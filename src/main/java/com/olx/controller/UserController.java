@@ -105,7 +105,7 @@ public class UserController {
 			
 		@GetMapping(value="/testing", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 		public ResponseEntity<Boolean> testing(@RequestHeader("authTocken") String authTocken) {
-			System.out.println("hello spring");
+			System.out.println("hello spring...");
 			return userService.validateTocken(authTocken);
 		}
 }

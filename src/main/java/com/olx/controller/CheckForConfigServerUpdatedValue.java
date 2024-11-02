@@ -13,7 +13,7 @@ public class CheckForConfigServerUpdatedValue {
 	private String dbURL;
 	
 	@GetMapping(value="read-property")
-	public String getBDURL(){
-		return "dbURL : "+this.dbURL;
+	public String getBDURL() {
+		return "dbURL : " +this.dbURL;
 	}
 }
