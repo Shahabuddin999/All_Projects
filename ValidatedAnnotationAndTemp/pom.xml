@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>Zensar</groupId>
-	<artifactId>Temp</artifactId>
+	<artifactId>ValidatedAnnotationAndTemp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Temp</name>
 	<description>Temporary</description>
