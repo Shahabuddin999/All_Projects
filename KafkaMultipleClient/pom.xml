@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>kafka.multiple</groupId>
-	<artifactId>client.example</artifactId>
+	<artifactId>KafkaMultipleClient</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>client.example</name>
 	<description>multiple client kafka </description>
