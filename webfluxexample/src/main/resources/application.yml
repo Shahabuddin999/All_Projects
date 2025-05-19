@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: WebFluxDemo
+    
+  r2dbc:
+    url: r2dbc:h2:file:///./testdatabase;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+# to open on web console put open on browser : http://localhost:8080/h2-console
+# and put  JDBC URL: :r2dbc:h2:file:///./testdb 
+# with blank username and password

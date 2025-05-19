@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org">
+	<body>
+		<h1 th:text="${firstName}"></h1>
+		<h1 th:text="${cityList}"></h1>
+		<ul th:each="city:${cityList}">
+			<li th:text="${city}"></li>
+		</ul>
+		
+		<ul th:each="city:${cityList}">
+			<li th:if="${city}=='Mumbai'" th:text="${city}"></li>
+		</ul>
+		
+		<div th:with="country=${countryList[0]}">
+			<h1 th:text="${country}"></h1>
+		</div>
+	</body>
+</html>

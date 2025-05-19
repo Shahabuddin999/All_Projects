@@ -1,0 +1,14 @@
+server:
+  port: 8088
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - "*"
+        exclude:
+        - "caches"
+      base-path: /olxapp
+  endpoint:
+    shutdown:
+      enabled: true

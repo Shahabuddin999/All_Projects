@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<context:annotation-config />
+
+	<bean id="lifeCycleBeanId" class="zensar.BeanLifeCycle.LifeCycleBean" init-method="myInit" destroy-method="myDestroy">
+		<property name="name" value="Hello, Shahabuddin Ansari..." />
+	</bean>
+	<bean id="zenBeanPostProcessor" class="zensar.BeanLifeCycle.ZenBeanPostProcessor"></bean>
+	
+	
+	<bean id="musicChatApp" class="zensar.BeanLifeCycle.MusicChatApp">
+		<property name="users">
+			<list>
+				<value>Ram</value>
+				<value>Shyam</value>
+				<value>Mohan</value>
+			</list>
+		</property>
+		<property name="message">
+			<set>
+				<value>Hi</value>
+				<value>Hello</value>
+				<value>Hello</value>
+			</set>
+		</property>
+		<property name="chatRoom">
+			<map>
+				<entry key="AAAB" value="BBB"></entry>
+				<entry key="CCC" value="DDD"></entry>
+				<entry key="EEE" value="FFF"></entry>
+			</map>
+		</property>
+		<property name="prop">
+			<props>
+				<prop key="abc">aaaa</prop>
+				<prop key="ddd">ddd</prop>
+				<prop key="www">qqq</prop>
+			</props>
+		</property>
+		
+	</bean>
+	
+	<!-- 
+	<bean id="itemId" class="zensar.BeanLifeCycle.Item">
+		<property name="name" value="sales Laptop" />
+		<property name="price" value="6000" />
+	</bean>
+	
+
+	<bean id="orderId" class="zensar.BeanLifeCycle.Order">
+		<property name="item" ref="itemId" />
+		<property name="title" value="lapy" />
+	</bean>
+
+
+	<bean id="itemId_2" class="zensar.BeanLifeCycle.Item">
+		<property name="name" value="sales Computer" />
+		<property name="price" value="2000" />
+	</bean>
+
+	<bean id="orderId_2" class="zensar.BeanLifeCycle.Order">
+		<property name="item" ref="itemId_2" />
+		<property name="title" value="Computer lapy" />
+	</bean>
+
+	<bean id="itemId_3" class="zensar.BeanLifeCycle.Item">
+		<property name="name" value="sales Computer" />
+		<property name="price" value="8000" />
+	</bean>
+
+	<bean id="orderId_3" class="zensar.BeanLifeCycle.Order">
+		<property name="item" ref="itemId_3" />
+		<property name="title" value="Computer lapy" />
+	</bean>
+-->
+</beans>

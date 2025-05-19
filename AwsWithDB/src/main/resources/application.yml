@@ -1,0 +1,15 @@
+server:
+   port: 9002
+spring:
+   application:
+     name: product-service
+   datasource:
+      url:  jdbc:mysql://zenappdatabase.culdczaacued.us-east-1.rds.amazonaws.com:3306/zenappdatabase
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: root12345
+   jpa:
+      hibernate.ddl-auto: update
+      properties:
+         hibernate:
+            dialect: org.hibernate.dialect.MySQL8Dialect

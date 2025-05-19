@@ -1,0 +1,26 @@
+pipeline {
+	agent any
+	stages {
+		stage('Clean stage') {
+			steps {
+				dir("jenkinDemo") {
+					bat 'D:\\Software\\apache-maven-3.8.2\\bin\\mvn clean'
+				}
+			}
+		}
+		stage('Compile stage') {
+			steps {
+				dir("jenkinDemo") {
+					bat 'D:\\Software\\apache-maven-3.8.2\\bin\\mvn compile'
+				}
+			}
+		}
+		stage('Install stage') {
+			steps {
+				dir("jenkinDemo") {
+					bat 'D:\\Software\\apache-maven-3.8.2\\bin\\mvn install'
+				}
+			}
+		}
+	}
+}
