@@ -2,8 +2,12 @@ package com.webflux.demo.service;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.webflux.demo.dto.Customer;
@@ -37,8 +41,18 @@ public class UserService {
 				.doOnNext(user -> System.out.println("processing user: " + user)).map(user -> user);
 	}
 
-	public Mono<User> getUserById(Integer id) {
-		return userRepository.findById(id);
+	public Mono<ResponseEntity<User>> getUserById(Integer id) {
+		return userRepository.findById(id).map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+	}
+	
+	public Mono<ResponseEntity<Object>> getUserByIdWithErrorMesage(Integer id) {
+	    return userRepository.findById(id)
+	        .map(user -> ResponseEntity.ok((Object) user)) // Cast User to Object
+	        .switchIfEmpty(Mono.just(
+	            ResponseEntity.status(HttpStatus.NOT_FOUND)
+	                .body(Map.of("error", "User not found with id: " + id))
+	        ));
 	}
 
 	public Mono<User> createUser(User user) {
@@ -56,6 +70,18 @@ public class UserService {
 			return userRepository.save(existing);
 		});
 	}
+	
+	
+	public Mono<ResponseEntity<User>> updateUserWithResponseEntity(Integer id, User updatedData) {
+	    return userRepository.findById(id)
+	        .flatMap(existingUser -> {
+	            existingUser.setName(updatedData.getName());
+	            return userRepository.save(existingUser); // returns Mono<User>
+	        })
+	        .map(savedUser -> ResponseEntity.ok(savedUser))
+	        .defaultIfEmpty(ResponseEntity.notFound().build());
+	}
+	
 
 	public Mono<Void> deleteUser(Integer id) {
 		return userRepository.deleteById(id);

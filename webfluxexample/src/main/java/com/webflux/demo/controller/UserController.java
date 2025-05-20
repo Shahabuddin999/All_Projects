@@ -1,5 +1,6 @@
 package com.webflux.demo.controller;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,9 +33,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Mono<User> getUser(@PathVariable("id") Integer id) {
+    public Mono<ResponseEntity<User>> getUser(@PathVariable("id") Integer id) {
         return userService.getUserById(id);
     }
+    
+    @GetMapping("witherror/{id}")
+    public Mono<ResponseEntity<Object>> getUserByIdWithErrorMesage(@PathVariable("id") Integer id) {
+        return userService.getUserByIdWithErrorMesage(id);
+    }
+
 
     @PostMapping
     public Mono<User> createUser(@RequestBody User user) {
@@ -44,6 +51,11 @@ public class UserController {
     @PutMapping("/{id}")
     public Mono<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user) {
         return userService.updateUser(id, user);
+    }
+    
+    @PutMapping("/withresponse/{id}")
+    public Mono<ResponseEntity<User>> updateUserWithResponseEntity(@PathVariable("id") Integer id, @RequestBody User user) {
+        return userService.updateUserWithResponseEntity(id, user);
     }
 
     @DeleteMapping("/{id}")
