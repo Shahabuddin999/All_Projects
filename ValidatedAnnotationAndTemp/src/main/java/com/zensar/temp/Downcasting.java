@@ -1,4 +1,4 @@
-package com.zensar;
+package com.zensar.temp;
 
 interface Person{
 	public void b();

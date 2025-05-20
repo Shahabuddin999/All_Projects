@@ -1,4 +1,4 @@
-package com.zensar;
+package com.zensar.temp;
 interface Messageable{  
     Message getMessage(String msg);  
 }  

@@ -1,4 +1,4 @@
-package com.zensar;
+package com.zensar.temp;
 import java.util.*;
 import java.util.stream.Collectors.*;
 import java.util.stream.*;

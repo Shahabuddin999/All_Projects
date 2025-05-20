@@ -1,4 +1,4 @@
-package com.zensar;
+package com.zensar.temp;
 
 public class PrimeChecker {
 	public static boolean isPrime(int n) {

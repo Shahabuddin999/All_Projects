@@ -1,4 +1,4 @@
-package com.zensar;
+package com.zensar.temp;
 
 class ParentClass {
     public void hello() {

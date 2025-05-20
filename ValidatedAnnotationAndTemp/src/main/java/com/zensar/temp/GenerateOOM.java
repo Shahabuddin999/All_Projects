@@ -1,4 +1,4 @@
-package com.zensar;
+package com.zensar.temp;
 
 public class GenerateOOM {
     public static void main(String[] args) throws Exception {

@@ -1,4 +1,4 @@
-package com.zensar;
+package com.zensar.temp;
 class GFG {
 	public static void main(String[] args) {
 		Geek g1 = new Geek("aa", 1, 20);
