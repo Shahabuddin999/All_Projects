@@ -42,17 +42,13 @@ public class UserService {
 	}
 
 	public Mono<ResponseEntity<User>> getUserById(Integer id) {
-		return userRepository.findById(id).map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+		return userRepository.findById(id).map(ResponseEntity::ok).defaultIfEmpty(ResponseEntity.notFound().build());
 	}
-	
+
 	public Mono<ResponseEntity<Object>> getUserByIdWithErrorMesage(Integer id) {
-	    return userRepository.findById(id)
-	        .map(user -> ResponseEntity.ok((Object) user)) // Cast User to Object
-	        .switchIfEmpty(Mono.just(
-	            ResponseEntity.status(HttpStatus.NOT_FOUND)
-	                .body(Map.of("error", "User not found with id: " + id))
-	        ));
+		return userRepository.findById(id).map(user -> ResponseEntity.ok((Object) user)) // Cast User to Object
+				.switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(Map.of("error", "User not found with id: " + id))));
 	}
 
 	public Mono<User> createUser(User user) {
@@ -70,18 +66,13 @@ public class UserService {
 			return userRepository.save(existing);
 		});
 	}
-	
-	
+
 	public Mono<ResponseEntity<User>> updateUserWithResponseEntity(Integer id, User updatedData) {
-	    return userRepository.findById(id)
-	        .flatMap(existingUser -> {
-	            existingUser.setName(updatedData.getName());
-	            return userRepository.save(existingUser); // returns Mono<User>
-	        })
-	        .map(savedUser -> ResponseEntity.ok(savedUser))
-	        .defaultIfEmpty(ResponseEntity.notFound().build());
+		return userRepository.findById(id).flatMap(existingUser -> {
+			existingUser.setName(updatedData.getName());
+			return userRepository.save(existingUser); // returns Mono<User>
+		}).map(savedUser -> ResponseEntity.ok(savedUser)).defaultIfEmpty(ResponseEntity.notFound().build());
 	}
-	
 
 	public Mono<Void> deleteUser(Integer id) {
 		return userRepository.deleteById(id);
@@ -89,9 +80,9 @@ public class UserService {
 
 	public Flux<Customer> getAllCustomerUsingFlux() {
 
-		Flux<Customer> flux = Flux.range(1, 10).delayElements(Duration.ofSeconds(1))
-				.doOnNext(i -> System.out.println("processing count:" + i))
-				.map(i -> new Customer(i, "user " + i, "user " + i + "@gmail.com"));
+		Flux<Customer> flux = Flux.range(1, 10).map(i -> {
+			return new Customer(i, "user " + i, "user " + i + "@gmail.com");
+		}).delayElements(Duration.ofSeconds(1)).doOnNext(i -> System.out.println("processing count:" + i));
 		return flux;
 	}
 
@@ -117,21 +108,23 @@ public class UserService {
 //	                return userWithOrders;  // Return the combined object here
 //	            })
 //	        );
-	// Above code is also  non-blocking but if you want to see as records is loaded it should return then I used delayElements(Duration.ofSeconds(1))	
-		
-		return userRepository.findAll()
-		        .flatMap(user -> orderRepository.findByUserId(user.getId())
-		            .collectList()
-		            .map(orders -> {
-		                UserWithOrders userWithOrders = new UserWithOrders();
-		                userWithOrders.setUser(user);
-		                userWithOrders.setOrders(orders);
-		                return userWithOrders;
-		            })
-		        )
-		        .delayElements(Duration.ofSeconds(1)) // Non-blocking delay between each emission
-		        .doOnNext(userWithOrders -> {
-		            System.out.println("Emitting user with orders: " + userWithOrders);
-		        });
+		// Above code is also non-blocking but if you want to see as records is loaded
+		// it should return then I used delayElements(Duration.ofSeconds(1))
+
+		Flux<UserWithOrders> users = userRepository.findAll()
+				.flatMap(user -> orderRepository.findByUserId(user.getId())
+				.collectList()
+				.map(ordersList -> {
+					UserWithOrders userWithOrders = new UserWithOrders();
+					userWithOrders.setUser(user);
+					userWithOrders.setOrders(ordersList);
+					return userWithOrders;
+				}))
+				.delayElements(Duration.ofSeconds(1)) // Non-blocking delay between each emission
+				.doOnNext(userWithOrders -> {
+					System.out.println("Emitting user with orders: " + userWithOrders);
+				});
+
+		return users;
 	}
 }

@@ -58,7 +58,7 @@ public class ConcurrentHashMapExample2{
         System.out.println("counting :"+count);
         ///////////////////////
         int chunckSize=5;
-        Integer[] array = {10,20,30,40,60,70,80,90,100,12,34,45,67,43,65,76,12};
+        Integer[] array = {10,20,30,40,60,70,80,90,100,12,34,45,67,43,65,76,8};
         List<Integer[]> list = new ArrayList<>();
         for(int from=0;from<array.length;from+=chunckSize) {
         	int to = from+chunckSize;
@@ -88,6 +88,10 @@ public class ConcurrentHashMapExample2{
         		.collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
         System.out.println(sortedMapByValue);
         //mapping.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey().reversed()).collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1, LinkedHashMap::new));
+        System.out.println(Arrays.asList(array).stream().min((o1,o2)->o1-o2).get());
+        
+        
+    
     }    
     
     

@@ -80,4 +80,17 @@ public class EmailService {
         }
         return CompletableFuture.completedFuture("initiate Done");
     }
+    
+    @Async("taskExecutor")
+    public CompletableFuture<String> initiate(String s) {
+        try {
+        	System.out.println("Value initiate(String s) : "+s);
+            Thread.sleep(7000);
+            System.out.println("initiate : "+Thread.currentThread().getName());
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return CompletableFuture.completedFuture("initiate Done");
+    }
 }

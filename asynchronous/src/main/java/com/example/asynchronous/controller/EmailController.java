@@ -42,6 +42,10 @@ public class EmailController {
 			System.out.println("recieved data : "+val);
 			
 		});
+		
+		// thenCompose() is used to call another asynchronous method and returned value is being passed to initiate(String)
+		emailService.initiate().thenCompose(result -> emailService.initiate(result))
+		.thenAccept(value->System.out.println(value));
 		//value[0] = info.get();
 		emailService.process();
 		emailService.info();
