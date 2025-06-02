@@ -44,17 +44,13 @@ public class ConcurrentHashMapExample2{
         Map<String,Integer> sorted = countChar.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByKey().reversed())
         		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,LinkedHashMap::new));   
         
-        // This is acending order sorting because I m not using reversed()
-        countChar.entrySet().stream().sorted(Map.Entry.<String, Integer>comparingByKey().reversed()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,LinkedHashMap::new));  
-        
-        System.out.println(sorted);
-        Map<String,Integer> sorted2 = countChar.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByValue().reversed()).
-        		collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1, LinkedHashMap::new));
-        System.out.println(sorted2+" ,,,");
         // Getting those charrectors which are appeared more that 1 times
         List<String> dup = namechars.stream().filter(val->Collections.frequency(namechars, val)>1).collect(Collectors.toList());
         System.out.println(namechars+":   dup: "+dup);
         Map<String,Integer> count = namechars.stream().collect(Collectors.toMap(Function.identity(),init->1, Math::addExact));
+        System.out.println("counting :"+count);
+        
+        count = namechars.stream().collect(Collectors.toMap(Function.identity(),init->1, Math::addExact));
         System.out.println("counting :"+count);
         ///////////////////////
         int chunckSize=5;
@@ -80,17 +76,33 @@ public class ConcurrentHashMapExample2{
         System.out.println("x="+x+", y=" +y);
         Map<String,Integer> mapping = new LinkedHashMap<>();
         mapping.put("shahab", 1);mapping.put("ansari", 10);mapping.put("koraon", 3);mapping.put("kosfra", 5);
-        Map<String,Integer> sorting = mapping.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey()).
-        		collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1, LinkedHashMap::new));
-        System.out.println(sorting);
         
-        Map<String,Integer> sortedMapByValue = mapping.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByValue())
-        		.collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1,LinkedHashMap::new));
-        System.out.println(sortedMapByValue);
         //mapping.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey().reversed()).collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1, LinkedHashMap::new));
         System.out.println(Arrays.asList(array).stream().min((o1,o2)->o1-o2).get());
+        System.out.println(Arrays.asList(array).stream().min(Collections.reverseOrder()).get());
         
+        Map<String, Integer> map = new HashMap<>();
+        map.put("apple", 3);
+        map.put("banana", 1);
+        map.put("cherry", 2);
         
+		Map<String, Integer> sort = map.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey().reversed())
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+		  System.out.println(sort);
+		  
+		  sort = map.entrySet().stream().sorted((entry1,entry2)->entry2.getKey().compareTo(entry1.getKey()))
+					.collect(Collectors.toMap(
+												entry3->entry3.getKey(), 
+												entry4->entry4.getValue(), 
+												(e1, e2) -> e1, 
+												() -> new LinkedHashMap<>())
+											  );
+			  System.out.println(sort);
+			  
+			  
+			  Map<String, Integer> duplicateKey = Arrays.asList("shahab","ansari","shahab","nizam","nizam").stream()
+					    .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(s -> 1)));
+			  System.out.println("dupl : "+duplicateKey);
     
     }    
     
