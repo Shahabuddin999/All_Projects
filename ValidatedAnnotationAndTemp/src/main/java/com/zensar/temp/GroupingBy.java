@@ -7,18 +7,21 @@ import java.util.stream.Collectors;
 
 public class GroupingBy {
 	public static void main(String[] args) {
-		List<Transaction> transactions = Arrays.asList(
-				new Transaction(LocalDate.of(2023, 5, 28), 100.0, "bus"),
-				new Transaction(LocalDate.of(2023, 5, 28), 150.0, "car"),
-				new Transaction(LocalDate.of(2023, 5, 28), 140.0, "car"),
-				new Transaction(LocalDate.of(2023, 5, 29), 200.0, "bike"),
-				new Transaction(LocalDate.of(2023, 5, 29), 50.0, "bike"),
-				new Transaction(LocalDate.of(2023, 5, 30), 300.0, "cycle")
-				);
+		List<Transaction> transactions = Transaction.getTrasaction();
 
 		Map<LocalDate, Double> sumByDay = transactions.stream().collect(
-				Collectors.groupingBy(val -> val.getDate(), Collectors.summingDouble(value -> value.getAmount())));
-
+											Collectors.groupingBy(Transaction::getDate,
+																	Collectors.summingDouble(Transaction::getAmount)));
+		
+		sumByDay.forEach((date, total) -> System.out.println(date + " : " + total));
+		System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n");
+		
+		
+		
+		
+		
+		sumByDay = transactions.stream().collect(
+		Collectors.groupingBy(val -> val.getDate(), Collectors.summingDouble(value -> value.getAmount())));
 		sumByDay.forEach((date, total) -> System.out.println(date + " : " + total));
 		
 		Map<String, Double> sumByCategory = transactions.stream().collect(

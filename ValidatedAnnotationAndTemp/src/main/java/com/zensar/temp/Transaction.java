@@ -1,5 +1,7 @@
 package com.zensar.temp;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,4 +13,15 @@ public class Transaction {
     private LocalDate date;
     private double amount;
     private String category;
+    
+    public static List<Transaction> getTrasaction(){
+    	return Arrays.asList(
+				new Transaction(LocalDate.of(2023, 5, 28), 100.0, "bus"),
+				new Transaction(LocalDate.of(2023, 5, 28), 150.0, "car"),
+				new Transaction(LocalDate.of(2023, 5, 28), 140.0, "car"),
+				new Transaction(LocalDate.of(2023, 5, 29), 200.0, "bike"),
+				new Transaction(LocalDate.of(2023, 5, 29), 50.0, "bike"),
+				new Transaction(LocalDate.of(2023, 5, 30), 300.0, "cycle")
+				);
+    }
 }
