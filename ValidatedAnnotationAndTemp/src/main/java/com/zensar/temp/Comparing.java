@@ -36,7 +36,7 @@ public class Comparing {
 		System.out.println(filter);
 		List<Integer> listData = Arrays.asList(10,21,51,8,4);
 		System.out.println(listData.stream().min((a,b)->a>b?1:-1).get());
-		int v = listData.stream().filter(num->num%2==0).reduce(0,(a,b)->a+b);
-		System.out.println(v);
+		Optional<Integer> v = listData.stream().filter(num->num%2==0).reduce((a,b)->a+b);
+		v.ifPresent(val->System.out.println(val));
 	}
 }
