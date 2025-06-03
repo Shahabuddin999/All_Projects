@@ -8,7 +8,7 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		System.out.println("Application is UP & Running on GIT");
+		System.out.println("Great job Application is UP & Running on Git Hub !!!!!!! ");
 	}
 
 }
