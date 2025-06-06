@@ -3,6 +3,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +23,7 @@ public class PopulateCompanyAndEmp {
     @Autowired
     private EmployeeRepo employeeRepo1;
 
-    @GetMapping(value = "/all88")
+    @GetMapping(value = "/welcome")
     //@ResponseBody
     public String getUsersContact() {
     	ModelAndView model = new ModelAndView();
@@ -33,8 +35,7 @@ public class PopulateCompanyAndEmp {
     }
     
     
-    @GetMapping(value = "/all2")
-    @ResponseBody
+    @GetMapping(value = "/all")
     public List<Employees> getUsersContactDetail() {       		
         List<Employees> list = (List<Employees>) employeeRepo1.findAll();
         Iterator<Employees> itr = list.iterator();
@@ -48,18 +49,9 @@ public class PopulateCompanyAndEmp {
     }
     
    
-    @RequestMapping("/saveEmp")
-    public String update() {
-    	
-        Employees emp = new Employees();
-        Company company = new Company();
-        company.setCompanyName("Designer");
-        company.setCompanyOwner("Shahabuddin is owner");
-        emp.setAddress("Banglor");
-        emp.setEmpName("Deepak jha is emp");
-        emp.setCompany(company);
-        //company.setEmployee(emp);
-        employeeRepo1.save(emp);
-        return "Saved";
+    @PostMapping("/save")
+    public Employees update(@RequestBody Employees employee) {
+        System.out.println("Recieved : "+employee);
+        return employeeRepo1.save(employee);
     }
 }
