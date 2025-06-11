@@ -14,7 +14,7 @@ public class App {
 		return monoNumbers;
 	}
 	
-	public static void main(String[] args) {
+	public static void mainMMMMMMMMM(String[] args) {
 		App app = new App();
 		Flux<Integer> fluxNumbers = app.testFlux();
 		Mono<Integer> monoNumbers = app.testMono();
