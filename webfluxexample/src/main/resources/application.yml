@@ -12,5 +12,5 @@ spring:
       schema-locations: classpath:schema.sql
 
 # to open on web console put open on browser : http://localhost:8080/h2-console
-# and put  JDBC URL: :r2dbc:h2:file:///./testdb 
+# and put  JDBC URL: :jdbc:h2:file:./testdatabase 
 # with blank username and password

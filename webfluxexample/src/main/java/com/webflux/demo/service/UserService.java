@@ -80,7 +80,7 @@ public class UserService {
 
 	public Flux<Customer> getAllCustomerUsingFlux() {
 
-		Flux<Customer> flux = Flux.range(1, 10).map(i -> {
+		Flux<Customer> flux = Flux.range(1, 100).map(i -> {
 			return new Customer(i, "user " + i, "user " + i + "@gmail.com");
 		}).delayElements(Duration.ofSeconds(1)).doOnNext(i -> System.out.println("processing count:" + i));
 		return flux;
