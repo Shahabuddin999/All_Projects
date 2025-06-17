@@ -2,6 +2,7 @@ package com.zensar.user_management.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,27 +25,27 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping
-	public Mono<UserDTO> insertUser(@RequestBody UserDTO user) {
+	public Mono<ResponseEntity<UserDTO>> insertUser(@RequestBody UserDTO user) {
 		return userService.insertUser(user);
 	}
 
 	@GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public Flux<UserDTO> getAllUsers() {
+	public Mono<ResponseEntity<Flux<UserDTO>>> getAllUsers() {
 		return userService.getAllUsers();
 	}
 
 	@GetMapping("/{id}")
-	public Mono<UserDTO> getUserById(@PathVariable("id") Integer id) {
+	public Mono<ResponseEntity<UserDTO>> getUserById(@PathVariable("id") Integer id) {
 		return userService.getUserById(id);
 	}
 
 	@PutMapping("/{id}")
-	public Mono<UserDTO> updateUser(@PathVariable("id") Integer id, @RequestBody UserDTO user) {
+	public Mono<ResponseEntity<UserDTO>> updateUser(@PathVariable("id") Integer id, @RequestBody UserDTO user) {
 		return userService.updateUser(id, user);
 	}
 
 	@DeleteMapping("/{id}")
-	public Mono<Void> deleteUser(@PathVariable("id") Integer id) {
+	public Mono<ResponseEntity<Void>> deleteUser(@PathVariable("id") Integer id) {
 		return userService.deleteUser(id);
 	}
 }

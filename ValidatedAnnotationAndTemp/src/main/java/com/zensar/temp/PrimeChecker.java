@@ -83,7 +83,7 @@ public class PrimeChecker {
 		String[] rawArray = { "apple", null, "banana", "apple", "kiwi", null, "orangee", "bananaaaa" };
 		// Remove nulls, remove duplicates, sort alphabetically
 		List<String> cleanedSortedList = Arrays.stream(rawArray)
-				.filter(val -> Objects.nonNull(val)) // Remove nulls
+				.filter(val -> val!=null) // Remove nulls
 				.distinct() // Remove duplicates
 				.sorted((v1, v2) -> v1.length() - v2.length()) // Sort alphabetically you can use
 				.collect(Collectors.toList()); // .sorted(Comparator.naturalOrder())
@@ -105,8 +105,8 @@ public class PrimeChecker {
 		int[] intVal = {1,2,3,3,4,4,4,5,5,2}; 
 		Map<Integer,Integer> map = Arrays.stream(intVal)
 				.boxed()  // .boxed() converts primitive int to Integer objects, .collect() can't collect primitive value so used .boxed()
-				.collect(Collectors.toMap(Function.identity(),init->1,Math::addExact));
-		System.out.println(map);
+				.collect(Collectors.groupingBy(val->val, Collectors.summingInt(value->1)));
+		System.out.println("count: "+map);
 		
 		String [] str={"Hello", "World", "Everyone"};
 		List<Integer> len = Arrays.asList(str).stream().map(val->val.length()).collect(Collectors.toList());

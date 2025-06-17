@@ -1,6 +1,8 @@
 package com.zensar.user_management.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.zensar.user_management.dto.UserDTO;
@@ -21,36 +23,60 @@ public class UserServiceImpl implements UserService {
 	private SequenceGeneratorService sequenceGenerator;
 	
 	@Override
-	public Mono<UserDTO> insertUser(UserDTO userDTO) {
-		User user = this.getUser(userDTO);
-		return sequenceGenerator.generateSequence("user_sequence").flatMap(id -> {
-			user.setId(id);
-			return getUserDTO(userRepository.save(user));
-		});
+	public Mono<ResponseEntity<UserDTO>> insertUser(UserDTO userDTO) {
+	    User user = this.getUser(userDTO);
+
+	    return sequenceGenerator.generateSequence("user_sequence")
+	        .flatMap(id -> {
+	            user.setId(id);
+	            return userRepository.save(user);
+	        })
+	        .flatMap(savedUser -> getUserDTO(Mono.just(savedUser)))
+	        .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto));
 	}
 
 	@Override
-	public Mono<Void> deleteUser(Integer id) {
-		return userRepository.deleteById(id);
+	public Mono<ResponseEntity<Void>> deleteUser(Integer id) {
+	    return userRepository.findById(id)
+	        .flatMap(existingUser ->
+	            userRepository.delete(existingUser)
+	                .then(Mono.defer(() -> Mono.just(ResponseEntity.noContent().<Void>build())))
+	        )
+	        .switchIfEmpty(Mono.defer(() -> Mono.just(ResponseEntity.notFound().<Void>build())));
+	}
+	
+	@Override
+	public Mono<ResponseEntity<UserDTO>> updateUser(Integer id, UserDTO userDTO) {
+	    return userRepository.findById(id)
+	        .flatMap(existingUser -> {
+	            existingUser.setName(userDTO.getName());
+	            existingUser.setAddress(userDTO.getAddress());
+	            return userRepository.save(existingUser)
+	                .flatMap(savedUser -> getUserDTO(Mono.just(savedUser)))
+	                .map(updatedDTO -> ResponseEntity.ok(updatedDTO));
+	        })
+	        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+	}
+	@Override
+	public Mono<ResponseEntity<Flux<UserDTO>>> getAllUsers() {
+	    Flux<UserDTO> userFlux = getUserDTOFlux(userRepository.findAll());
+
+	    return userFlux.hasElements()
+	        .flatMap(hasUsers -> {
+	            if (Boolean.TRUE.equals(hasUsers)) {
+	                return Mono.just(ResponseEntity.ok(userFlux));
+	            } else {
+	                return Mono.just(ResponseEntity.noContent().<Flux<UserDTO>>build());
+	            }
+	        });
 	}
 
 	@Override
-	public Mono<UserDTO> updateUser(Integer id, UserDTO user) {
-		return userRepository.findById(id).flatMap(existingUser -> {
-			existingUser.setName(user.getName());
-			existingUser.setAddress(user.getAddress());
-			return getUserDTO(userRepository.save(existingUser));
-		});
-	}
-
-	@Override
-	public Flux<UserDTO> getAllUsers() {
-		return getUserDTOFlux(userRepository.findAll());
-	}
-
-	@Override
-	public Mono<UserDTO> getUserById(Integer id) {
-		return getUserDTO(userRepository.findById(id));
+	public Mono<ResponseEntity<UserDTO>> getUserById(Integer id) {
+	    return userRepository.findById(id)
+	        .flatMap(user -> getUserDTO(Mono.just(user))
+	            .map(dto -> ResponseEntity.ok(dto)))
+	        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
 	}
 
 	public User getUser(UserDTO dto) {
@@ -60,18 +86,18 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public Mono<UserDTO> getUserDTO(Mono<User> user) {
-		return user.map(userData->{
+		return user.flatMap(userData->{
 			UserDTO target = new UserDTO();
 			BeanUtils.copyProperties(userData, target);
-			return target;
+			return Mono.just(target);
 		});
 	}
 	
 	public Flux<UserDTO> getUserDTOFlux(Flux<User> users) {
-		return users.map(source->{
+		return users.flatMap(source->{
 			UserDTO target = new UserDTO();
 			BeanUtils.copyProperties(source, target);
-			return target;
+			return Mono.just(target);
 		});
 	}
 }

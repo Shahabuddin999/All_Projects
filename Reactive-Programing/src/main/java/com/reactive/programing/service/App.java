@@ -34,12 +34,39 @@ public class App {
 	public static void main(String[] args) {
 		App app = new App();
 		//Flux<Integer> fluxNumbers = app.testFlux();
-		Mono<Integer> monoNumbers = app.testMono();
+		//Mono<Integer> monoNumbers = app.testMono();
 		
 		//fluxNumbers.subscribe(System.out::println);
 		//monoNumbers.subscribe(System.out::println);
+		getFlux();
 		
+	}
+	static Flux<String>  getFlux(){
+		Mono<String> mono = Mono.just("aaa");
+		Flux<String> flux = Flux.just("bbb","cccc","ddd");
 		
+		Mono<String> mono2 = mono.flatMap(v->{
+			return Mono.just(v+" hi");
+		});
+		mono2.subscribe(System.out::println);
+		
+		mono2 = mono.map(v->{
+			return v+" hello";
+		});
+		mono2.subscribe(System.out::println);
+		
+		Flux<String> flux2 = flux.flatMap(v->{
+			return Mono.just(v+" hi flatMap"); // It flatterns all mono into a single Flux.just("bbb hi flatMap","cccc hi flatMap","ddd hi flatMap");
+		});
+		flux2.subscribe(System.out::println);
+		
+		flux2 = flux.map(v->{
+			return v+" hi flatMap2"; // It put into Flux.just("bbb hi flatMap2","cccc hi flatMap2","ddd hi flatMap2")
+		});
+		flux2.subscribe(System.out::println);
+		
+	
+		return null;
 	}
 
 }
