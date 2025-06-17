@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 	            existingUser.setAddress(userDTO.getAddress());
 	            return userRepository.save(existingUser)
 	                .flatMap(savedUser -> getUserDTO(Mono.just(savedUser)))
-	                .map(updatedDTO -> ResponseEntity.ok(updatedDTO));
+	                .flatMap(updatedDTO -> Mono.just(ResponseEntity.ok(updatedDTO)));
 	        })
 	        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
 	}
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 	public Mono<ResponseEntity<UserDTO>> getUserById(Integer id) {
 	    return userRepository.findById(id)
 	        .flatMap(user -> getUserDTO(Mono.just(user))
-	            .map(dto -> ResponseEntity.ok(dto)))
+	            .flatMap(dto -> Mono.just(ResponseEntity.ok(dto))))
 	        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
 	}
 
