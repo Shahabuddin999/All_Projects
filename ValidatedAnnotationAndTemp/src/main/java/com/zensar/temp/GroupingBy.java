@@ -82,6 +82,12 @@ public class GroupingBy {
 											  );
 			System.out.println(sort);
 				  
+			sort = mapSort.entrySet().stream().sorted((e1,e2)->e1.getKey().compareTo(e2.getKey()))
+					.collect(Collectors.toMap(e1->e1.getKey(), e2->e2.getValue(),(e1,e2)->e1,()->new LinkedHashMap<>()));
+			System.out.println("Sort : "+sort);
 			
+			List<String> list = Arrays.asList("Shahahbuddin","Sangram","Sangram");
+			Map<String,Integer> mapping = list.stream().collect(Collectors.groupingBy(v->v,Collectors.summingInt(e->1)));
+			System.out.println(mapping);
 	}
 }

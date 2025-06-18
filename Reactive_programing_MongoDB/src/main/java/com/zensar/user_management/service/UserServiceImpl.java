@@ -24,7 +24,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public Mono<ResponseEntity<UserDTO>> insertUser(UserDTO userDTO) {
-	    User user = this.getUser(userDTO);
+	    
+		User user = this.getUser(userDTO);
 
 	    return sequenceGenerator.generateSequence("user_sequence")
 	        .flatMap(id -> {
@@ -32,17 +33,15 @@ public class UserServiceImpl implements UserService {
 	            return userRepository.save(user);
 	        })
 	        .flatMap(savedUser -> getUserDTO(Mono.just(savedUser)))
-	        .map(dto -> ResponseEntity.status(HttpStatus.CREATED).body(dto));
+	        .flatMap(dto -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(dto)));
 	}
 
 	@Override
 	public Mono<ResponseEntity<Void>> deleteUser(Integer id) {
 	    return userRepository.findById(id)
-	        .flatMap(existingUser ->
-	            userRepository.delete(existingUser)
-	                .then(Mono.defer(() -> Mono.just(ResponseEntity.noContent().<Void>build())))
-	        )
-	        .switchIfEmpty(Mono.defer(() -> Mono.just(ResponseEntity.notFound().<Void>build())));
+	        .flatMap(user -> userRepository.delete(user)
+	        		.thenReturn(ResponseEntity.status(HttpStatus.OK).<Void>build()))
+	        .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
 	}
 	
 	@Override
@@ -53,20 +52,21 @@ public class UserServiceImpl implements UserService {
 	            existingUser.setAddress(userDTO.getAddress());
 	            return userRepository.save(existingUser)
 	                .flatMap(savedUser -> getUserDTO(Mono.just(savedUser)))
-	                .flatMap(updatedDTO -> Mono.just(ResponseEntity.ok(updatedDTO)));
+	                .flatMap(updatedDTO -> Mono.just(ResponseEntity.status(HttpStatus.OK).body(updatedDTO)));
 	        })
-	        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+	        .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
 	}
 	@Override
 	public Mono<ResponseEntity<Flux<UserDTO>>> getAllUsers() {
-	    Flux<UserDTO> userFlux = getUserDTOFlux(userRepository.findAll());
+	    
+		Flux<UserDTO> userFlux = getUserDTOFlux(userRepository.findAll());
 
 	    return userFlux.hasElements()
 	        .flatMap(hasUsers -> {
 	            if (Boolean.TRUE.equals(hasUsers)) {
-	                return Mono.just(ResponseEntity.ok(userFlux));
+	                return Mono.just(ResponseEntity.status(HttpStatus.OK).body(userFlux));
 	            } else {
-	                return Mono.just(ResponseEntity.noContent().<Flux<UserDTO>>build());
+	                return Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).build());
 	            }
 	        });
 	}
@@ -75,8 +75,8 @@ public class UserServiceImpl implements UserService {
 	public Mono<ResponseEntity<UserDTO>> getUserById(Integer id) {
 	    return userRepository.findById(id)
 	        .flatMap(user -> getUserDTO(Mono.just(user))
-	            .flatMap(dto -> Mono.just(ResponseEntity.ok(dto))))
-	        .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+	            .flatMap(dto -> Mono.just(ResponseEntity.status(HttpStatus.OK).body(dto))))
+	        .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build()));
 	}
 
 	public User getUser(UserDTO dto) {
