@@ -167,7 +167,8 @@ public class UserServiceImplTemp implements UserServiceTemp{
 	@Override
 	public Mono<ResponseEntity<Flux<UserDTO>>> getAllUsersWebClient() {
 		
-		Flux<UserDTO> flux = webClient.get().uri("/getall")
+		Flux<UserDTO> flux = webClient.get()
+				.uri("/getall")
 				.retrieve()
 				.onStatus(status->status.is4xxClientError(), response->{
 					return Mono.empty();

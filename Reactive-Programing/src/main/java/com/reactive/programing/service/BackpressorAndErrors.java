@@ -10,10 +10,11 @@ import reactor.core.publisher.Mono;
 public class BackpressorAndErrors {
 
 	public static void main(String[] args) {
-		Flux<Integer> f = Flux.range(1, 5)
+		Flux<Integer> f = Flux.range(1, 500)
 		// basicaly onBackpressureBuffer is handled internally by Flux.range() we should not manually handle
-		// .onBackpressureBuffer(2000,drop->System.out.println("Dropped>>>>>>>>> : "+drop),BufferOverflowStrategy.DROP_OLDEST )
+		.onBackpressureBuffer(2000,drop->System.out.println("Dropped>>>>>>>>> : "+drop),BufferOverflowStrategy.DROP_OLDEST )
 		.delayElements(Duration.ofMillis(1));//.doOnNext(i -> System.out.println("Received:: " + i));
+		
 		f.subscribe(i -> System.out.println("Received:: " + i));
 		f.blockLast();
 		
