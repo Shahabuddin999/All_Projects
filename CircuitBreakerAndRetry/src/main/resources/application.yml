@@ -1,0 +1,41 @@
+server:
+  address: 0.0.0.0
+  port: 8080
+
+resilience4j:
+  retry:
+    retryAspectOrder: 1
+    instances:
+      externalService:
+        maxAttempts: 3
+        waitDuration: 1s
+        retryExceptions:
+          - java.lang.RuntimeException
+
+  circuitbreaker:
+    circuitBreakerAspectOrder: 2
+    instances:
+      externalService:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 2
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    '[io.github.resilience4j.retry]': DEBUG
+    '[io.github.resilience4j.circuitbreaker]': DEBUG
+    '[com.retry.CircuitBreakerAndRetry.controller]': DEBUG
