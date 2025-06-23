@@ -1,0 +1,67 @@
+AWS Root account : ansari.shahabuddin99999@gmail.com / Alld@alld12
+passkey : 224774918268-root-Shahabuddin
+
+IAM Account ID : 224774918268
+IAM URL : https://224774918268.signin.aws.amazon.com/console
+IAM User : ansari.shahabuddin99999@gmail.com
+IAM Pass : Alld@alld123
+
+
+EC2 Public IPv4 addresses : 13.53.40.25
+EC2 Private IPv4 addresses : 172.31.43.217
+EC2 Elastic IP : 13.50.176.83
+
+Server is Amazon linux
+
+Installing java
+----------------
+sudo yum update -y
+sudo amazon-linux-extras enable corretto17
+sudo yum install java-17-amazon-corretto -y
+java -version
+
+Installing Postgresql
+-------------
+sudo dnf install -y postgresql15 postgresql15-server
+
+
+EC2 Public IPv4 addresses : 13.53.40.25
+scp -i "/d/ec2KeyPair.pem" demo-0.0.1-SNAPSHOT.jar ec2-user@13.53.40.25:/home/ec2-user/   ===> File will be transafer on ec2 instace
+ssh -i "/d/ec2KeyPair.pem" ec2-user@13.53.40.25     ===> This will take you to ec2 instace
+java -jar demo-0.0.1-SNAPSHOT.jar --server.address=0.0.0.0     ===> Run the JAR In the EC2 shell
+http://13.53.40.25:8080/users/order/1     ==> hit the API
+
+
+Elastic IP : 13.50.176.83 , if you dont create elastic IP then on every ec2 instance restart Public IP will be changed to overcome this issue create Elastic IP
+and associate with running ec2 instance then public IP will never be changed.
+Note : Elastic IP is chargeable, AMI is chargeable, for testing purpose you create use and delete Elastic IP and AMI and snamshot of AMI as well
+
+
+work on ec2 
+sudo -i -u postgres
+psql
+CREATE USER springuser WITH PASSWORD 'springpass';
+CREATE DATABASE springdb;
+GRANT ALL PRIVILEGES ON DATABASE springdb TO springuser;
+\q
+
+sudo -i -u postgres
+psql
+CREATE USER postgres WITH PASSWORD 'postgre';
+CREATE DATABASE entityrelationship;
+GRANT ALL PRIVILEGES ON DATABASE entityrelationship TO postgres;
+\q
+
+sudo find / -name pg_hba.conf
+sudo nano /var/lib/pgsql/data/pg_hba.conf
+spring.datasource.url=jdbc:postgresql://localhost:5432/springdb
+spring.datasource.username=postgres
+spring.datasource.password=postgre
+
+
+scp -i "/d/ec2KeyPair.pem" EntityRelationshipProject-0.0.1-SNAPSHOT.jar ec2-user@13.50.176.83:/home/ec2-user/   ===> File will be transafer on ec2 instace
+ssh -i "/d/ec2KeyPair.pem" ec2-user@13.50.176.83     ===> This will take you to ec2 instace
+java -jar EntityRelationshipProject-0.0.1-SNAPSHOT.jar --server.address=0.0.0.0    ===> Run The Application
+
+
+http://13.50.176.83:8080/users

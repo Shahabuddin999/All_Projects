@@ -14,3 +14,8 @@ spring:
 # to open on web console put open on browser : http://localhost:8080/h2-console
 # and put  JDBC URL: :jdbc:h2:file:./testdatabase 
 # with blank username and password
+
+aws:
+  region: eu-north-1
+  s3:
+    bucket-name: myappbucket-shahab-2025

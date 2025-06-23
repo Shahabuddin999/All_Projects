@@ -10,6 +10,7 @@ public class EntityRelationshipProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EntityRelationshipProjectApplication.class, args);
+		System.out.println("Application is up and running.......");
 	}
 	
 	@Bean
