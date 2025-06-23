@@ -8,7 +8,7 @@ public class MonowebfluxApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MonowebfluxApplication.class, args);
-		System.out.println("New pushed gone to Git hub..........>>>>>>>>>>><<<<<<<<<<<<<<");
+		System.out.println("New pushed gone to Git hub..........New chages done");
 	}
 
 }
