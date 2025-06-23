@@ -19,6 +19,17 @@ import com.webflux.demo.service.UserService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+/*
+ * This endpoint will work when you will deploy it on EC2 instance because it can not access DefaultCredentialsProvider from AWS  
+ * I have created awsCommand.txt file in resource folder where I have written some command go through and follow
+ * This all code will not compile and run on local only build you can create and move jar to ec2 instance and run over there 
+ * for local need to remove all config and code about S3 of AWS.
+ * 
+ * on AWS url like https://13.53.40.25:8080/users
+ * Note : here I have configures HTTPS not HTTP 
+ */
+
+
 @RestController
 @RequestMapping("/users")
 public class UserController {

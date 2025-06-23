@@ -1,5 +1,12 @@
 server:
   port: 8080
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: Alld@alld123
+    key-store-type: PKCS12
+    key-alias: mykey
+    # Abow information is available in keystore.p12 in encrypted formate. above config is used to use https instead of http for secure url it is for AWS and It won't work localy and will not run'
 spring:
   application:
     name: WebFluxDemo
