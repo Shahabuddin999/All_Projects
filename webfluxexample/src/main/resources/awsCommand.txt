@@ -63,5 +63,24 @@ scp -i "/d/ec2KeyPair.pem" EntityRelationshipProject-0.0.1-SNAPSHOT.jar ec2-user
 ssh -i "/d/ec2KeyPair.pem" ec2-user@13.50.176.83     ===> This will take you to ec2 instace
 java -jar EntityRelationshipProject-0.0.1-SNAPSHOT.jar --server.address=0.0.0.0    ===> Run The Application
 
+---------------------
+// if you want https instead http for yor project you need to run below command on git bash and create keystore.p12 file on ec2 using below command
 
-http://13.50.176.83:8080/users
+keytool -genkeypair \
+  -alias mykey \
+  -keyalg RSA \
+  -keysize 2048 \
+  -storetype PKCS12 \
+  -keystore keystore.p12 \
+  -validity 3650
+  
+
+while creating  keystore.p12 file it will ask password pls remeber it because you have to give this password in application.yml file
+  
+now come back from ec2 and run below command on git bash to move file from ec2 to local machine and configure application.yml file
+
+scp -i "/d/ec2KeyPair.pem" ec2-user@13.53.40.25:/home/ec2-user/keystore.p12 /D:/OLX-Apps/OLX-Updated.zip/webfluxexample/src/main/resources/
+-----------------
+To verify if SSL is working on the correct port:
+openssl s_client -connect 13.53.40.25:8443
+
