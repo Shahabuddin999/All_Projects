@@ -8,6 +8,6 @@ public class LambdaProjectApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LambdaProjectApplication.class, args);
+		System.out.println("Application running sucessfully !!!!!!!");
 	}
-
 }
