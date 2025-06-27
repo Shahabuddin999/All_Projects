@@ -23,6 +23,11 @@ public class EmployeeProfileController {
 	@Autowired
 	private EmployeeService employeeService;
 	
+	@GetMapping(value="/test", produces=MediaType.APPLICATION_JSON_VALUE)
+	public String test() {
+		return "You have learned EC2 Congrats !!!";
+	}
+	
 	@GetMapping(value="/employee", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Employee> getAllEmployees() {
 		return employeeService.getAllEmployees();

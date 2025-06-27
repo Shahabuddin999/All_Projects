@@ -3,9 +3,13 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/entityrelationship
+#    url: jdbc:postgresql://localhost:5432/entityrelationship
+#    username: postgres
+#    password: postgre
+#    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://database-2.cl6yeqegk1ai.ap-south-1.rds.amazonaws.com:5432/postgres
     username: postgres
-    password: postgre
+    password: alld1234567
     driver-class-name: org.postgresql.Driver
 
   jpa:

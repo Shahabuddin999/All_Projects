@@ -22,7 +22,7 @@ public class HelloController {
 	
     @GetMapping("/hello")
     public String hello() {
-        return "Hello from  Spring Boot on AWS Lambda !!! Congratulation Shahabuddin !!!!";
+        return "Hello from  Spring Boot on AWS Lambda, You have learned LAMBDA !!!";
     }
     
     @GetMapping("/get")

@@ -1,0 +1,170 @@
+https://70nrdwxd10.execute-api.ap-south-1.amazonaws.com/Dev/hello
+Java techie to deploy application on Lamda https://www.youtube.com/watch?v=J0aEfUUervE&list=PLVz2XdJiJQxxurKT1Dqz6rmiMuZNdClqv&index=23
+
+-----------------------------------------------------
+Working On Lamda 
+
+Go to "Lambda"
+Create Function : "ShahabFunction"
+Click on "created function"->click on "Code"-> Click on "upload from" and upload jar file-> on same page
+Go to "Runtime settings" click on edit and update Handler : com.example.lambda.LambdaHandler::handleRequest then click on "Save" button-> click on "Test" on same page
+and go to "Test event action" select "Create new event" give any name : in Event name like "ShahabEvent"->
+"Template - optional" dropdown and select "API Gateway AWS Proxy"-> go to Event JSON on same page : in "Path":"/save/employee" this api endpoint of controller
+then go to "httpMethod" here give the endpoint method name "httpMethod":"POST" is its post then "POST" if get then give "GET"
+then click on "Save" button then click on "Test" button
+
+NOTE: if application is database connected then need to add "environment Variable". click on the Lambda's funtion name->
+then go to "Configuration"->"Environment variables"->here add 
+
+Key  										Value
+SPRING_DATASOURCE_DRIVER_CLASS_NAME			org.postgresql.Driver
+
+SPRING_DATASOURCE_PASSWORD					alld1234567
+
+SPRING_DATASOURCE_URL						jdbc:postgresql://shahablamdadb.cl6yeqegk1ai.ap-south-1.rds.amazonaws.com:5432/postgres
+
+SPRING_DATASOURCE_USERNAME					postgres
+
+
+Go To API Gateway
+Create REST API : ShahabRestAPI
+Create resource : {proxy+}
+Create method : ShahabMethod
+Method details : Method type : Any, Integration type : Lambda Proxy,  Lambda function : select created functin (ShahabFunction)
+Deploy API : Stage : Select New stage in drop down : New Stage, Stage name : Give any name like(dev, prod, stag) I have given "Dev" and click on "Continue" button-> then you will be back and click on "Dev" which you have created then below you will see a "Invoke URL" like https://84tb902ue3.execute-api.ap-south-1.amazonaws.com/Dev  This is the base url and in this url you apend your endpoint like
+https://84tb902ue3.execute-api.ap-south-1.amazonaws.com/Dev/save/employee and now you can hit from postman or else where ever you want to test and hit
+
+
+Now to create database got to Aurora and RDS->Databases->Choose a database creation method "Standard create"->Create Database->Engine Type and select "PostgreSql"->Templates select "Fre Tier"->DB instance identifier give any name like "database-1"->give password->public key select "Yes"
+Now dont change any thing else and click on "create Database". Now Database has been created.
+Now click on the database to allow port for database : and go to "Connectivity and Security" ->click on "VPC security groups" it will redirect you to Security Group of EC2 then click on "Security group ID"->click on "edit inbound rule"-> click on "add rule"->select postgresql with port "5432" which will be used to connect database-> click on "Save rules" button
+-------------------------------------------------------------------------
+
+Then from your local system, open git bash run below command it will take you to the RDS DB:
+try below command after entering it will ask for password then type password which you have given during database creation
+psql -h shahablamdadb.cl6yeqegk1ai.ap-south-1.rds.amazonaws.com -U postgres -d postgres -p 5432
+psql -h database-2.cl6yeqegk1ai.ap-south-1.rds.amazonaws.com -U postgres -d postgres -p 5432
+
+
+Part		Meaning
+psql		PostgreSQL interactive terminal (command-line client)
+-h		 	shahablamdadb.cl6yeqegk1ai.ap-south-1.rds.amazonaws.com	-h stands for host — the endpoint of your RDS PostgreSQL instance
+-U 			postgres	-U is the username — in this case, postgres (likely the master user)
+-d 			postgres	-d is the database name you're connecting to — here also named postgres
+-p 			5432	-p is the port number — 5432 is the default port for PostgreSQL
+Password: "alld1234567"
+---------------------------------------------------------------------------
+Option B: Use a tool like DBeaver, PgAdmin, or IntelliJ DataSource:
+Host: shahablamdadb.cl6yeqegk1ai.ap-south-1.rds.amazonaws.com
+Port: 5432
+DB: postgres
+Username: postgres
+Password: alld1234567
+---------------------------------------------------------------------------
+Launch EC2 Instance
+Login aws search EC2 ->click on "Launch an instance"->enter Instance name(Server) in "Name and tags"->
+->"Application and OS Images (Amazon Machine Image)" select "Quick start"->select "Amazon Linux aws"->
+"Instance type" select "t2.micro" which is free tier->"Key pair (login) " select "Key pair name - required" in drop down create new or select existing keyPair if you have already created.->in "Firewall (security groups)" section select "Create security group"->check "Create security group" and 
+check "Allow HTTPS traffic from the internet" and "Allow HTTP traffic from the internet" these 3 will be security group means role.
+now click on "Launch Instance" button now your EC2 instance created and you can connect database as you have connected to lambda.
+creaate database in RDS with "publick access" and give credential in application.properties file
+
+-----------------------------------------------------------------------------
+
+<<<<<<<<<<<<<<<<<<<<<<<<<   DUMMY rough   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+AWS Root account : ansari.shahabuddin99999@gmail.com / Alld@alld12
+passkey : 224774918268-root-Shahabuddin
+
+IAM Account ID : 224774918268
+IAM URL : https://224774918268.signin.aws.amazon.com/console
+IAM User : ansari.shahabuddin99999@gmail.com
+IAM Pass : Alld@alld123
+
+
+EC2 Public IPv4 addresses : 13.53.40.25
+EC2 Private IPv4 addresses : 172.31.43.217
+EC2 Elastic IP : 13.50.176.83
+
+Server is Amazon linux
+
+Installing java
+----------------
+sudo yum update -y
+sudo amazon-linux-extras enable corretto17
+sudo yum install java-17-amazon-corretto -y
+java -version
+
+Installing Postgresql
+-------------
+sudo dnf install -y postgresql15 postgresql15-server
+
+
+EC2 Public IPv4 addresses : 13.53.40.25
+scp -i "/d/ec2KeyPair.pem" demo-0.0.1-SNAPSHOT.jar ec2-user@13.53.40.25:/home/ec2-user/   ===> File will be transafer on ec2 instace
+ssh -i "/d/ec2KeyPair.pem" ec2-user@13.53.40.25     ===> This will take you to ec2 instace
+java -jar demo-0.0.1-SNAPSHOT.jar --server.address=0.0.0.0     ===> Run the JAR In the EC2 shell
+http://13.53.40.25:8080/users/order/1     ==> hit the API
+
+
+Elastic IP : 13.50.176.83 , if you dont create elastic IP then on every ec2 instance restart Public IP will be changed to overcome this issue create Elastic IP
+and associate with running ec2 instance then public IP will never be changed.
+Note : Elastic IP is chargeable, AMI is chargeable, for testing purpose you create use and delete Elastic IP and AMI and snamshot of AMI as well
+
+
+work on ec2 
+sudo -i -u postgres
+psql
+CREATE USER springuser WITH PASSWORD 'springpass';
+CREATE DATABASE springdb;
+GRANT ALL PRIVILEGES ON DATABASE springdb TO springuser;
+\q
+
+sudo -i -u postgres
+psql
+CREATE USER postgres WITH PASSWORD 'postgre';
+CREATE DATABASE entityrelationship;
+GRANT ALL PRIVILEGES ON DATABASE entityrelationship TO postgres;
+\q
+
+sudo find / -name pg_hba.conf
+sudo nano /var/lib/pgsql/data/pg_hba.conf
+spring.datasource.url=jdbc:postgresql://localhost:5432/springdb
+spring.datasource.username=postgres
+spring.datasource.password=postgre
+
+
+scp -i "/d/ec2KeyPair.pem" EntityRelationshipProject-0.0.1-SNAPSHOT.jar ec2-user@13.50.176.83:/home/ec2-user/   ===> File will be transafer on ec2 instace
+ssh -i "/d/ec2KeyPair.pem" ec2-user@13.50.176.83     ===> This will take you to ec2 instace
+java -jar EntityRelationshipProject-0.0.1-SNAPSHOT.jar --server.address=0.0.0.0    ===> Run The Application
+
+---------------------
+// if you want https instead http for yor project you need to run below command on git bash and create keystore.p12 file on ec2 using below command
+
+keytool -genkeypair \
+  -alias mykey \
+  -keyalg RSA \
+  -keysize 2048 \
+  -storetype PKCS12 \
+  -keystore keystore.p12 \
+  -validity 3650
+  
+
+while creating  keystore.p12 file it will ask password pls remeber it because you have to give this password in application.yml file
+  
+now come back from ec2 and run below command on git bash to move file from ec2 to local machine and configure application.yml file
+
+scp -i "/d/ec2KeyPair.pem" ec2-user@13.53.40.25:/home/ec2-user/keystore.p12 /D:/OLX-Apps/OLX-Updated.zip/webfluxexample/src/main/resources/
+-----------------
+To verify if SSL is working on the correct port:
+openssl s_client -connect 13.53.40.25:8443
+
+
+
+--------------
+EC2 Public IPv4 addresses :13.232.151.148
+scp -i "/d/ec2KeyPair.pem" target/EntityRelationshipProject-0.0.1-SNAPSHOT.jar ec2-user@13.232.151.148:/home/ec2-user/   ===> File will be transafer on ec2 instace
+ssh -i "/d/ec2KeyPair.pem" ec2-user@13.232.151.148     ===> This will take you to ec2 instace
+java -jar EntityRelationshipProject-0.0.1-SNAPSHOT.jar --server.address=0.0.0.0     ===> Run the JAR In the EC2 shell
+http://13.53.40.25:8080/users/order/1     ==> hit the API
+
