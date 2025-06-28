@@ -42,6 +42,20 @@ public class Java11 {
 		CompletableFuture<HttpResponse<String>> asyncResponse = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
 		System.out.println(asyncResponse.get().body());
 		
+		// POST request
+		String json = "{\"title\":\"Hello\",\"body\":\"World\",\"userId\":1}";
+
+		HttpRequest request2 = HttpRequest.newBuilder()
+		        .uri(URI.create("https://jsonplaceholder.typicode.com/posts"))
+		        .header("Content-Type", "application/json")
+		        .POST(HttpRequest.BodyPublishers.ofString(json))
+		        .build();
+
+		HttpResponse<String> response2 = client.send(request2, HttpResponse.BodyHandlers.ofString());
+
+		System.out.println("Status: " + response2.statusCode());
+		System.out.println("Response:\n" + response2.body());
+		
 		Optional<String> name = Optional.empty();
 		if (name.isEmpty()) {
 		    System.out.println("No name");
