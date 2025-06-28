@@ -56,6 +56,7 @@ public class React {
 		});
 		String block = map.block(); // This line is not required in Rest API/Controller/Service this is blocking code, in Spring, Spring will handle internally
 		System.out.println("Result1: " + block);
+		
 		Flux<String> flux1 = react.getFlux1();
 		Flux<String> flux2 = react.getFlux2();
 		Flux<String> map2 = Flux.zip(flux1, flux2).map(tuple -> {
@@ -81,7 +82,8 @@ public class React {
 		});
 		
 		paired.subscribe(System.out::println);
-
+		
+		//Mono.deferContextual(ctx -> Mono.just(ctx.get("userId"))).subscribe(System.out::println);
 	}
 
 }
