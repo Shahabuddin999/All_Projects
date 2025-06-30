@@ -1,8 +1,12 @@
 package com.zensar.temp;
 
 import java.time.LocalDate;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GroupingBy {
@@ -27,7 +31,7 @@ public class GroupingBy {
 		Map<String, Double> sumByCategory = transactions.stream().collect(
 				Collectors.groupingBy(val -> val.getCategory(), Collectors.summingDouble(value -> value.getAmount())));
 
-		sumByCategory.forEach((category, total) -> System.out.println(category + " : " + total));
+		sumByCategory.forEach((category, total) -> System.out.println(category + " :: " + total));
 		
 		
 		Map<LocalDate, Map<String, Double>> result = transactions.stream()
@@ -36,7 +40,7 @@ public class GroupingBy {
 					            Collectors.summingDouble(amount->amount.getAmount())
 			        )
 			    ));
-		result.forEach((date, total) -> System.out.println(date + " : " + total));
+		result.forEach((date, total) -> System.out.println(date + " ::: " + total));
 		
 		Map<String, List<Transaction>> map=  transactions.stream().collect(Collectors.groupingBy(val->val.getCategory()));
 		System.out.println("By Category : "+map);
@@ -56,7 +60,7 @@ public class GroupingBy {
 						Collectors.groupingBy(TransactionPlus::getAddress,
 							Collectors.summingDouble(TransactionPlus::getAmount)))));  //    Map<Date, Map<String, Map<String,Double>>
 		
-		System.out.println("Output : "+output);
+		System.out.println("Output :::: "+output);
 		
 		
 		 Map<String, Integer> duplicateKey = Arrays.asList("shahab","ansari","shahab","nizam","nizam").stream()
@@ -65,14 +69,14 @@ public class GroupingBy {
 		 
 	        Map<String, Integer> mapSort = new HashMap<>();
 	        mapSort.put("apple", 3);
-	        mapSort.put("banana", 1);
-	        mapSort.put("cherry", 2);
+	        mapSort.put("cherry", 1);
+	        mapSort.put("banana", 2);
 	        
 			Map<String, Integer> sort;
 //			sort = mapSort.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey().reversed())
 //					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 //			  System.out.println(sort);
-			  
+					
 		  sort = mapSort.entrySet().stream().sorted((entry1,entry2)->entry2.getKey().compareTo(entry1.getKey()))
 					.collect(Collectors.toMap(
 												entry3->entry3.getKey(), 
@@ -86,8 +90,29 @@ public class GroupingBy {
 					.collect(Collectors.toMap(e1->e1.getKey(), e2->e2.getValue(),(e1,e2)->e1,()->new LinkedHashMap<>()));
 			System.out.println("Sort : "+sort);
 			
-			List<String> list = Arrays.asList("Shahahbuddin","Sangram","Sangram");
+			List<String> list = Arrays.asList("Shahahbuddin","Shahahbuddin","Shahahbuddin","Ansari","Sangram","Sangram");
 			Map<String,Integer> mapping = list.stream().collect(Collectors.groupingBy(v->v,Collectors.summingInt(e->1)));
 			System.out.println(mapping);
+			
+			sort = mapSort.entrySet().stream().sorted((v1,v2)->v1.getKey().compareTo(v2.getKey()))
+					.collect(Collectors.toMap(
+							v1->v1.getKey(), 
+							v2->v2.getValue(),
+							(v1,v2)->v1,
+							LinkedHashMap::new));
+			System.out.println(sort);
+			
+			Map<String, Integer> counter = list.stream().collect(Collectors.groupingBy(v->v,Collectors.summingInt(v->1)));
+			System.out.println(counter);
+			Map<LocalDate,Map<String,Double>> m = transactionsPlus.stream().collect(Collectors.groupingBy(v1->v1.getDate(),Collectors.groupingBy(v2->v2.getName(),Collectors.summingDouble(v3->v3.getAmount()))));
+			System.out.println(m);
+			List<String> counting = list.stream().filter(v1->Collections.frequency(list, v1)>1).collect(Collectors.toList());
+			System.out.println(counting);
+			Map<String,Integer> c =list.stream().filter(v1->Collections.frequency(list, v1)>1).collect(Collectors.groupingBy(v2->v2,Collectors.summingInt(v3->1)));
+			System.out.println(c);
+			
+			String []arr = List.of("dd","bss","aa").stream().sorted((v1,v2)->v1.compareTo(v2)).collect(Collectors.toList()).toArray(String[]::new);
+			for(String val : arr)
+				System.out.println(val);
 	}
 }

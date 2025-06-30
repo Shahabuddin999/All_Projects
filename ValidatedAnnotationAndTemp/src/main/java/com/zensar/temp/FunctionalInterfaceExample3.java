@@ -22,7 +22,7 @@ public class FunctionalInterfaceExample3 extends ParentClass implements Interfac
     @Override
 	public void hello() {
         super.hello(); // (note: ParentClass.super could not be used)
-        InterfaceFoo.super.hello(); // This statement can be called inside the instance method only not in static method exp: can't be called inide main()
+        InterfaceFoo.super.hello(); // This statement can be called inside the instance method only not in static method exp: can't be called inside main()
         InterfaceBar.super.hello();
     }
     

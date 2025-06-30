@@ -22,10 +22,10 @@ public class Customer {
 
 	public static List<Customer> getCustomers() {
 		
-		return Stream.of(new Customer(10, "Shahab", Arrays.asList("23312310", "231313")),
+		return Stream.of(new Customer(3, "Shahab", Arrays.asList("23312310", "231313")),
 				new Customer(20, "Kalam", Arrays.asList("23324340", "45454")),
 				new Customer(30, "Nizam", Arrays.asList("454565", "87687")),
-				new Customer(40, "Parvej Alam", Arrays.asList("2324", "6885"))).collect(Collectors.toList());
+				new Customer(19, "Parvej Alam", Arrays.asList("2324", "6885"))).collect(Collectors.toList());
 	}
 
 	public int getAge() {

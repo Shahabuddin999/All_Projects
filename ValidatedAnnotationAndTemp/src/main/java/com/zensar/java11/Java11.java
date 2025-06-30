@@ -19,9 +19,11 @@ public class Java11 {
 		list.stream().forEach((var name)->System.out.println(name));
 		list.stream().forEach((@NotNull var name)->System.out.println(name));
 		list.stream().forEach((final var name)->System.out.println(name));
+		String[] array = list.toArray(String[]::new);
 		
 		List<String> copy = List.copyOf(list);
 		System.out.println("Copied list : "+copy);
+		System.out.println(" list : "+list);
 		
 		System.out.println("  hello  ".isBlank());         // false
 		System.out.println("java\nrocks".lines().count());         // 3 // Stream of "java", "rocks"
@@ -63,16 +65,13 @@ public class Java11 {
 		String filePath = "D:\\OLX-Apps\\OLX-Updated.zip\\ValidatedAnnotationAndTemp\\src\\main\\java\\com\\zensar\\java11\\file.txt";
 		String content = Files.readString(Path.of(filePath));
 		System.out.println(content);
-		Files.writeString(Path.of(filePath), "Hello Java 11");
+		Files.writeString(Path.of(filePath), "Hello Java 11 how are you...");
+		String readData = Files.readString(Path.of(filePath));
+		System.out.println(readData);
 		// You can run .java files directly without compiling, for example : java Hello.java
 		// Java 11 removed some older features: like (Applets, Java EE modules (like javax.xml.bind), JavaFX (now separate from JDK))
-
-			
-
-			
-
-			
-
+	
+		// HttpClient, Files.readString()/writeString(), optional.isBlank(), List.of(), list.copyOf()
+		// String "".isBlank(), "".lines().count(), "".repeat(3), "".stripLeading(),"".stripTrailing()
 	}
-
 }

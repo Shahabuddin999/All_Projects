@@ -10,7 +10,7 @@ public class MonoDeferVsJust_2 {
 		return Flux.defer(()->{
 			return Flux.just("Shahabuddin","Ansari","Koraon","Delhi");
 			//return Mono.just(null);
-		}).subscribeOn(Schedulers.boundedElastic()); // This line new separet thread if its taking time to complete its execution without this line thread will be died before completing its execution only when its taking time.
+		}).subscribeOn(Schedulers.boundedElastic()); // This line start new separet thread if its taking time to complete its execution without this line thread will be died before completing its execution only when its taking time.
 	}
 	
 	Flux<String> getFlux2(){

@@ -4,5 +4,17 @@ spring:
       client:
         registration:
           github:
-            client-id: 785483ef91b33d1e9fe0
-            client-secret: fe8504c3925b4171aa8105eb8309b8b33d5d16a8
+            client-id: Ov23liJbQVcQTk8NMxYr
+            client-secret: 042c01ec311ed3f545f692595570e8d3160f6b01
+            scope: read:user, user:email
+            provider: github
+          google:
+            client-id: 256126201412-j73vgke1k82ocpae79hkukeisuimkh4c.apps.googleusercontent.com
+            client-secret: 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
+            scope: profile, email
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+        

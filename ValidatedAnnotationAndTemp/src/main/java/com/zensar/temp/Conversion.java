@@ -19,18 +19,19 @@ public class Conversion {
 
 		List<String> list = Arrays.asList(array);
 //		list = Arrays.asList("aa","bb","cc");
-		String[] newArr = list.toArray(new String[0]);
+		String[] newArray = list.toArray(String[]::new);
+		String[] newArr = list.stream().toArray(String[]::new); //🔹 More flexible — allows for transformation, filtering before conversion.
 
 		char charArray[] = name.toCharArray();
 		String val = new String(charArray);
 
 		String result = String.join(" ", list);
-		System.out.println(result);
+		System.out.println("result : "+result);
 
 		List<String> words = Arrays.asList("apple", "banana", "apple", "orange", "banana", "apple");
 		Map<String, Integer> fruits = countStrings(words);
 
-		System.out.println(fruits);
+		System.out.println("Fruits : "+fruits);
 		
 		Integer[] intArry = {10,20,30,40,60,70,80,90,100,12,34,45,67,43,65,76,8};
 		List<Integer> numbers = Arrays.asList(70,80,90,100,12,34,45,67);

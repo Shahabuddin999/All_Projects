@@ -40,6 +40,9 @@ public class Temp2 {
         Optional<Customer> cus = list.stream().reduce((v1,v2)->v1.getAge()>v2.getAge()?v1:v2);
         System.out.println(cus.get());
         
+        Optional<Integer> obj = list.stream().filter(custo->custo.getAge()%2==0).map(customer1->customer1.getAge()).reduce((val1,val2)->(val1+val2));
+        System.out.println("Sum of Age: "+obj.get());
+        
         cus = list.stream().reduce((v1,v2)->v1.getAge()>v2.getAge()?v1:v2);
         System.out.println(cus+"...");
         
