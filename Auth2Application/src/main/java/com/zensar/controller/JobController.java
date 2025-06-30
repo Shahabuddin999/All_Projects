@@ -16,7 +16,7 @@ public class JobController {
 	@GetMapping(value="/")
     public Map<String, Object> showGoogle(OAuth2AuthenticationToken token, @AuthenticationPrincipal OAuth2User user) {
         return user.getAttributes();
-    }
+    } 
 //	public String showMessage(Principal principal) {
 //		OAuth2AuthenticationToken oAuth2AuthenticationToken = (OAuth2AuthenticationToken) principal;
 //		return "Hello : "+oAuth2AuthenticationToken.getPrincipal().getAttribute("login");
