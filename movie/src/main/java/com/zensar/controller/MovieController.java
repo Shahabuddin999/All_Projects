@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zensar.dto.Movie;
 import com.zensar.dto.Ticket;
-import com.zensar.entity.MovieEntity;
-import com.zensar.entity.TicketEntity;
 import com.zensar.service.MovieService;
-import com.zensar.service.MovieServiceImpl;
 import com.zensar.service.TicketService;
 
 import jakarta.validation.Valid;
