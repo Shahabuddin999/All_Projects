@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GroupingBy {
 	public static void main(String[] args) {
@@ -93,14 +96,24 @@ public class GroupingBy {
 			List<String> list = Arrays.asList("Shahahbuddin","Shahahbuddin","Shahahbuddin","Ansari","Sangram","Sangram");
 			Map<String,Integer> mapping = list.stream().collect(Collectors.groupingBy(v->v,Collectors.summingInt(e->1)));
 			System.out.println(mapping);
-			
+		
+			mapSort = new HashMap<>();
+	        mapSort.put("apple", 3);
+	        mapSort.put("cherry", 1);
+	        mapSort.put("banana", 2);
+	        mapSort.put("saumya", 4);
+	        mapSort.put("amarud", 5);
+	        mapSort.put("dunkey", 0);
+	        mapSort.put("rahul", -1);
+	        
 			sort = mapSort.entrySet().stream().sorted((v1,v2)->v1.getKey().compareTo(v2.getKey()))
 					.collect(Collectors.toMap(
 							v1->v1.getKey(), 
 							v2->v2.getValue(),
 							(v1,v2)->v1,
-							LinkedHashMap::new));
-			System.out.println(sort);
+							LinkedHashMap::new
+							));
+			System.out.println("Sorted :::::::: "+sort);
 			
 			Map<String, Integer> counter = list.stream().collect(Collectors.groupingBy(v->v,Collectors.summingInt(v->1)));
 			System.out.println(counter);
@@ -114,5 +127,30 @@ public class GroupingBy {
 			String []arr = List.of("dd","bss","aa").stream().sorted((v1,v2)->v1.compareTo(v2)).collect(Collectors.toList()).toArray(String[]::new);
 			for(String val : arr)
 				System.out.println(val);
+			
+			List<String> listing =  Arrays.asList("shahab","shahab","ansari","shahabuddin","nizamuddin","nizam");
+			Map<Integer, List<String>> collect = listing.stream().collect(Collectors.groupingBy(str->str.length())); // this line and below line is same because if you dont use ,Collectors.toList() internaly its added by compiler like collect(Collectors.groupingBy(str->str.length(),Collectors.toList()));
+			// you can use Function.identity() because it also return input like str->str means  str->str and Function.identity() are equals
+			System.out.println(collect);
+			Map<Integer, List<String>> collect1 = listing.stream().collect(Collectors.groupingBy(str->str.length(),Collectors.toList()));
+			System.out.println(collect1);
+			
+			Map<String, Long> collect2 = listing.stream().collect(Collectors.groupingBy(str->str, Collectors.counting()));
+			System.out.println(collect2);
+			//String str = String.join(",", listing);
+			//String[] array = listing.toArray(String[]::new);
+			//System.out.println(str);
+			//Collections.frequency(list, String/int any thing);
+			String array = "java is best java is too good java good good good";
+			Map<String, Long> collect3 = Arrays.stream(array.split(" "))
+					.collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
+					.entrySet().stream().filter(entry->entry.getValue()>1).collect(Collectors.toMap(v1->v1.getKey(),v2->v2.getValue()));
+			System.out.println(collect3);
+			
+			Integer []intArray = {10,18,20,13,21,21,21,12,17,21,21,18};
+			Map<Integer, Long> collect4 = Arrays.stream(intArray).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
+			.entrySet().stream().filter(val->val.getValue()>1).collect(Collectors.toMap(key->key.getKey(), value->value.getValue()));
+			System.out.println("Map: "+collect4);
+			
 	}
 }

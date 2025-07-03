@@ -28,5 +28,22 @@ public class Testing {
 		String []str = "shashabuddin.pdf".split("[.]");
 		System.out.println(str.length);
 		System.out.println(Arrays.asList(str));
+		
+		
+		
+		String paragraph = "Java is great. Java is object-oriented. Java is fast and Java is powerful!";
+        int topN = 3;
+        //System.out.println(paragraph);
+        // 1. Clean and normalize the paragraph
+        String cleaned = paragraph.replaceAll("[^a-zA-Z0-9\\s]", "")  // remove punctuation
+                                  //.replaceAll("-", "")             // remove hyphens
+                                  .toLowerCase();                   // convert to lowercase
+
+        System.out.println(cleaned);
+        paragraph="shahbuddin ansari@gmail.com ye mera mail hai";
+        String mail = paragraph.replaceAll("[^\\w+@\\.\\w ]", "");
+        System.out.println(mail);
+        
+
 	}
 }
