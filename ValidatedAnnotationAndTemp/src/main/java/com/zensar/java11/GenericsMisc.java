@@ -19,6 +19,7 @@ public class GenericsMisc {
 
         
         "ABC".chars().forEach(System.out::println);
+        System.out.println("converting into char: "+(char)65);
         
         System.out.println("---------------------------------------------------------");
 
