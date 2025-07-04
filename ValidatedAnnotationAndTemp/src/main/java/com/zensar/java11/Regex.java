@@ -1,12 +1,14 @@
-package com.zensar.temp;
+package com.zensar.java11;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Regex {
 
@@ -56,11 +58,38 @@ public class Regex {
 		Matcher m1 = p1.matcher("shahab@site.com.info");
 
 		while (m1.find()) 
-		    System.out.println("Matched: " + m1.group());
+		  System.out.println("Matched: " + m1.group());
 		
+		int sum = IntStream.rangeClosed(1, 5).sum();
+		System.out.println("Sum: " + sum);
+		
+		Map<Integer, Integer> numberToSquare = IntStream.rangeClosed(1, 5)
+			    .boxed() // boxed() is important for primitives data to collect as Collection(like: List, Set, Map)
+			    .collect(Collectors.toMap(
+			        Function.identity(),
+			        n -> n * n
+			    ));
 
+			System.out.println(numberToSquare);
 
+			List<Integer> first5 = IntStream.rangeClosed(1, 20)
+					.filter(f->f%2==0)
+				    .limit(5)
+				    .boxed()
+				    .collect(Collectors.toList());
+
+				System.out.println(first5);
+				
+				List<Integer> after5 = IntStream.rangeClosed(1, 20)
+						.filter(f->f%2==0)
+					    .skip(5)
+					    .boxed()
+					    .collect(Collectors.toList());
+
+					System.out.println(after5);
+					
+		String input = "Hell#$#$o World##$^&*#$";
+		System.out.println(input.replaceAll("[^a-zA-Z0-9 ]",""));
 
 	}
-
 }

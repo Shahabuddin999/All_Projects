@@ -71,7 +71,7 @@ public class Java11 {
 		// You can run .java files directly without compiling, for example : java Hello.java
 		// Java 11 removed some older features: like (Applets, Java EE modules (like javax.xml.bind), JavaFX (now separate from JDK))
 	
-		// HttpClient, Files.readString()/writeString(), optional.isBlank(), List.of(), list.copyOf()
+		// HttpClient, Files.readString()/writeString(), optional.isEmpty(), List.of(), list.copyOf()
 		// String "".isBlank(), "".lines().count(), "".repeat(3), "".stripLeading(),"".stripTrailing()
 	}
 }
