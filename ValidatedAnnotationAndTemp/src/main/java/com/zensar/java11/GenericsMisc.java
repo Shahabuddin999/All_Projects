@@ -1,51 +1,22 @@
 package com.zensar.java11;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-public class AAWordAnalysis {
+import com.zensar.temp.Transaction;
+
+public class GenericsMisc {
 
     public static void main(String[] args) {
         List<String> words = Arrays.asList(
             "AANAYA", "ATHAH", "AAVCCANA", "ATACK", "AJAAYA", "AKIRA", "AARAV", "AJAYYY"
         );
 
-        // Vowel set for checking
-        Set<Character> vowels = Set.of('A', 'E', 'I', 'O', 'U');
-
-        // Filter words that start with "AA" (case-insensitive)
-        List<String> aaWords = words.stream()
-            .filter(word -> word.toLowerCase().startsWith("aa"))
-            .collect(Collectors.toList());
-
-         //Print each word and its consonant count
-//        for (String word : aaWords) {
-//            long consonantCount = word.chars()
-//                .filter(Character::isLetter)
-//                .mapToObj(ch -> Character.toUpperCase((char) ch))
-//                .filter(ch -> !vowels.contains(ch))
-//                .count();
-//
-//            System.out.println("Word: " + word + ", Consonants: " + consonantCount);
-//        }
-        System.out.println("---------------------------------------------------------");
-        aaWords.forEach(word -> {
-            long consonantCount = word
-                .toUpperCase()
-                .chars()   // "ABC".chars();  // returns IntStream of 65, 66, 67
-                //.filter(Character::isLetter)
-                .filter(ch -> {
-                	//System.out.println("ch : "+ch);
-                	return Character.isLetter(ch);}) // This line and just above line is same
-                .filter(ch -> !"AEIOU".contains(String.valueOf((char) ch)))
-                .count();
-
-            System.out.println("Word: " + word + ", Consonants: " + consonantCount);
-        });
-
-        // Print total count
-        System.out.println("Total words starting with 'AA': " + aaWords.size());
         
         "ABC".chars().forEach(System.out::println);
         
@@ -72,6 +43,41 @@ public class AAWordAnalysis {
         	long count = data.chars().filter(value-> !"AEIOU".contains(String.valueOf((char)value))).count();
         	System.out.println(data +" : "+count);
         });
+        System.out.println("---------------------------------------------------------");
+        Map<String, Long> collect = words.stream().filter(data->data.startsWith("AA")).
+        collect(Collectors.groupingBy(val->val,Collectors.summingLong(data->{
+        	long count = data.chars().filter(value-> !"AEIOU".contains(String.valueOf((char)value))).count();
+        	return count;
+        })));
         
+        System.out.println(collect);
+        
+     // Getting prime number
+ 		IntStream.rangeClosed(1,100).forEach(value->{
+ 			boolean noneMatch = IntStream.rangeClosed(2,(int)Math.sqrt(value)).noneMatch(val->value%val==0);
+ 			if(noneMatch)
+ 				System.out.println("Prime : "+value);
+ 		});
+ 		
+ 		List<List<Integer>> list = List.of(List.of(10,3,6,1,2),List.of(8,9,7),List.of(30,40));
+		List<Integer> collectList = list.stream().flatMap(list1->list1.stream()).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+		System.out.println(collectList);
+		// Comparator.naturalOrder() Ascending order
+		// Comparator.reverseOrder() Descending order
+		
+		List<Transaction> trasactionPlus = Transaction.getTrasactionPlus();
+		trasactionPlus.stream().forEach(obj->{
+			System.out.println(obj.getDate().getYear());
+		});
+		
+		int[] i={1,2,3,3,4,4,4,5,5,2};
+		Arrays.stream(i).distinct().forEach(System.out::println);
+		
+		String []stringArr = {"shahab","ansari",null,"","kalam"};
+		Arrays.stream(stringArr)
+		.filter(Objects::nonNull)//  .filter(obj->obj!=null && !obj.isEmpty())
+		.filter(obj->!obj.isEmpty())
+		.sorted(Comparator.naturalOrder())
+		.forEach(System.out::println);
     }
 }

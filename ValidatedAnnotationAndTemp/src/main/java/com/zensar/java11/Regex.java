@@ -54,6 +54,10 @@ public class Regex {
 		
 		System.out.println("========================================");
 		
+		String str3 = "shah@#bu!=ddin";
+		System.out.println(str3.replaceAll("[^a-zA-z ]", ""));
+
+		
 		Pattern p1 = Pattern.compile("\\.[a-zA-Z]{2,}");
 		Matcher m1 = p1.matcher("shahab@site.com.info");
 
