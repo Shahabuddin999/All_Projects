@@ -25,7 +25,9 @@ public class GenericsMisc {
 
         words.stream().filter(val->val.startsWith("AA")).collect(Collectors.toList())
         .stream().forEach(val->{
-        	long count = val.chars().filter(ch->Character.isLetter(ch))
+        	long count = val.chars()
+        			.filter(ch->Character.isLetter(ch))
+        			//.filter(Character::isLetter) // This line and just above line is same
         			.filter(ch->!"AEIOU".contains(String.valueOf((char)ch)))
         			.count();
         	System.out.println(val+" : "+count);
@@ -61,10 +63,13 @@ public class GenericsMisc {
  		});
  		
  		List<List<Integer>> list = List.of(List.of(10,3,6,1,2),List.of(8,9,7),List.of(30,40));
-		List<Integer> collectList = list.stream().flatMap(list1->list1.stream()).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+		List<Integer> collectList = list.stream()
+				.flatMap(list1->list1.stream())
+				.sorted(Comparator.naturalOrder()) // Comparator.naturalOrder() Ascending order // Comparator.reverseOrder() Descending order
+				.collect(Collectors.toList());
 		System.out.println(collectList);
-		// Comparator.naturalOrder() Ascending order
-		// Comparator.reverseOrder() Descending order
+		
+		
 		
 		List<Transaction> trasactionPlus = Transaction.getTrasactionPlus();
 		trasactionPlus.stream().forEach(obj->{
@@ -76,7 +81,7 @@ public class GenericsMisc {
 		
 		String []stringArr = {"shahab","ansari",null,"","kalam"};
 		Arrays.stream(stringArr)
-		.filter(Objects::nonNull)//  .filter(obj->obj!=null && !obj.isEmpty())
+		.filter(Objects::nonNull) // .filter(obj->obj!=null && !obj.isEmpty())
 		.filter(obj->!obj.isEmpty())
 		.sorted(Comparator.naturalOrder())
 		.forEach(System.out::println);

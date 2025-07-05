@@ -87,13 +87,24 @@ public class Regex {
 				List<Integer> after5 = IntStream.rangeClosed(1, 20)
 						.filter(f->f%2==0)
 					    .skip(5)
-					    .boxed()
+					    .boxed() // After .boxed(), each int becomes an Integer.
 					    .collect(Collectors.toList());
 
 					System.out.println(after5);
 					
 		String input = "Hell#$#$o World##$^&*#$";
 		System.out.println(input.replaceAll("[^a-zA-Z0-9 ]",""));
-
+		
+		List<Character> letters = 
+			input.chars()
+		    .mapToObj(c -> (char) c) // Here, you're converting int → char → Character (boxed).
+		    .filter(c->Character.isLetter(c) || Character.isSpaceChar(c))
+		    .collect(Collectors.toList());
+		
+		System.out.println(letters);
+		
+		input.chars().mapToObj(c->(char)c)
+		.filter(c->Character.isLetter(c) || Character.isSpaceChar(c))
+		.forEach(System.out::print);
 	}
 }
