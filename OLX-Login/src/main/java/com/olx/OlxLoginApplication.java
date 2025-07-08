@@ -60,10 +60,5 @@ public class OlxLoginApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OlxLoginApplication.class, args);
 	}
-
-	@Bean
-	public PasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 }
 
