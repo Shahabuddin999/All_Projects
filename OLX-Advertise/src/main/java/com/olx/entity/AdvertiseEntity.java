@@ -19,7 +19,7 @@ public class AdvertiseEntity {
 	private int status;
 	private double price;
 	private String description;
-	private Blob photo;
+	private String photo;
 	private LocalDate createdDate;
 	private LocalDate modifiedDate;
 	private boolean active;
@@ -61,10 +61,10 @@ public class AdvertiseEntity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Blob getPhoto() {
+	public String getPhoto() {
 		return photo;
 	}
-	public void setPhoto(Blob photo) {
+	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
 	public LocalDate getCreatedDate() {
@@ -97,7 +97,7 @@ public class AdvertiseEntity {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public AdvertiseEntity(int id, String title, int category, int status, double price, String description, Blob photo,
+	public AdvertiseEntity(int id, String title, int category, int status, double price, String description, String photo,
 			LocalDate createdDate, LocalDate modifiedDate, boolean active, String postedBy, String userName) {
 		super();
 		this.id = id;

@@ -21,7 +21,7 @@ public class AdvertiseDto {
 	@ApiModelProperty(value = "Advertise Description")
 	private String description;
 	@ApiModelProperty(value = "Advertise Photo")
-	private Blob photo;
+	private String photo;
 	@ApiModelProperty(value = "Advertise Created date")
 	private LocalDate createdDate;
 	@ApiModelProperty(value = "Advertise Modified date")
@@ -85,11 +85,11 @@ public class AdvertiseDto {
 		this.description = description;
 	}
 
-	public Blob getPhoto() {
+	public String getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(Blob photo) {
+	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
 
@@ -149,7 +149,7 @@ public class AdvertiseDto {
 		this.categoryName = categoryName;
 	}
 
-	public AdvertiseDto(int id, String title, int category, int status, double price, String description, Blob photo,
+	public AdvertiseDto(int id, String title, int category, int status, double price, String description, String photo,
 			LocalDate createdDate, LocalDate modifiedDate, boolean active, String postedBy, String userName,
 			String statusName, String categoryName) {
 		super();

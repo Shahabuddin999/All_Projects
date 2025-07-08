@@ -2,12 +2,10 @@ package com.olx.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,21 +15,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.olx.dto.AdvertiseDto;
-import com.olx.dto.AdvertiseStatusDto;
-import com.olx.dto.CategoryDto;
 import com.olx.service.AdvertiseService;
-import com.olx.service.MasterDelegateService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
  
 @RestController
 @RequestMapping("/advertiseMasterApp")
@@ -40,43 +33,47 @@ public class AdvertiseController {
 	
 	@Autowired
 	AdvertiseService advertiseService;
+	
 	@Autowired
 	RestTemplate restTemplate;
+	
+	// Swagger: http://localhost:8083/swagger-ui/index.html
+	// Always send Bearer token from postman or Swagger. if you send from postman then go to Authorization->"Auth Type" select "Bearer Tocken" in drop down and past tocken. 
 	
 	@PostMapping(value="/advertise", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Create a Advertise", notes = "Create a Advertise and Returns Adertise to Client") // This @ApiOperation and @ApiParam is belonging to swagger
 	public ResponseEntity<AdvertiseDto>  createAdvertise(@RequestBody @ApiParam(value="Need to send Advertise DTO", name = "advertiseDto", required = true) AdvertiseDto advertiseDto,
-														 @ApiParam(value="Need to send Authorization", name = "Authorization", required = true) @RequestHeader("Authorization") String authorization) {
-			
-		ResponseEntity<AdvertiseDto> responseAdvertiseDto = advertiseService.createAdvertise(advertiseDto, authorization);
+														 @ApiParam(value="Need to send Authorization", name = "Authorization", required = true) HttpServletRequest request) {
+		String tocken = getBearerTocken(request);	
+		ResponseEntity<AdvertiseDto> responseAdvertiseDto = advertiseService.createAdvertise(advertiseDto, tocken);
 		return responseAdvertiseDto;
 	}
 	
 	@PutMapping(value="/advertise/{advertiseId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Update particular Advertise", notes = "Update particular Advertise and return to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<AdvertiseDto>  updateAdvertise(@RequestBody @ApiParam(value="Send advertiseDto DTO", name="advertiseDto", required = true) AdvertiseDto advertiseDto,@ApiParam(value="Send Authorization", name="Authorization", required = true)  @RequestHeader("Authorization") String authorization, @ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
-		ResponseEntity<AdvertiseDto> response = advertiseService.updateAdvertise(advertiseDto, authorization, advertiseId);
+	public ResponseEntity<AdvertiseDto>  updateAdvertise(@RequestBody @ApiParam(value="Send advertiseDto DTO", name="advertiseDto", required = true) AdvertiseDto advertiseDto,@ApiParam(value="Send Authorization", name="Authorization", required = true)  HttpServletRequest request, @ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
+		ResponseEntity<AdvertiseDto> response = advertiseService.updateAdvertise(advertiseDto, getBearerTocken(request), advertiseId);
 		return response;
 	}
 	
 	@GetMapping(value="/user/advertise", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Read all Advertise", notes = "Returns a particular Advertise and return to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<List<AdvertiseDto>>  getAdvertiseByLoggedInUser(@ApiParam(value="Auth Tocken over here", name="Authorization", required = true) @RequestHeader("Authorization") String authorization) {
-		ResponseEntity<List<AdvertiseDto>> response = advertiseService.getAdvertiseByLoggedInUser(authorization);
+	public ResponseEntity<List<AdvertiseDto>>  getAdvertiseByLoggedInUser(@ApiParam(value="Auth Tocken over here", name="Authorization", required = true) HttpServletRequest request) {
+		ResponseEntity<List<AdvertiseDto>> response = advertiseService.getAdvertiseByLoggedInUser(getBearerTocken(request));
 		return response;
 	}
 	
 	@GetMapping(value="/user/advertise/{advertiseId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	@ApiOperation(value="Read all Advertise based on AuthTocken", notes = "Returns Read all Advertise based on AuthTocken to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<AdvertiseDto>  getAdvertiseByLoggedInUserAndId(@ApiParam(value="Send Authorization", name="Authorization", required = true) @RequestHeader("Authorization") String authorization,@ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
-		ResponseEntity<AdvertiseDto> response = advertiseService.getAdvertiseByLoggedInUserAndId(authorization, advertiseId);
+	@ApiOperation(value="Read Advertise based on AuthTocken and advertiseID", notes = "Returns Read all Advertise based on AuthTocken to the client") // This @ApiOperation and @ApiParam is belonging to swagger
+	public ResponseEntity<AdvertiseDto>  getAdvertiseByLoggedInUserAndId(@ApiParam(value="Send Authorization", name="Authorization", required = true) HttpServletRequest request, @ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
+		ResponseEntity<AdvertiseDto> response = advertiseService.getAdvertiseByLoggedInUserAndId(getBearerTocken(request), advertiseId);
 		return response;
 	}
 	
 	@DeleteMapping(value="/user/advertise/{advertiseId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Read and Delete advertise for a particular advertise Id", notes = "Read and Delete advertise for a particular advertise Id and return to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<Boolean>  deleteAdvertiseByLoggedInUserAndId(@ApiParam(value="Send Authorization", name="Authorization", required = true) @RequestHeader("Authorization") String authorization,@ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
-		ResponseEntity<Boolean> response = advertiseService.deleteAdvertiseByLoggedInUserAndId(authorization, advertiseId);
+	public ResponseEntity<Boolean>  deleteAdvertiseByLoggedInUserAndId(@ApiParam(value="Send Authorization", name="Authorization", required = true) HttpServletRequest request,@ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
+		ResponseEntity<Boolean> response = advertiseService.deleteAdvertiseByLoggedInUserAndId(getBearerTocken(request), advertiseId);
 		return response;
 	}
 	
@@ -126,13 +123,19 @@ public class AdvertiseController {
 	
 	@GetMapping(value="/advertise/{advertiseId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Read particular advertise based on id", notes = "Read particular advertise based on id and returns... to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<AdvertiseDto>  getAdvertiseById(@ApiParam(value="Send Authorization", name="Authorization", required = true) @RequestHeader("Authorization") String authorization,@ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
+	public ResponseEntity<AdvertiseDto>  getAdvertiseById(@ApiParam(value="Send Authorization", name="Authorization", required = true) HttpServletRequest request,@ApiParam(value="Advertise Id", name="advertiseId", required = true) @PathVariable("advertiseId") int advertiseId) {
 		// in the doc API no 11 and 15 are same but only response is different
 		// means this deleteAdvertiseByLoggedInUserAndId() and getAdvertiseById()
-		ResponseEntity<AdvertiseDto> response = advertiseService.getAdvertiseById(authorization, advertiseId);
+		ResponseEntity<AdvertiseDto> response = advertiseService.getAdvertiseById(getBearerTocken(request), advertiseId);
 		return response; 
 	}
 	
+	public String getBearerTocken(HttpServletRequest request) {
+		String token = request.getHeader("Authorization");
+		if (!token.startsWith("Bearer "))
+			token = "Bearer " + token;
+		return token;
+	}
 	/*
 	@GetMapping(value="/advertise/getAllCategory", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Read all category", notes = "Read all category to the client") // This @ApiOperation and @ApiParam is belonging to swagger

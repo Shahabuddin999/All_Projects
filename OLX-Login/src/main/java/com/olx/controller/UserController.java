@@ -37,6 +37,9 @@ public class UserController {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    //Swagger : http://localhost:8080/swagger-ui/
+    //Always send Bearer token from postman or Swagger. if you send from postman then go to Authorization->"Auth Type" select "Bearer Tocken" in drop down and past tocken.
+
     @Operation(summary = "Authenticate User", description = "Validate username and password, return JWT token")
     @PostMapping(value = "/user/authenticate", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<String> authenticate(
