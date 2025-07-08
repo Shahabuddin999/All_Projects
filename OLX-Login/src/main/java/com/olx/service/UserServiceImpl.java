@@ -49,18 +49,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	PasswordEncoder passwordEncoder; 
-//	@Override
-//	public ResponseEntity<String> authenticate(UserDto userDto) {
-//		List<UserEntity> list = userRepository.findUserByUserName(userDto.getUsername());
-//		if (list.isEmpty()) {
-//			UserEntity userEntity = this.modelMapper.map(userDto, UserEntity.class);
-//			userEntity = userRepository.save(userEntity);
-//			userDto = this.modelMapper.map(userEntity, UserDto.class);
-//			return new ResponseEntity<String>("LoggedIn",HttpStatus.CREATED);
-//		} else {
-//			throw new InvalidUserNameOrPasswordException(userDto.getUsername());
-//		}
-//	}
 
 	@Override
 	public ResponseEntity<Boolean> userLogout(String authToken) {

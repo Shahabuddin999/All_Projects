@@ -47,7 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		// This method will be called at login time if login success then you will get authTocken else will get "UsernameNotFoundException("User not found: " + username)"
+		// This method will be called at login time if login /olxuser/user/authenticate success then you will get "jwtTocken generated" else will get "UsernameNotFoundException("User not found: " + username)"
 	    List<UserEntity> userEntities = userRepo.findByUsername(username);
 	    
 	    if (userEntities.isEmpty()) {
@@ -62,9 +62,10 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	        authorities.add(new SimpleGrantedAuthority(role.trim()));
 	    }
 
-	    // Spring Security will internally do: passwordEncoder.matches(rawPasswordFromLoginForm, encodedPasswordFromDB);
+	    
 	    // UserDetails userDetails = new User(username, passwordEncoder.encode(userEntity.getPassword()), authorities); 
 	    // Use just above line if your password id saved as a plain text not in encoded form
+	    // Spring Security will internally do: passwordEncoder.matches(rawPasswordFromLoginForm, encodedPasswordFromDB);
 
 	    UserDetails userDetails = new User(username, userEntity.getPassword(), authorities);
 	    // Use just above line if password is saved in database in encoded form so here you don't need to encode it again, because you are already getting password in encoded password form from database 
