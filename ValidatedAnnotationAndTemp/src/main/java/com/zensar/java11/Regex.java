@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Regex {
 
@@ -106,5 +107,6 @@ public class Regex {
 		input.chars().mapToObj(c->(char)c)
 		.filter(c->Character.isLetter(c) || Character.isSpaceChar(c))
 		.forEach(System.out::print);
+		
 	}
 }

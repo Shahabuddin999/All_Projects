@@ -84,6 +84,12 @@ public class React {
 		paired.subscribe(System.out::println);
 		
 		//Mono.deferContextual(ctx -> Mono.just(ctx.get("userId"))).subscribe(System.out::println);
+		
+		Flux<String> flux = Flux.just("A", "B", "C");
+		flux.cache();
+		flux.subscribe(System.out::println);
+		flux.subscribe(System.out::println);
+
 	}
 
 }
