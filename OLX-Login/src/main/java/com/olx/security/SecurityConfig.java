@@ -27,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 
-		// Third call at server starting time
+		// Second this method will be called at server starting time
 	    http.csrf().disable()
 	        .authorizeRequests()
 	        
@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 		// This belove line is for database call
-		auth.userDetailsService(userDetailsService); // Second call at server starting time
+		auth.userDetailsService(userDetailsService); // First this method will be called at server starting time
 		
 //		auth.inMemoryAuthentication()
 //		.withUser("shahabuddin")
@@ -83,11 +83,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public AuthenticationManager getAuthenticationManager() throws Exception {
-		return super.authenticationManager(); // First call at server starting time
-		// Server is started first of All
-		// -> 1st call :"getAuthenticationManager()" method will be called then it will call 
-		// -> 2nd call :"configure(AuthenticationManagerBuilder auth)" and then this method will call to
-		// -> 3rd call :"configure(HttpSecurity http)"
+		return super.authenticationManager(); 
+		// -> This getAuthenticationManager() method and AppConfig's class's method getModelMapper() and getPasswordEncoder() will be injected first because bean is injected at server starting time.
+		// -> 1st call :"configure(AuthenticationManagerBuilder auth)" and then this method will call to
+		// -> 2nd call :"configure(HttpSecurity http)"
 	}
 	
 	
