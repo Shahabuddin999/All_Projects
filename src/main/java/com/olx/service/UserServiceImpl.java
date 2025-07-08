@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService{
 		LocalDateTime expiryDateTime = extractExpiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		BlackListedToken balBlackListedToken = new BlackListedToken(1, token, LocalDateTime.now(), expiryDateTime);
 		userLogoutMongoRepository.save(balBlackListedToken);
-		return new ResponseEntity<Boolean>(true,HttpStatus.FOUND);
+		return new ResponseEntity<>(true,HttpStatus.FOUND);
 		} catch (Exception e) {
 			throw new InvalidAuthTokenException("You have intered invalid Auth Thocken");
 		}
@@ -81,8 +82,8 @@ public class UserServiceImpl implements UserService{
 		List<UserEntity> list = userRepository.findUserByUserName(userName);
 		if (!list.isEmpty()) {
 			UserDto userDto = this.modelMapper.map(list.get(0), UserDto.class);
-			userDto.setPassword(this.encodePassword(userDto.getPassword()));
-			return new ResponseEntity<UserDto>(userDto,HttpStatus.FOUND);
+			userDto.setPassword(setPasswordForDto());
+			return new ResponseEntity<>(userDto,HttpStatus.FOUND);
 		} else {
 			throw new InvalidAuthTokenException(authTocken);
 		}
@@ -91,32 +92,14 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public ResponseEntity<Boolean> validateTocken(String authTocken) {
 
-		authTocken = authTocken.split(" ")[1];
+		//authTocken = authTocken.split(" ")[1];
 		try {
 			String userName = jwtUtil.extractUsername(authTocken);
-			//UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
-			/////////////// checking and getting Roles
-			//Collection<? extends GrantedAuthority> roles = userDetails.getAuthorities();
-			//roles.stream().forEach(System.out::println);
-			//java.util.Set<GrantedAuthority> userRoles = roles.stream().collect(Collectors.toSet());
-			//userRoles.stream().forEach(System.out::println);
-			//System.out.println(userRoles);
-			//////////////////
-			//if (Boolean.TRUE.equals(jwtUtil.validateToken(authTocken, userDetails))) {
-			if (Boolean.TRUE.equals(jwtUtil.validateToken(authTocken, userName))) {
-// 					ye check kr rha ki loggedout tocken me to ni h jo loggeout hote h wo blacklisted tocken me chala jata h 
-//				LocalDateTime currentDateTime = LocalDateTime.now();
-//				BlackListedToken blackListedToken = userLogoutMongoRepository.findByToken(authTocken);
-//				if (blackListedToken != null && (currentDateTime.equals(blackListedToken.getExpirydate())
-//						|| currentDateTime.isAfter(blackListedToken.getExpirydate()))) {
-//					throw new InvalidAuthTokenException("You have intered invalid Auth Tocken : " + authTocken);
-//				}
-				 
-			}
+			System.out.println("UserName: "+userName);
 		} catch (Exception e) {
 			throw new InvalidAuthTokenException("You have intered invalid Auth Tocken");
 		}
-		return new ResponseEntity<Boolean>(true, HttpStatus.FOUND);
+		return new ResponseEntity<>(true, HttpStatus.FOUND);
 	}
 
 	@Override
@@ -124,14 +107,38 @@ public class UserServiceImpl implements UserService{
 		List<UserEntity> list = userRepository.findUserByUserName(userDto.getUsername());
 		if (list.isEmpty()) {
 			UserEntity userEntity = this.modelMapper.map(userDto, UserEntity.class);
+			userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
 			userEntity = userRepository.save(userEntity);
 			userDto = this.modelMapper.map(userEntity, UserDto.class);
-			return new ResponseEntity<UserDto>(userDto,HttpStatus.CREATED);
+			userDto.setPassword(setPasswordForDto());
+			return new ResponseEntity<>(userDto,HttpStatus.CREATED);
 		} else {
 			throw new UserNameAlreadyExistsException(userDto.getUsername());
 		}
 	}
 	public String encodePassword(String rawPassword) {
 		return passwordEncoder.encode(rawPassword);
+	}
+
+	@Override
+	public ResponseEntity<UserDto> changePassword(UserDto userDto) {
+		List<UserEntity> userList = userRepository.findByUsername(userDto.getUsername());
+
+        if (userList.isEmpty()) {
+        	throw new InvalidUserNameOrPasswordException("You have passed invalid User Name: "+userDto.getUsername());
+        }
+
+        UserEntity userEntity = userList.get(0);
+        userEntity.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userRepository.save(userEntity);
+        UserDto responseDto = new UserDto();
+        responseDto = this.modelMapper.map(userEntity, UserDto.class);
+        responseDto.setPassword("Password Updated Successfully");
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+	}
+	
+	public static String setPasswordForDto() {
+		return "*********";
 	}
 }

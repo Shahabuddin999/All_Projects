@@ -44,3 +44,8 @@ eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

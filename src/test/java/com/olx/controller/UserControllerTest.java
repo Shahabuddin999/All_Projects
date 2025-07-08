@@ -99,7 +99,7 @@ class UserControllerTest {
 		when(this.userService.getUser(tocken, expectedUserDto.getUsername())).thenReturn(new ResponseEntity<UserDto>(expectedUserDto,HttpStatus.FOUND));
 		when(jwtUtil.extractUsername(tocken.split(" ")[1])).thenReturn(expectedUserDto.getUsername());
 		when(userDetailsService.loadUserByUsername(expectedUserDto.getUsername())).thenReturn(user);
-		when(jwtUtil.validateToken(tocken.split(" ")[1], user)).thenReturn(true);
+		when(jwtUtil.validateToken(tocken.split(" ")[1], expectedUserDto.getUsername())).thenReturn(true);
 		mockMvc.perform(get("/olxuser/user")
 				.accept("application/json")
 				.headers(headers)
@@ -120,7 +120,7 @@ class UserControllerTest {
 		UserDetails user = new User(expectedUserDto.getUsername(),expectedUserDto.getPassword(),new ArrayList<GrantedAuthority>());
 		when(jwtUtil.extractUsername(tocken.split(" ")[1])).thenReturn(expectedUserDto.getUsername());
 		when(userDetailsService.loadUserByUsername(expectedUserDto.getUsername())).thenReturn(user);
-		when(jwtUtil.validateToken(tocken.split(" ")[1], user)).thenReturn(true);
+		when(jwtUtil.validateToken(tocken.split(" ")[1], expectedUserDto.getUsername())).thenReturn(true);
 		mockMvc.perform(get("/olxuser/token/validate")
 				.contentType("application/json")
 				.headers(headers)

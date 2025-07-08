@@ -7,11 +7,13 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@EnableWebSecurity
+@EnableWebSecurity  // @EnableWebSecurity is combination of @Configuration thats why we are able to inject the of "public AuthenticationManager getAuthenticationManager()" in last method 
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -19,36 +21,73 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailsService userDetailsService;
 
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
+	
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable().authorizeRequests().
-		//antMatchers("/zenstock/**").hasAnyRole("ADMIN", "EMPLOYEE").
-		antMatchers("/user/authenticate").hasRole("ADMIN").
-		antMatchers("/employee").hasRole("EMPLOYEE").
-		antMatchers("/testing").hasRole("ADMIN").and().formLogin();
-		//antMatchers("/user/authenticate").permitAll().and().formLogin();
-		
-		/*
-		 http.authorizeRequests()
-		.antMatchers("/zenstock/**").hasAnyRole("ADMIN","EMPLOYEE")
-		.antMatchers("/employee").hasRole("EMPLOYEE")
-		.antMatchers("/admin").hasRole("ADMIN")
-		.antMatchers("/all").permitAll().and().formLogin();
-		 */
+
+		// Third call at server starting time
+	    http.csrf().disable()
+	        .authorizeRequests()
+	        
+	        // ✅ Public or limited access routes
+	        .antMatchers("/olxuser/user/authenticate").permitAll()  // login should be public
+	        .antMatchers("/olxuser/token/validate").permitAll()
+	        .antMatchers("/olxuser/change-password").permitAll()
+	        .antMatchers("/olxuser/user/getUsername").permitAll()
+	        .antMatchers(
+	        	    "/v3/api-docs/**",
+	        	    "/swagger-ui/**",
+	        	    "/swagger-ui.html", // http://localhost:8080/swagger-ui
+	        	    "/swagger-resources/**",
+	        	    "/configuration/**",
+	        	    "/webjars/**",
+	        	    "/actuator/**", // http://localhost:8080/actuator/health
+	        	    "/zipkin/**"  // to run zipkin, first run this command: D:\software>java -jar zipkin-server-2.23.16-exec.jar. then hit: http://localhost:9411/zipkin
+	        	).permitAll()
+	        
+	        // ✅ Role-based access
+	        .antMatchers("/olxuser/employee").hasRole("EMPLOYEE") // Save role in database like ROLE_EMPLOYEE or ROLE_ADMIN. but here you need only give ADMIN or EMPLOYEE without appending ROLE like ROLE_ADMIN or ROLE_EMPLOYEE etc.  because spring internally adds ROLE before ADMIN or EMPLOYEE
+	        .antMatchers("/olxuser/testing").hasRole("ADMIN") // ✅ Corrected path
+	        // Any other request needs to be authenticated
+	        .anyRequest().authenticated() // ✅ All other endpoints require authentication
+	        .and()
+	        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+	    
+	        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+	        //Just above line Extracts the JWT from the Authorization header. Validates the token. Populates SecurityContext with the user's info and roles.
+
+	        //.and().formLogin(); // can be removed if using pure JWT only
 	}
+
+	
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService);
-		/*
-		 * auth.inMemoryAuthentication()
-		 * .withUser("shahabuddin").password(passwordEncoder.encode("ansari")).roles(
-		 * "admin") .and()
-		 * .withUser("nizam").password(passwordEncoder.encode("khan")).roles("user");
-		 */
+		
+		// This belove line is for database call
+		auth.userDetailsService(userDetailsService); // Second call at server starting time
+		
+//		auth.inMemoryAuthentication()
+//		.withUser("shahabuddin")
+//		.password(passwordEncoder.encode("ansari"))
+//		.roles("admin")
+//		.and()
+//		.withUser("nizam")
+//		.password(passwordEncoder.encode("khan"))
+//		.roles("user");
+		
+//		This is for inMemory		
+		 
 	}
+	
 	@Bean
 	public AuthenticationManager getAuthenticationManager() throws Exception {
-		return super.authenticationManager();
+		return super.authenticationManager(); // First call at server starting time
+		// Server is started first of All
+		// -> 1st call :"getAuthenticationManager()" method will be called then it will call 
+		// -> 2nd call :"configure(AuthenticationManagerBuilder auth)" and then this method will call to
+		// -> 3rd call :"configure(HttpSecurity http)"
 	}
 	
 	

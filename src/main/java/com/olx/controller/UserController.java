@@ -1,4 +1,5 @@
 package com.olx.controller;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -6,17 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.olx.dto.UserDto;
 import com.olx.exception.InvalidAuthTokenException;
@@ -24,89 +17,107 @@ import com.olx.exception.InvalidUserNameOrPasswordException;
 import com.olx.security.JwtUtil;
 import com.olx.service.UserService;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/olxuser")
 @CrossOrigin(origins = "*")
 public class UserController {
 
-		@Autowired
-		UserService userService;
-		
-		@Autowired
-		JwtUtil jwtUtil;
-		
-		@Autowired
-		UserDetailsService userDetailsService;
-		
-		@Autowired
-		AuthenticationManager authenticationManager;
-		
-		@PostMapping(value="/user/authenticate", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-		@ApiOperation(value="Authenticate User over here", notes = "Authenticate User over here and return response to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-		public ResponseEntity<String> authenticate(@ApiParam(value="Need to send User DTO to validate", name="userAuthentication", required = true) @RequestBody UserDto userDto) throws Exception{
-			try {
-				// Calling manually because not hitting from Login page provided by spring framework
-				Authentication auth =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
-				System.out.println("Auth : " + auth);
-			}catch(Exception e) {
-				throw new InvalidUserNameOrPasswordException("You have intered Invalid UserName or Password");
-			}
-			String authTocken = jwtUtil.generateToken(userDto.getUsername());
-			return new ResponseEntity<>(authTocken, HttpStatus.OK);
-		}
-		
-		@DeleteMapping(value="/user/logout")
-		@ApiOperation(value="Logout user over here", notes = "Logout user over here and return response to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-		public ResponseEntity<Boolean> userLogout(@ApiParam(value="Pass Auth Tocken over here", name="Authorization", required = true) @RequestHeader("Authorization") String authorization) {
-			return userService.userLogout(authorization);
-		}
-		
-		@PostMapping(value="/user", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-		@ApiOperation(value="Create user over here to create User", notes = "Create user over here and return response to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-		public ResponseEntity<UserDto> createUser(@ApiParam(value="Need to send User's DTO", name="user", required = true) @RequestBody UserDto user) {
-			return userService.createUser(user);
-		}
-		
-		@GetMapping(value="/user", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-		@ApiOperation(value="Get user over here", notes = "Get user over here and return response to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-		//public ResponseEntity<UserDto> getUser(@ApiParam(value="Need to pass User's Auth Tocken", name="Authorization", required = true) @RequestHeader("Authorization") String authorization) {
-		public ResponseEntity<UserDto> getUser(@ApiParam(value="Need to pass User's Auth Tocken", name="Authorization", required = true) @RequestHeader("Authorization") String authorization) {
-			
-			ResponseEntity<UserDto> user = null;
-			if(Boolean.TRUE.equals(validateUserTocken(authorization).getBody())) {
-				String userName = getUsername(authorization).getBody();
-				user = userService.getUser(authorization, userName);
-			}
-			return user;
-		}
-		
-		@GetMapping(value="/token/validate", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-		@ApiOperation(value="Validate user over here...", notes = "Validate user over here and return response to the client___") // This @ApiOperation and @ApiParam is belonging to swagger
-		public ResponseEntity<Boolean> validateUserTocken(@ApiParam(value="Need to send User Auth Tocken", name ="Authorization" ,required = true) @RequestHeader("Authorization") String authorization) {
-			//ResponseEntity<Boolean> isValid = userService.validateTocken(authorization);
-			return userService.validateTocken(authorization);
-		}
-		
-		@GetMapping(value="/user/getUsername", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-		@ApiOperation(value="Get UserName", notes = "Get UserName by AuthTocken") // This @ApiOperation and @ApiParam is belonging to swagger
-		public ResponseEntity<String> getUsername(@ApiParam(value="Need to send User Auth Tocken", name ="Authorization" ,required = true) @RequestHeader("Authorization") String authorization) {
-			String userName = "";
-			try {
-			String actualTocken = authorization.split(" ")[1];
-			userName = jwtUtil.extractUsername(actualTocken);
-			}  catch (Exception e) {
-				throw new InvalidAuthTokenException("You have intered Invalid Auth Tocken");
-			}
-			return new ResponseEntity<>(userName,HttpStatus.FOUND);
-		}
-			
-		@GetMapping(value="/testing", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-		public ResponseEntity<Boolean> testing(@RequestHeader("authTocken") String authTocken) {
-			System.out.println("hello spring.......");
-			System.out.println("hello spring.......");
-			return userService.validateTocken(authTocken);
-		}
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    JwtUtil jwtUtil;
+
+    @Autowired
+    UserDetailsService userDetailsService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Operation(summary = "Authenticate User", description = "Validate username and password, return JWT token")
+    @PostMapping(value = "/user/authenticate", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<String> authenticate(
+            @Parameter(description = "User DTO with credentials", required = true) @RequestBody UserDto userDto) {
+        try {
+            Authentication auth = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword())); // This line will call loadUserByUsername(String username)
+            System.out.println("Auth: " + auth);
+        } catch (Exception e) {
+            throw new InvalidUserNameOrPasswordException("You have entered invalid username or password");
+        }
+        String authToken = jwtUtil.generateToken(userDto.getUsername());
+        return new ResponseEntity<>(authToken, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Logout user", description = "Invalidate the user token")
+    @DeleteMapping(value = "/user/logout")
+    public ResponseEntity<Boolean> userLogout(
+            @Parameter(description = "Auth token", required = true) @RequestHeader("Authorization") String authorization) {
+        return userService.userLogout(authorization);
+    }
+
+    @Operation(summary = "Create user", description = "Register a new user")
+    @PostMapping(value = "/user", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                 consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserDto> createUser(
+            @Parameter(description = "User data", required = true) @RequestBody UserDto user) {
+        return userService.createUser(user);
+    }
+
+    @Operation(summary = "Get current user info", description = "Returns authenticated user data")
+    @GetMapping(value = "/user", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserDto> getUser(@Parameter(hidden = true) Authentication authorization) {
+        ResponseEntity<UserDto> user = null;
+        ResponseEntity<Boolean> flag = validateUserTocken(authorization);
+        if (Boolean.TRUE.equals(flag.getBody())) {
+            String userName = authorization.getName();
+            String token = getTocken();
+            user = userService.getUser(token, userName);
+        }
+        return user;
+    }
+
+    @Operation(summary = "Validate JWT token", description = "Check if token is valid and authorized")
+    @GetMapping(value = "/token/validate", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Boolean> validateUserTocken(@Parameter(hidden = true) Authentication authorization) {
+        authorization.getAuthorities().forEach(a -> System.out.println("✅ Role: " + a.getAuthority()));
+        String token = getTocken();
+        return userService.validateTocken(token);
+    }
+
+    @Operation(summary = "Get username from token", description = "Extract username from JWT token")
+    @GetMapping(value = "/user/getUsername", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<String> getUsername(@Parameter(hidden = true) Authentication authorization) {
+        String userName;
+        try {
+            String actualToken = getTocken();
+            userService.validateTocken(actualToken);
+            userName = jwtUtil.extractUsername(actualToken);
+        } catch (Exception e) {
+            throw new InvalidAuthTokenException("You have entered an invalid auth token");
+        }
+        return new ResponseEntity<>(userName, HttpStatus.FOUND);
+    }
+
+    @Operation(summary = "Admin test endpoint", description = "Returns message for ADMIN users only")
+    @GetMapping(value = "/testing", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<String> testing(@Parameter(hidden = true) Authentication auth) {
+        System.out.println("✅ Authenticated User: " + auth.getName());
+        auth.getAuthorities().forEach(a -> System.out.println("✅ Role: " + a.getAuthority()));
+        return ResponseEntity.ok("Hello ADMIN, you are authorized!");
+    }
+
+    @Operation(summary = "Change or encode password", description = "Encode the user password before saving to DB")
+    @PostMapping(value = "/change-password", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+                 consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<UserDto> encodePassword(@RequestBody UserDto userDto) {
+        return userService.changePassword(userDto);
+    }
+    
+    public String getTocken() {
+    	return (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
+    }
 }

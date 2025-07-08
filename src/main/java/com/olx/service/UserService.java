@@ -10,4 +10,5 @@ public interface UserService {
 	ResponseEntity<UserDto> getUser(String authTocken, String userName);
 	ResponseEntity<UserDto> createUser(UserDto user);
 	ResponseEntity<Boolean> validateTocken(String authTocken);
+	ResponseEntity<UserDto> changePassword(UserDto user);
 }
