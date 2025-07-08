@@ -37,7 +37,7 @@ public class AdvertiseController {
 	@Autowired
 	RestTemplate restTemplate;
 	
-	// Swagger: http://localhost:8083/swagger-ui/index.html
+	// Swagger: http://localhost:8085/swagger-ui/index.html
 	// Always send Bearer token from postman or Swagger. if you send from postman then go to Authorization->"Auth Type" select "Bearer Tocken" in drop down and past tocken. 
 	
 	@PostMapping(value="/advertise", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
