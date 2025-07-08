@@ -117,7 +117,9 @@ public class UserController {
         return userService.changePassword(userDto);
     }
     
+    // This will return tocken
     public String getTocken() {
-    	return (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
+    	String tocken = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
+    	return tocken;
     }
 }
