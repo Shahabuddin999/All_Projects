@@ -1,20 +1,80 @@
 package com.zensar.temp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.Set;
 
 public class DateTime {
 
 	public static void main(String[] args) {
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-		LocalDate date = LocalDate.now(); // current date
-		String formatted = date.format(formatter); // format it
-
-		System.out.println(formatted); // e.g., "02-06-2025"
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy : HH:mm:ss");
+		LocalDateTime date = LocalDateTime.now(); 
+		String formattedDate = date.format(formatter);
+		System.out.println(formattedDate); 
 		
-		System.out.println(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+		String dateString = "20-10-2025 : 23:20:30"; 
+		date = LocalDateTime.parse(dateString,formatter);
+		System.out.println(date);
+		dateString = date.format(formatter);
+		System.out.println(dateString);
+		
+		System.out.println("=========================================================");
+		
+//		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a z");
+//		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+//		System.out.println(zdt);
+//		String format = zdt.format(fmt);
+//		System.out.println(format);
+//		
+//		zdt = ZonedDateTime.parse("12-09-2025 12:00:45 AM IST",fmt);
+//		System.out.println(zdt);
+//		format = zdt.format(formatter);
+//		System.out.println(format);
+		
+		
+		///////////////////////////////
+		//DateTimeFormatter.ofPattern("hh:mm:ss VV"); // ❌ no AM/PM marker
+		//hh is 12-hour format, but there’s no a → ambiguous error
+		//✅ Should use HH (24-hour) if no AM/PM
+		
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a VV", Locale.ENGLISH);
+        // Locale.ENGLISH is specified for AM/PM in english otherwise it would take system's default Local that might be different, so now it is fixed
+        // Locale.HINDI is AM → पूर्वाह्न, PM → अपराह्न and for Locale.JAPANESE it is 午前 / 午後 (Gozen/Gogo)
+        // VV will take dynamic Zone like "Asia/Kolkata" or "America/New_york" 
+        
+        //ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+        //ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("America/New_York")); // America/New_York OR Asia/Kolkata is pointing to VV in DateTimeFormatter
+        ZonedDateTime zdt = ZonedDateTime.now(ZoneId.systemDefault()); // This will pick system's default Zone like Asia/Calcutta
+        //System.out.println("Original ZDT: " + zdt);
+        String formatted = zdt.format(fmt);
+        System.out.println("Original Formatted: " + formatted); 
+
+        String input = "10-07-2025 01:11:07 AM Asia/Kolkata";
+        //String input = "10-07-2025 11:45:00 午前 Asia/Tokyo";  // Japanese for AM. Fails because:You used 午前 instead of AM. Your Locale is ENGLISH, so it expects AM/PM
+
+        ZonedDateTime parsed = ZonedDateTime.parse(input, fmt);
+        //System.out.println("Parsed ZDT: " + parsed);
+
+        String reformatted = parsed.format(fmt);
+        System.out.println("Assigned Formatted: " + reformatted);
+        
+        System.out.println("====================Practice=======================");
+        DateTimeFormatter fm = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a VV", Locale.ENGLISH);
+        ZonedDateTime dt = ZonedDateTime.now(ZoneId.systemDefault());
+        String fmtd = dt.format(fm);
+        System.out.println(fmtd);
+        
+        String newdt = "10-10-2025 10:50:20 AM Asia/Kolkata";
+        ZonedDateTime newdtime = ZonedDateTime.parse(newdt,fm);
+        String fmtddt = newdtime.format(fm);
+        System.out.println(fmtddt);
+        
+        Set<String> zones = ZoneId.getAvailableZoneIds();
+        zones.stream().sorted().forEach(System.out::println);
 	}
 
 }
