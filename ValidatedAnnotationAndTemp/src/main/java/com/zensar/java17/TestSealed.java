@@ -1,6 +1,6 @@
 package com.zensar.java17;
 // Sealed class
-
+//Sealed abstract base class
  sealed class Shape permits Circle, Rectangle, Triangle {
   double area() {
 	  return 10;
@@ -24,7 +24,7 @@ package com.zensar.java17;
 }
 
 //Final permitted subclass of Triangle
-final class EquilateralTriangle extends Triangle {
+ final class EquilateralTriangle extends Triangle {
  @Override
   double area() {
      return 12.0;
@@ -48,3 +48,16 @@ final class EquilateralTriangle extends Triangle {
 }
 
 
+ public class TestSealed {
+	    public static void main(String[] args) {
+	        Shape s1 = new Rectangle();
+	        Shape s2 = new Circle();
+	        Shape s3 = new EquilateralTriangle();
+	        Shape s4 = new ColoredCircle();
+
+	        System.out.println(s1.area()); // 10.0
+	        System.out.println(s2.area()); // 20.0
+	        System.out.println(s3.area()); // 12.0
+	        System.out.println(s4.area()); // 25.0
+	    }
+	}
