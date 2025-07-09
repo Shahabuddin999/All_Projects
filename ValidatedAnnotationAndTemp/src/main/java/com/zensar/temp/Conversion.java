@@ -2,6 +2,7 @@ package com.zensar.temp;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,7 +44,12 @@ public class Conversion {
 			System.out.print(value+" ");
 		});
 		System.out.println("\n"+numbers);
-
+		
+		//Integer[] array2 = Arrays.stream(intArry).sorted(Comparator.reverseOrder()).collect(Collectors.toList()).toArray(Integer[]::new);
+		Integer[] array2 = Arrays.stream(intArry).sorted(Collections.reverseOrder()).collect(Collectors.toList()).toArray(Integer[]::new);
+		Arrays.stream(array2).forEach(value->{
+			System.out.print(value+" ");
+		});
 	}
 
 }

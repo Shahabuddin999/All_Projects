@@ -19,9 +19,8 @@ public class GroupingBy {
 	public static void main(String[] args) {
 		List<Transaction> transactions = Transaction.getTrasaction();
 
-		Map<LocalDate, Double> sumByDay = transactions.stream().collect(
-											Collectors.groupingBy(Transaction::getDate,
-																	Collectors.summingDouble(Transaction::getAmount)));
+		Map<LocalDate, Double> sumByDay = transactions.stream()
+										.collect(Collectors.groupingBy(Transaction::getDate,Collectors.summingDouble(Transaction::getAmount)));
 		
 		sumByDay.forEach((date, total) -> System.out.println(date + " : " + total));
 		System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n\n");
@@ -79,10 +78,14 @@ public class GroupingBy {
 	        mapSort.put("banana", 2);
 	        
 			Map<String, Integer> sort;
-//			sort = mapSort.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey().reversed())
-//					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-//			  System.out.println(sort);
-					
+			sort = mapSort.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey().reversed())
+					.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+			  System.out.println("Sorted Decending order: "+sort);
+			
+			  sort = mapSort.entrySet().stream().sorted(Map.Entry.<String,Integer>comparingByKey())
+						.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+				  System.out.println("Sorted Asending order: "+sort);
+				  
 		  sort = mapSort.entrySet().stream().sorted((entry1,entry2)->entry2.getKey().compareTo(entry1.getKey()))
 					.collect(Collectors.toMap(
 												entry3->entry3.getKey(), 
@@ -136,7 +139,7 @@ public class GroupingBy {
 			// you can use Function.identity() because it also return input like str->str means  str->str and Function.identity() are equals
 			System.out.println(collect);
 			Map<Integer, List<String>> collect1 = listing.stream().collect(Collectors.groupingBy(str->str.length(),Collectors.toList()));
-			System.out.println(collect1);
+			System.out.println("Grouped by length: "+collect1);
 			
 			Map<String, Long> collect2 = listing.stream().collect(Collectors.groupingBy(str->str, Collectors.counting()));
 			System.out.println(collect2);
@@ -154,6 +157,11 @@ public class GroupingBy {
 			Map<Integer, Long> collect4 = Arrays.stream(intArray).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
 			.entrySet().stream().filter(val->val.getValue()>1).collect(Collectors.toMap(key->key.getKey(), value->value.getValue()));
 			System.out.println("Map: "+collect4);
+			
+			System.out.println("-------");
+			list.stream().sorted(Collections.reverseOrder()).forEach(System.out::println);
+			System.out.println("-------");
+			list.stream().sorted().forEach(System.out::println);
 			
 	}
 }

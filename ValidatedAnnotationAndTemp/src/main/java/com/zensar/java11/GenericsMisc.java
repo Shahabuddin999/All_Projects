@@ -1,5 +1,6 @@
 package com.zensar.java11;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class GenericsMisc {
 
     public static void main(String[] args) {
         List<String> words = Arrays.asList(
-            "AANAYA", "ATHAH", "AAVCCANA", "ATACK", "AJAAYA", "AKIRA", "AARAV", "AJAYYY"
+            "AANAYA", "AAAAA", "ATHAH", "AAVCCANA", "ATACK", "AJAAYA", "AKIRA", "AARAV", "AJAYYY"
         );
 
         
@@ -65,9 +66,11 @@ public class GenericsMisc {
  		List<List<Integer>> list = List.of(List.of(10,3,6,1,2),List.of(8,9,7),List.of(30,40));
 		List<Integer> collectList = list.stream()
 				.flatMap(list1->list1.stream())
-				.sorted(Comparator.naturalOrder()) // Comparator.naturalOrder() Ascending order // Comparator.reverseOrder() Descending order
+				//.sorted(Comparator.naturalOrder()) // Comparator.naturalOrder() Ascending order // Comparator.reverseOrder() Descending order
+				//.sorted() // Ascending order 
+				.sorted(Collections.reverseOrder())
 				.collect(Collectors.toList());
-		System.out.println(collectList);
+		System.out.println("Sorted : "+collectList);
 		
 		
 		
@@ -83,7 +86,8 @@ public class GenericsMisc {
 		Arrays.stream(stringArr)
 		.filter(Objects::nonNull) // .filter(obj->obj!=null && !obj.isEmpty())
 		.filter(obj->!obj.isEmpty())
-		.sorted(Comparator.naturalOrder())
+		//.sorted(Comparator.naturalOrder())
+		.sorted(Collections.reverseOrder())
 		.forEach(System.out::println);
     }
 }
