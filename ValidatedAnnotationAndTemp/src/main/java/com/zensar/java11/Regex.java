@@ -108,5 +108,9 @@ public class Regex {
 		.filter(c->Character.isLetter(c) || Character.isSpaceChar(c))
 		.forEach(System.out::print);
 		
+		input.chars()//.mapToObj(c->(char)c)
+		.filter(c->Character.isLetter((char)c) || Character.isSpaceChar((char)c))
+		.forEach(c->System.out.print((char)c));
+		
 	}
 }

@@ -4,25 +4,50 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DateTime {
 
 	public static void main(String[] args) {
 		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy : HH:mm:ss");
-		LocalDateTime date = LocalDateTime.now(); 
-		String formattedDate = date.format(formatter);
+		DateTimeFormatter formatterDT = DateTimeFormatter.ofPattern("dd-MM-yyyy : HH:mm:ss");
+		LocalDateTime dateTime = LocalDateTime.now(); 
+		String formattedDate = dateTime.format(formatterDT);
 		System.out.println(formattedDate); 
 		
 		String dateString = "20-10-2025 : 23:20:30"; 
-		date = LocalDateTime.parse(dateString,formatter);
-		System.out.println(date);
-		dateString = date.format(formatter);
+		dateTime = LocalDateTime.parse(dateString,formatterDT);
+		System.out.println(dateTime);
+		dateString = dateTime.format(formatterDT);
 		System.out.println(dateString);
 		
 		System.out.println("=========================================================");
+		
+		
+		List<String> logRecords = Arrays.asList(
+	            "2023-06-21 14:35:00 INFO Application started successfully",
+	            "2023-06-21 14:40:00 DEBUG Loading configuration",
+	            "2023-06-21 14:45:00 INFO Application shutdown",
+	            "2023-06-21 14:50:00 ERROR Failed to load resource"
+	        );
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDateTime start = LocalDateTime.parse("2023-06-21 14:35:00",formatter);
+		LocalDateTime end = LocalDateTime.parse("2023-06-21 14:45:00",formatter);
+		List<LocalDateTime> collect = logRecords.stream()
+				.map(val->val.replaceAll("[^0-9: -]", "").trim())
+				//.map(val->val.substring(0,19))
+				.map(val->LocalDateTime.parse(val,formatter))
+				.filter(date-> (date.isBefore(end) || date.equals(end))  && (date.isAfter(start) || date.equals(start)))
+				.collect(Collectors.toList());
+		collect.stream().forEach(date->System.out.println(date.format(formatter)));
+		
+		System.out.println("=========================================================");
+		
 		
 //		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss a z");
 //		ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
@@ -73,8 +98,8 @@ public class DateTime {
         String fmtddt = newdtime.format(fm);
         System.out.println(fmtddt);
         
-        Set<String> zones = ZoneId.getAvailableZoneIds();
-        zones.stream().sorted().forEach(System.out::println);
+//        Set<String> zones = ZoneId.getAvailableZoneIds();
+//        zones.stream().sorted().forEach(System.out::println);
 	}
 
 }
