@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 @Service
 public class JwtUtil {
 	private String SECRET_KEY = "secret";
-
+	// Make secret key complex and long because If an attacker knows the SECRET_KEY, Hackers can generate fake tokens. they can act as any user (admin access). Complete security breakdown.
+	// For example you can keep: private static final String SECRET_KEY = Base64.getEncoder().encodeToString("Your$uper$ecureKeyThatIsAtLeast256Bits!".getBytes());
 	@Autowired
 	UserDetailsService userDetailsService;
 	
@@ -55,9 +56,13 @@ public class JwtUtil {
 
     private String createToken(Map<String, Object> claims, String subject) {
 
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+        return Jwts.builder()
+        		   .setClaims(claims)
+        		   .setSubject(subject)
+        		   .setIssuedAt(new Date(System.currentTimeMillis()))
+                   .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                   .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                   .compact();
     }
 
 //    public Boolean validateToken(String token, UserDetails userDetails) {

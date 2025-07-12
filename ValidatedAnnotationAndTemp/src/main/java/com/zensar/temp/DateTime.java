@@ -40,9 +40,8 @@ public class DateTime {
 		LocalDateTime end = LocalDateTime.parse("2023-06-21 14:45:00",formatter);
 		List<LocalDateTime> collect = logRecords.stream()
 				.map(val->val.replaceAll("[^0-9: -]", "").trim())
-				//.map(val->val.substring(0,19))
 				.map(val->LocalDateTime.parse(val,formatter))
-				.filter(date-> (date.isBefore(end) || date.equals(end))  && (date.isAfter(start) || date.equals(start)))
+				.filter(date-> (date.isAfter(start) || date.equals(start)) && (date.isBefore(end) || date.equals(end)))
 				.collect(Collectors.toList());
 		collect.stream().forEach(date->System.out.println(date.format(formatter)));
 		
@@ -100,6 +99,16 @@ public class DateTime {
         
 //        Set<String> zones = ZoneId.getAvailableZoneIds();
 //        zones.stream().sorted().forEach(System.out::println);
+        
+        DateTimeFormatter frmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDate = LocalDateTime.parse("2023-06-21 14:35:00",frmt);
+        LocalDateTime endDate = LocalDateTime.parse("2023-06-21 14:45:00",frmt);
+        
+        logRecords.stream()
+        		  //.map(date->LocalDateTime.parse(date.substring(0,19),frmt))
+        		  .map(date->LocalDateTime.parse(date.replaceAll("[^0-9: -]", "").trim(),frmt))
+        		  .filter(date-> !date.isAfter(endDate) && !date.isBefore(startDate))
+        		  .forEach(System.out::println);
 	}
 
 }
