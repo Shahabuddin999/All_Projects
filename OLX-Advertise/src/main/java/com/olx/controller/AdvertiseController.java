@@ -95,8 +95,6 @@ public class AdvertiseController {
 	
 	}
 	
-	// Sir
-	
 	@GetMapping(value="/advertise/searchFields/filtercriteria", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Read all advertise based on search filter", notes = "Read and all advertise based on search filter and return to the client") // This @ApiOperation and @ApiParam is belonging to swagger
 	public List<AdvertiseDto> searchAdvertisesByFilterCriteria(@RequestParam(name="searchText", required = false)String searchText,
@@ -112,8 +110,6 @@ public class AdvertiseController {
 		return list;
 	}
 	
-	
-	//////////
 	@GetMapping(value="/advertise/search/text", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	@ApiOperation(value="Read all advertise based on search Text", notes = "Read and all advertise based on search Text and return to the client") // This @ApiOperation and @ApiParam is belonging to swagger
 	public ResponseEntity<List<AdvertiseDto>>  getAdvertiseByText(@ApiParam(value="Advertise Text for Title and Description", name="searchText", required = true) @RequestParam("searchText") String searchText) {
@@ -136,35 +132,4 @@ public class AdvertiseController {
 			token = "Bearer " + token;
 		return token;
 	}
-	/*
-	@GetMapping(value="/advertise/getAllCategory", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	@ApiOperation(value="Read all category", notes = "Read all category to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<List<CategoryDto>>  getAllCategory() {
-		ResponseEntity<List<CategoryDto>> response = advertiseService.getAllCategory();
-		return response;
-	}
-	
-	@GetMapping(value="/category/{categoryId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	@ApiOperation(value="Read specific category", notes = "Read specific category and return to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<CategoryDto> getCategoryById(@ApiParam(value="Send Category Id", name="categoryId", required = true) Integer categoryId) {
-		ResponseEntity<CategoryDto> response = advertiseService.getCategoryById(categoryId);
-		return response;
-	}
-	
-	@GetMapping(value="/advertiseStatus/{advertiseStatusId}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	@ApiOperation(value="Read specific Advertise Status", notes = "Read specific Advertise and return to the client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<AdvertiseStatusDto> getAdvertiseStutusById(@ApiParam(value="Send Advertise Status Id", name="advertiseStatusId", required = true) Integer advertiseStatusId) {
-		ResponseEntity<AdvertiseStatusDto> response = advertiseService.getAdvertiseStatusDto(advertiseStatusId);
-		return response;
-	}
-	
-	@PostMapping(value="/advertiseDummy", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	@ApiOperation(value="Create a Advertise", notes = "Create a Advertise and Returns Adertise to Client") // This @ApiOperation and @ApiParam is belonging to swagger
-	public ResponseEntity<AdvertiseDto>  createAdvertiseDummy(@RequestBody @ApiParam(value="Need to send Advertise DTO", name = "advertiseDto", required = true) AdvertiseDto advertiseDto,
-														 @ApiParam(value="Need to send Authorization", name = "Authorization", required = true) @RequestHeader("Authorization") String authorization) {
-			
-		AdvertiseDto responseAdvertiseDto = advertiseService.createAdvertiseDummy(advertiseDto, authorization);
-		return new ResponseEntity<AdvertiseDto>(responseAdvertiseDto,HttpStatus.CREATED);
-	}
-	*/
 }
