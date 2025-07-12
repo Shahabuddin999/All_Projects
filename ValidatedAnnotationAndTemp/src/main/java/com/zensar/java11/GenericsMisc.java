@@ -9,10 +9,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.zensar.temp.Transaction;
-
 public class GenericsMisc {
-
+	private static Logger logger = LoggerFactory.getLogger(GenericsMisc.class); 
     public static void main(String[] args) {
         List<String> words = Arrays.asList(
             "AANAYA", "AAAAA", "ATHAH", "AAVCCANA", "ATACK", "AJAAYA", "AKIRA", "AARAV", "AJAYYY"
@@ -89,5 +91,25 @@ public class GenericsMisc {
 		//.sorted(Comparator.naturalOrder())
 		.sorted(Collections.reverseOrder())
 		.forEach(System.out::println);
+		
+		Set<Integer> collect2 = IntStream.rangeClosed(1, 20).filter(isPrime->{
+			return IntStream.rangeClosed(2, (int) Math.sqrt(isPrime)).noneMatch(value->isPrime%value==0);
+		}).boxed().collect(Collectors.toSet());
+		logger.info("Prime: "+collect2);
+		
+		//System.out.println(Math.pow(4, 3));
+		System.out.println("==========================");
+		IntStream.rangeClosed(2, 160).filter(val->{
+			int sum = String.valueOf(val).chars()
+			.map(data->Character.getNumericValue(data))
+			.map(digit-> (int)Math.pow(digit, 3)).sum();
+			return sum == val;
+		}).forEach(System.out::println);
+		
+		System.out.println("==========================");
+		IntStream.of(1, 2, 3, 4)
+        .boxed() // IntStream → Stream<Integer> // if you don't boxed() it then you can not return from .map() different input and different output. because boxed() changing IntStream intoStream<Integer>, then map can receive any data type and return any different data type 
+        .map(val -> "Hello") // Each Integer is replaced by "Hello"
+        .forEach(System.out::println);
     }
 }
