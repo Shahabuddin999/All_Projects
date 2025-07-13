@@ -116,8 +116,8 @@ public class GroupingBy {
 					.collect(Collectors.toMap(
 							v1->v1.getKey(), 
 							v2->v2.getValue(),
-							(v1,v2)->v1,
-							LinkedHashMap::new
+							(v1,v2)->v1,  // In case of duplicates, keep original
+							LinkedHashMap::new  // Maintain insertion order
 							));
 			System.out.println("Sorted :::::::: "+sort);
 			
