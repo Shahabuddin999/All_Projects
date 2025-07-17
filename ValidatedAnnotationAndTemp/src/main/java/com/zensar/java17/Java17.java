@@ -8,7 +8,7 @@ final class Bike extends Vehicle {}
 
 record User(String name, int age) {
 	public User(String name) {
-		this(name, 0); // must calls canonical constructor
+		this(name, 0); // must calls canonical constructor...
 	}
 
 	public User(int age) {
