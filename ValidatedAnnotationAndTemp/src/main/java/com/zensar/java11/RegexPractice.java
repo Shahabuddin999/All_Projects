@@ -67,6 +67,10 @@ public class RegexPractice {
 		while(matcher3.find())
 			System.out.println(matcher3.group());
 		
+		String str = "absdm 12 cs1dc45 dsad432";
+		Pattern ptr = Pattern.compile("[0-9]+");
+		Matcher mtr = ptr.matcher(str);
+		while(mtr.find())
+			System.out.println(mtr.group());
 	}
-
 }

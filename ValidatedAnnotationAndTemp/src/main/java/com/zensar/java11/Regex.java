@@ -94,7 +94,7 @@ public class Regex {
 					System.out.println(after5);
 					
 		String input = "Hell#$#$o World##$^&*#$";
-		System.out.println(input.replaceAll("[^a-zA-Z0-9 ]",""));
+		System.out.println(":::::::"+input.replaceAll("[^a-zA-Z0-9 ]","").trim());
 		
 		List<Character> letters = 
 			input.chars()
@@ -102,7 +102,9 @@ public class Regex {
 		    .filter(c->Character.isLetter(c) || Character.isSpaceChar(c))
 		    .collect(Collectors.toList());
 		
-		System.out.println(letters);
+		Arrays.stream(input.split("")).filter(c->Character.isLetter(c.toCharArray()[0]) || Character.isSpaceChar(c.toCharArray()[0])).forEach(System.out::println);
+		
+		System.out.println("letters: "+letters);
 		
 		input.chars().mapToObj(c->(char)c)
 		.filter(c->Character.isLetter(c) || Character.isSpaceChar(c))
@@ -112,5 +114,8 @@ public class Regex {
 		.filter(c->Character.isLetter((char)c) || Character.isSpaceChar((char)c))
 		.forEach(c->System.out.print((char)c));
 		
+		input.chars().mapToObj(ch->(char)ch).filter(ch->Character.isLetter(ch)).map(ch->String.valueOf(ch).toUpperCase()).forEach(System.out::println);
+	
+		"shahabuddin ansari".chars().mapToObj(c->(char)c).collect(Collectors.toList());
 	}
 }

@@ -163,5 +163,8 @@ public class GroupingBy {
 			System.out.println("-------");
 			list.stream().sorted().forEach(System.out::println);
 			
+			List<String> lst = List.of(array.split(" "));
+			Map<String, Long> collect5 = lst.stream().filter(val->Collections.frequency(lst, val)>1).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+			System.out.println(collect5);
 	}
 }

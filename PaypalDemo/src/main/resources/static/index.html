@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PayPal Spring Boot Integration</title>
+</head>
+<body>
+    <h1>Pay with PayPal</h1>
+    <div id="paypal-button"></div>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=ASvIXjU_mIESfspkh6vbzvhYKY5kAad0OWfyRL5BoxymJLEJTfs2JvsN&currency=USD"></script>
+    <script>
+        paypal.Buttons({
+            createOrder: function () {
+                return fetch("/api/paypal/order", {
+                    method: 'post',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: 10.00, currency: "USD" })
+                })
+                .then(res => res.json())
+                .then(data => data.orderId);
+            },
+            onApprove: function (data) {
+                return fetch(`/api/paypal/capture/${data.orderID}`, { method: 'post' })
+                    .then(res => res.json())
+                    .then(details => {
+                        alert('Payment Successful!');
+                        console.log(details);
+                    });
+            }
+        }).render('#paypal-button');
+    </script>
+</body>
+</html>

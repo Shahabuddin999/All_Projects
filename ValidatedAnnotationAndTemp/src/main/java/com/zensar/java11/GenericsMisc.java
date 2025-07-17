@@ -73,8 +73,6 @@ public class GenericsMisc {
 				.collect(Collectors.toList());
 		System.out.println("Sorted : "+collectList);
 		
-		
-		
 		List<Transaction> trasactionPlus = Transaction.getTrasactionPlus();
 		trasactionPlus.stream().forEach(obj->{
 			System.out.println(obj.getDate().getYear());
@@ -109,6 +107,11 @@ public class GenericsMisc {
 		IntStream.of(1, 2, 3, 4)
         .boxed() // IntStream → Stream<Integer> // if you don't boxed() it then you can not return from .map() different input and different output. because boxed() changing IntStream intoStream<Integer>, then map can receive any data type and return any different data type 
         .map(val -> "Hello") // Each Integer is replaced by "Hello"
+        .forEach(System.out::println);
+		
+		IntStream.of(1, 2, 3, 4)
+        //.boxed() // IntStream → Stream<Integer> // if you don't boxed() it then you can not return from .map() different input and different output. because boxed() changing IntStream intoStream<Integer>, then map can receive any data type and return any different data type 
+        .mapToObj(val -> "Hello") // Each Integer is replaced by "Hello"
         .forEach(System.out::println);
     }
 }

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: PaypalDemo
+
+paypal:
+  client-id: ASvIXjU_mIESfspkhG8HAlEadKIgUJiB6MgQwCUbA6vbzvhYKY5kAad0OWfyRL5BoxymJLEJTfs2JvsN
+  secret: EGOch_ZzbGVTVDH8gslm3R_Nb7PzzEMOmLq-zI4JPF1sASXlvGV1rwxwReC8l_cOQXUx1YK1WO-ZHy2O
+  mode: sandbox
+
+server:
+  port: 8080
+debug: true
