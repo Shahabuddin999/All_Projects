@@ -1,0 +1,60 @@
+minikube delete
+	Open PowerShell (as Administrator) and run:
+	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+	dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+	
+minikube start --driver=docker
+	This will use the Docker engine to run the Kubernetes cluster.
+	
+minikube status
+
+kubectl cluster-info
+
+kubectl get node
+
+minikube docker-env
+	will show you 
+		SET DOCKER_TLS_VERIFY=1
+			SET DOCKER_HOST=tcp://127.0.0.1:51310
+			SET DOCKER_CERT_PATH=C:\Users\User\.minikube\certs
+			SET MINIKUBE_ACTIVE_DOCKERD=minikube
+			REM To point your shell to minikube's docker-daemon, run:
+			REM @FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+		copy last line and past on CMD and press enter
+		now kubernatived can read your local docker repository
+	@FOR /f "tokens=*" %i IN ('minikube -p minikube docker-env --shell cmd') DO @%i
+	
+docker build -t springboot-k8s-sample:1.0 .
+	If you have deployment.yaml, service.yaml, or k8s folder, apply them again:
+		 kubectl apply -f postgres.yml
+		 
+kubectl create deployment springboot-k8s-sample --image=springboot-k8s-sample:1.0 --port=8080
+
+kubectl get deployment
+
+kubectl describe deployment springboot-k8s-sample
+
+kubectl get pod
+
+expose the service: kubectl expose deployment springboot-k8s-sample --type=NodePort --port=8080 --name=springboot-service
+
+get service: kubectl get svc
+
+open new CMD(terminal) and get the URL: minikube service springboot-service
+
+kubectl get pods
+
+open new CMD(terminal) and check logs: kubectl logs -f springboot-k8s-sample-67bbb57d7f-4gkzp
+
+open new CMD(terminal) and command run as local: kubectl port-forward deployment/springboot-k8s-sample 8080:8080
+
+to open kubernative dashboard: close all other terminal and stop main terminal and type : minikube dashboard
+	here you will get url and copy that url and past on browser you will see kubernative dashboard url
+	here if you delte pod imediately new pod will started with different IP
+	
+	
+----------
+At last do clean-up delete all 
+Delete Deployment: kubectl delete deployment springboot-k8s-sample
+Delete service : kubectl delete service springboot-service
+Stop minikube: minikube stop/start

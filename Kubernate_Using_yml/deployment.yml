@@ -1,0 +1,25 @@
+apiVersion: apps/v1                         # API version for Deployment
+kind: Deployment                            # Specifies that this is a Deployment object
+metadata:
+  name: kubernate-using-yml-file-deployment # Name of the Deployment
+  labels:
+    app: kubernate-using-yml-file           # Labels to identify this Deployment (optional but good practice)
+spec:
+  replicas: 2                               # Number of Pod replicas to maintain
+  selector:
+    matchLabels:
+      app: kubernate-using-yml-file         # This is "label selector" matches the pod template labels below it will manage to "Pod template"
+  template:
+    metadata:
+      labels:
+        app: kubernate-using-yml-file       # This is "Pod template" labels — must match the selector above
+    spec:
+      containers:
+        - name: kubernate-using-yml-file-container     
+        # Name of the container (used for logging: kubectl logs <pod-name> -c <container-name>) or 
+        # kubectl logs -f kubernate-using-yml-file-deployment-84dfc98dc5-slvvf
+        
+          image: shahabuddin999/docker-image-spring:latest # Docker image to use for this container
+          imagePullPolicy: Always                    # Always pull the image from Docker Hub when the pod is created
+          ports:
+            - containerPort: 8080                    # Port that the application inside the container listens on

@@ -26,13 +26,19 @@ public class TopNWords {
         
         System.out.println("-----------------------------------------------");
         
-        Arrays.stream(paragraph.replaceAll("[^a-zA-Z ]", "").split(" "))
-        .collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
-        .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2)->e1, LinkedHashMap::new))
-        .entrySet().stream().limit(topN).forEach(entry->{
-        	System.out.println(entry.getKey() +" : "+entry.getValue());
-        });
+        Arrays.stream(paragraph.replaceAll("[^a-zA-Z ]", "")
+        	  .split(" "))
+        	  .collect(Collectors.groupingBy(Function.identity(),Collectors.counting()))
+        	  .entrySet()
+        	  .stream()
+        	  .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+        	  .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2)->e1, LinkedHashMap::new))
+        	  .entrySet()
+        	  .stream()
+        	  .limit(topN)
+        	  .forEach(entry->{
+        			System.out.println(entry.getKey() +" : "+entry.getValue());
+        		});
          
         
         System.out.println("===================");

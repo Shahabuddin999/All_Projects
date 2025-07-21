@@ -1,7 +1,7 @@
 @echo off
 echo Building Spring Boot project with Maven...
 
-cd /d D:\OLX-Apps\OLX-Updated.zip\BootWithDatabase
+cd /d D:\OLX-Apps\OLX-Updated\BootWithDatabase
 
 call mvn clean install -DskipTests
 

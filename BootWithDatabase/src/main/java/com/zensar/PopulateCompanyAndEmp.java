@@ -23,6 +23,13 @@ public class PopulateCompanyAndEmp {
     @Autowired
     private EmployeeRepo employeeRepo1;
 
+    @GetMapping(value = "/welcomepage")
+    public String welcomePage() {
+    	
+    	return "Hi everyone you'r welcome on Kubernetes !!!!!!";
+    }
+    
+    
     @GetMapping(value = "/welcome")
     //@ResponseBody
     public String getUsersContact() {
