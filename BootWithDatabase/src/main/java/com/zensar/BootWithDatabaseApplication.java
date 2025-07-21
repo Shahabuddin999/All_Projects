@@ -8,6 +8,6 @@ public class BootWithDatabaseApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(BootWithDatabaseApplication.class, args);
-		System.out.println("BootWithDatabaseApplication is Up and runing on Docker........!!!!!!!!");
+		System.out.println("BootWithDatabaseApplication is Up and runing on Docker...>>>>>><<<<<<");
 	}
 }
