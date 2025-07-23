@@ -36,7 +36,6 @@ public class UserController {
                 "Received user: %s, age: %d, ID: %d, Active: %b, JWT: %s",
                 request.getName(), request.getAge(), userId, isActive, jwtToken
         );
-
         UserResponse response = new UserResponse("success", message);
         return ResponseEntity.ok(response);
     }
