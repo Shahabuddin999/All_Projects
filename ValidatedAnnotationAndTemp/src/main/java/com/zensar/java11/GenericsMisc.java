@@ -103,7 +103,22 @@ public class GenericsMisc {
 			return sum == val;
 		}).forEach(System.out::println);
 		
+		IntStream.rangeClosed(2, 160).filter(val->{
+			return val == String.valueOf(val).chars().map(value->{
+				int digit = Character.getNumericValue(value);
+				return (int)Math.pow(digit, 3); // return digit*digit*digit;
+			}).sum();
+		}).forEach(System.out::println);
+		
 		System.out.println("==========================");
+		IntStream.rangeClosed(2,160).filter(val->{
+			return val == String.valueOf(val).chars().map(value->{
+				int digit = Character.getNumericValue(value);
+				return digit*digit*digit;
+			}).reduce(0,(a,b)->a+b);
+		}).forEach(System.out::println);
+		System.out.println("==========================");
+		
 		IntStream.of(1, 2, 3, 4)
         .boxed() // IntStream → Stream<Integer> // if you don't boxed() it then you can not return from .map() different input and different output. because boxed() changing IntStream intoStream<Integer>, then map can receive any data type and return any different data type 
         .map(val -> "Hello") // Each Integer is replaced by "Hello"

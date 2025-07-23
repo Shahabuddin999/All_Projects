@@ -30,7 +30,7 @@ class FlatMapExammple {
     
     List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
     int sum = numbers.stream().reduce(0,(v1,v2)->v1+v2);
-    System.out.println(sum);
+    System.out.println("sum: "+sum);
     
     numbers.stream()
     .peek(num -> System.out.println("Will filter number: " + num))
@@ -41,7 +41,7 @@ class FlatMapExammple {
             .collect(Collectors.groupingBy(name -> name.charAt(0)));
     System.out.println(groupedByInitial);
     
-    names.stream().map(val->val).forEach(System.out::println);
+    names.stream().forEach(System.out::println);
     
     Map<Integer,String> map = new LinkedHashMap<>();
     map.put(2, "Shahabuddin");
@@ -52,9 +52,6 @@ class FlatMapExammple {
     Map<Integer,String> sortedMap = map.entrySet().stream().sorted(Map.Entry.<Integer,String>comparingByKey().reversed()).
     		collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(e1,e2)->e1, LinkedHashMap::new));
     System.out.println(sortedMap);
-    
-    Map<String, Integer> count = names.stream().collect(Collectors.toMap(Function.identity(),initial->1,Math::addExact));
-    System.out.println(count);
     
     List<String> dupli = names.stream().filter(val->Collections.frequency(names, val)>1).collect(Collectors.toList());
     System.out.println(dupli);

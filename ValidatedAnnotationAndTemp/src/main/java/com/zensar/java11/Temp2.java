@@ -24,6 +24,9 @@ List<String> logRecords = Arrays.asList(
 		//.map(date->LocalDateTime.parse(date.substring(0,19),fmt))
 		.filter(date->!(LocalDateTime.parse(date.substring(0,19),fmt)).isAfter(end) &&  !(LocalDateTime.parse(date.substring(0,19),fmt)).isBefore(start))
 		.forEach(System.out::println);
+		
+		String formated = end.format(fmt);
+		System.out.println(formated);
 	}
 
 }

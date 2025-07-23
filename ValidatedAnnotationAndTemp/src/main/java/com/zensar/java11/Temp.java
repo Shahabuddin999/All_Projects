@@ -69,7 +69,7 @@ public class Temp {
 		
 		String palindrom ="madam sis rahmrahm sfd";
 				Arrays.stream(palindrom.split(" ")).filter(str->{
-					return IntStream.range(0, str.length()/2).allMatch(i->str.charAt(i) == str.charAt(str.length()-i-1));
+					return IntStream.rangeClosed(0, str.length()/2).allMatch(i->str.charAt(i) == str.charAt(str.length()-i-1));
 				}).forEach(str->System.out.println("Palindrom: "+str));
 		System.out.println("======================");	
 		

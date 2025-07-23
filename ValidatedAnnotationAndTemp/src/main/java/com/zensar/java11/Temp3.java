@@ -26,6 +26,9 @@ public class Temp3 {
 		Integer collect2 = Arrays.stream(add).collect(Collectors.summingInt(a->a));
 		System.out.println(collect2);
 		
+		System.out.println("sum: "+Arrays.stream(add).reduce(0,(a,b)->a+b));
+		System.out.println("sum1: "+Arrays.stream(add).mapToInt(v->v).sum());
+		
 		System.out.println(IntStream.of(10,20,30,40).mapToObj(a->a).collect(Collectors.summingInt(a->a)));
 		
 		System.out.println("=============");

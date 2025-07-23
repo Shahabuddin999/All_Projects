@@ -30,7 +30,7 @@ public class Regex {
 		
 		String str = "Hello!!! 123    abc-Java_is***   great.";
 		String clean = str.replaceAll("[^a-zA-Z]+", " ").trim();
-		System.out.println(clean);
+		System.out.println("cleaned: "+clean);
 		
 		String str2 = "Hi!! I'm Shahab_123. Email:    shahab@gmail.com ### OK?";
 		String cleaned = str2.replaceAll("[^a-zA-Z0-9@._]+", " ").trim();
