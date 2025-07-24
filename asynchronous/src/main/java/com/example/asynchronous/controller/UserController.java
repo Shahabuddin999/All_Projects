@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.asynchronous.entity.UserRequest;
 import com.example.asynchronous.entity.UserResponse;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import com.example.asynchronous.entity.UserRequest;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,7 +29,11 @@ public class UserController {
 	 @Autowired
 	 private RestClient restClient;
 	 
-    @PostMapping("/{id}")
+	  @PostMapping(
+		        value = "/{id}",
+		        produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+		        consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
+		    )	
     public ResponseEntity<UserResponse> processUser(
             @PathVariable("id") Long userId,
             @RequestParam(name = "active", defaultValue = "false") boolean isActive,
@@ -62,8 +70,8 @@ public class UserController {
         return response.getBody();
     }
     
-    @PostMapping("/callapiusingrestclient")
-    public ResponseEntity<UserResponse> callUserApiUsingRestClient() {
+    @PostMapping(value = "/callapiusingrestclient")
+    public ResponseEntity<UserResponse> callUserApiUsingRestClient(HttpServletRequest httpServletRequest) {
         String url = "http://localhost:8080/api/users/100?active=true";
 
         UserRequest request = new UserRequest("Shahab", 30);
@@ -79,9 +87,12 @@ public class UserController {
         
         ResponseEntity<UserResponse> response = restClient.post()
                 .uri(url)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer mock-jwt-token-123")
+                //.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE) // Here you are setting header manually server side, and not taking from client
+                .header(HttpHeaders.AUTHORIZATION, httpServletRequest.getHeader("Authorization")) // Here forwarding header which are coming from client. 
+                .header(HttpHeaders.ACCEPT,  httpServletRequest.getHeader("Accept"))  
+                .header(HttpHeaders.CONTENT_TYPE, httpServletRequest.getHeader("Content-Type"))  
                 .body(request)
+                //.bodyValue() This line just use for WebClietn in reactive programin and some changes in onStatus() rest all are same like RestClient
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (req, res) -> {
                     throw new RuntimeException("Client Error: " + res.getStatusCode()); // will execute if any client exception is occurred
