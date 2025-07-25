@@ -1,0 +1,60 @@
+there are 2 way to Regenerate publik.key and private.key
+1) call http://localhost:8080/olxuser/generatekey API in OLX-Login
+
+2) Run this command on Git Bash Here
+
+	I) openssl genpkey -algorithm RSA -out private.key -pkeyopt rsa_keygen_bits:2048
+		This creates a 2048-bit private.key file.
+	II) openssl rsa -pubout -in private.key -out public.key
+		This creates the public.key from the private key.
+
+
+ Let's go step by step to generate and store your private and public keys using openssl and place them in your Spring Boot project.
+
+✅ Step-by-Step: Generate RSA Key Pair (public/private)
+You can use the following commands in your terminal or Git Bash.
+
+✅ Step 1: Generate Private Key
+
+openssl genpkey -algorithm RSA -out private.key -pkeyopt rsa_keygen_bits:2048
+This creates a 2048-bit private.key file.
+
+✅ Step 2: Generate Public Key
+openssl rsa -pubout -in private.key -out public.key
+This creates the public.key from the private key.
+
+✅ Step 3: Create the Keys Folder in Spring Boot Project
+In your project, create the directory:
+src/main/resources/keys/
+Then place the generated files inside:
+src/main/resources/keys/private.key
+src/main/resources/keys/public.key
+📌 Important: private.key should NOT be committed to GitHub or version control!
+Add it to .gitignore:
+
+
+# .gitignore
+src/main/resources/keys/private.key
+🛠️ Optional: Format Conversion Notes
+If you face errors like:
+
+java.security.spec.InvalidKeySpecException: java.security.InvalidKeyException: IOException
+You can convert private key to PKCS#8 format (Java-compatible):
+
+openssl pkcs8 -topk8 -nocrypt -in private.key -out private.pem
+Then use private.pem in your code instead of private.key.
+
+
+mvn clean install -DskipTests
+
+🔁 RS256 vs HS256 (Symmetric):
+
+----------------------------------------------------------------------------------------------------------------------------------
+Feature									RS256										HS256
+----------------------------------------------------------------------------------------------------------------------------------
+Type									Asymmetric									Symmetric
+Signing key								Private Key									Shared Secret
+Verifying key							Public Key									Same Shared Secret
+Key distribution						Secure – public key can be shared			Less secure – secret must be kept
+Performance								Slightly slower								Faster
+Use case								Microservices, OpenID Connect, etc.			Simple internal apps

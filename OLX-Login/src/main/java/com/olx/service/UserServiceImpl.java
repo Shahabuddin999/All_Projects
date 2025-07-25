@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService{
 	@Autowired
 	PasswordEncoder passwordEncoder; 
 
+	 public static final String passwordProtected = "[password_protected]";
 	@Override
 	public ResponseEntity<Boolean> userLogout(String authToken) {
 		
@@ -127,6 +128,6 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	public static String setPasswordForDto() {
-		return "*********";
+		return passwordProtected;
 	}
 }

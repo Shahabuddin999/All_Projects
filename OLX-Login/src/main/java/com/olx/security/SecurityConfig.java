@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	        .antMatchers("/olxuser/user/authenticate").permitAll()  // login should be public
 	        .antMatchers("/olxuser/token/validate").permitAll()
 	        .antMatchers("/olxuser/change-password").permitAll()
-	        .antMatchers("/olxuser/user/getUsername").permitAll()
+	        .antMatchers("/olxuser/generatekey").permitAll()
 	        .antMatchers(
 	        	    "/v3/api-docs/**",
 	        	    "/swagger-ui/**",

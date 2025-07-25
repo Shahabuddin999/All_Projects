@@ -77,8 +77,8 @@ public class ExternalServiceController {
 	private String getClientIp(HttpServletRequest request) {
 		String xfHeader = request.getHeader("X-Forwarded-For");
 		if (xfHeader == null) {
-			return request.getRemoteAddr();
+			return request.getRemoteAddr(); // On local machine this line will be executed
 		}
-		return xfHeader.split(",")[0];
+		return xfHeader.split(",")[0]; // On live server this will be executed. you can check it after deploying it on ngrok this line will be executed
 	}
 }

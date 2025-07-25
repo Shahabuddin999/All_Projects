@@ -15,6 +15,7 @@ import com.olx.dto.UserDto;
 import com.olx.exception.InvalidAuthTokenException;
 import com.olx.exception.InvalidUserNameOrPasswordException;
 import com.olx.security.JwtUtil;
+import com.olx.security.PublicAndPrivateKeyGenerator;
 import com.olx.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -118,6 +119,14 @@ public class UserController {
                  consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UserDto> encodePassword(@RequestBody UserDto userDto) {
         return userService.changePassword(userDto);
+    }
+    
+    @Autowired
+	PublicAndPrivateKeyGenerator key;
+    @GetMapping("/generatekey")
+    public String generateKey() throws Exception {
+    	return key.generateKeyPair();
+        
     }
     
     // This will return tocken
