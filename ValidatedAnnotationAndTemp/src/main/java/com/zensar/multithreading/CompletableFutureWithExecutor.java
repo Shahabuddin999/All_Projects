@@ -6,13 +6,13 @@ import com.zensar.temp.TransactionPlus;
 public class CompletableFutureWithExecutor {
 
 	static ExecutorService executor = Executors.newFixedThreadPool(2);
-	static CompletableFuture<TransactionPlus> getTransaction() {
+	static CompletableFuture<TransactionPlus> getTransaction(String str) {
 		 CompletableFuture<TransactionPlus> future = CompletableFuture.supplyAsync(() -> {
 	            try {
 	                Thread.sleep(5000);
 	            } catch (InterruptedException e) {}
 	            TransactionPlus obj = new  TransactionPlus();
-	            obj.setAddress("Alld"); obj.setAmount(100d); obj.setCategory("Prime");
+	            obj.setAddress("Alld"); obj.setAmount(100); obj.setCategory("Prime: "+str);
 	            return obj;
 	        }, executor);
 		return future; 
@@ -34,7 +34,7 @@ public class CompletableFutureWithExecutor {
             System.out.println("Async Result: " + result);
         });
         
-        getTransaction().thenAccept(result->{
+        getTransaction("Shahabuddin").thenAccept(result->{
         	System.out.println("Async Result: "+result);
         });
 

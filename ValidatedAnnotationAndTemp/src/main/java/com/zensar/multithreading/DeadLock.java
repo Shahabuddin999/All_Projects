@@ -2,17 +2,17 @@ package com.zensar.multithreading;
 
 public class DeadLock {
 
-	public static final Object lock1="Lock1";
-	public static final Object lock2="Lock2";
+	public  final Object lock1="Lock1";
+	public  final Object lock2="Lock2";
 	
 	public static void main(String[] args) {
-		
+		DeadLock deadLock = new DeadLock();
 		Thread t1 = new Thread(()->{
-			synchronized (lock1) {
+			synchronized (deadLock.lock1) {
 				try {
 					System.out.println("Thread1 holding lock1");
 					Thread.sleep(100);
-					synchronized (lock2) {
+					synchronized (deadLock.lock2) {
 						System.out.println("Thread1 locked lock2");
 					}
 				}catch (Exception e) {
@@ -22,11 +22,11 @@ public class DeadLock {
 		});
 		
 		Thread t2 = new Thread(()->{
-			synchronized (lock2) {
+			synchronized (deadLock.lock2) {
 				try {
 					System.out.println("Thread2 holding lock2");
 					Thread.sleep(100);
-					synchronized (lock1) {
+					synchronized (deadLock.lock1) {
 						System.out.println("Thread1 locked lock1");
 					}
 				}catch (Exception e) {

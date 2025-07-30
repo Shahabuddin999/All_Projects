@@ -5,25 +5,27 @@ public class MultiThreadExample {
     public static void main(String[] args) {
         ExecutorService executor = Executors.newFixedThreadPool(3);
 
-        CompletableFuture<Void> task1 = CompletableFuture.runAsync(() -> {
+        CompletableFuture<String> task1 = CompletableFuture.supplyAsync(() -> {
         	try {
                 Thread.sleep(5000);
+                
             } catch (InterruptedException e) {}
-            System.out.println("Task 1 running on thread: " + Thread.currentThread().getName());
+        	return "Task 1 running on thread: " + Thread.currentThread().getName();
+           
         }, executor);
 
-        CompletableFuture<Void> task2 = CompletableFuture.runAsync(() -> {
+        CompletableFuture<String> task2 = CompletableFuture.supplyAsync(() -> {
         	try {
                 Thread.sleep(4000);
             } catch (InterruptedException e) {}
-            System.out.println("Task 2 running on thread: " + Thread.currentThread().getName());
+        	return "Task 2 running on thread: " + Thread.currentThread().getName();
         }, executor);
 
-        CompletableFuture<Void> task3 = CompletableFuture.runAsync(() -> {
+        CompletableFuture<String> task3 = CompletableFuture.supplyAsync(() -> {
         	try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {}
-            System.out.println("Task 3 running on thread: " + Thread.currentThread().getName());
+        	return "Task 3 running on thread: " + Thread.currentThread().getName();
         }, executor);
 
         task1.thenAccept(result -> {

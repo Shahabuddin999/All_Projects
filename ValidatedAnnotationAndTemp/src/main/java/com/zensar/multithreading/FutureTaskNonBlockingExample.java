@@ -31,7 +31,7 @@ public class FutureTaskNonBlockingExample {
 		for (int i = 0; i < 5; i++) {
 			System.out.println("Main thread working: " + i);
 			try {
-				Thread.sleep(500); // Simulating some main thread work
+				Thread.sleep(1000); // Simulating some main thread work
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -5,9 +5,22 @@ public class FixedDeadlock {
         final String lock2 = "LOCK2";
 
         Runnable task = () -> {
+        	System.out.println("Entered Thread: "+Thread.currentThread().getName());
             synchronized (lock1) {
+            	try {
+            		System.out.println(Thread.currentThread().getName() + ": Acquired lock1");
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
                 synchronized (lock2) {
-                    System.out.println(Thread.currentThread().getName() + ": Acquired both locks!");
+                	try {
+                		System.out.println(Thread.currentThread().getName() + ": Acquired lock2");
+    					Thread.sleep(1000);
+    				} catch (InterruptedException e) {
+    					e.printStackTrace();
+    				}
+                    
                 }
             }
         };

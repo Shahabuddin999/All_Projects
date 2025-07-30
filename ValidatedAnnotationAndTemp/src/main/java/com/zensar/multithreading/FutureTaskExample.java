@@ -1,29 +1,35 @@
 package com.zensar.multithreading;
+
 import java.util.concurrent.*;
 
 public class FutureTaskExample {
     public static void main(String[] args) throws Exception {
-        // Step 1: Create a Callable task
-        Callable<String> callableTask = () -> {
-            Thread.sleep(2000); // Simulate some long computation
+        Callable<String> callableTask1 = () -> {
+            Thread.sleep(2000); // Simulate long task
             return "Result from Callable";
         };
 
-        // Step 2: Wrap it in a FutureTask
-        FutureTask<String> futureTask = new FutureTask<>(callableTask);
+        FutureTask<String> futureTask1 = new FutureTask<>(callableTask1);
+        FutureTask<String> futureTask2 = new FutureTask<>(() -> { 
+        											return "Shahabuddin Ansari"; 
+        										});
 
-        // Step 3: Use ExecutorService to execute the task
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(futureTask);  // or executor.execute(futureTask);
+        //new Thread(futureTask2).start(); futureTask2.get();
+        
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+        
+        executor.submit(futureTask1);
+        executor.submit(futureTask2);
 
-        System.out.println("Task submitted, doing other work...");
+        System.out.println("Both tasks submitted, doing other work...");
 
-        // Step 4: Get the result
-        String result = futureTask.get(); // This will block until the result is available
+        // Delay to simulate other work
+        Thread.sleep(500);
 
-        System.out.println("Result: " + result);
+        // Now fetch results — could be in any order
+        System.out.println("Future 1: " + futureTask1.get());
+        System.out.println("Future 2: " + futureTask2.get());
 
-        // Step 5: Shutdown the executor
         executor.shutdown();
     }
 }
