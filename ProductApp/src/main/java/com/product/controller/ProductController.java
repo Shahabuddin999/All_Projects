@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.product.dto.Product;
 
 @RestController
 @CrossOrigin(origins="*")
 public class ProductController {
-	private int a = 10;
 	private static List<Product> productList = new ArrayList<>();
 	private static int productIdCounter = 0;
 	static {
@@ -29,7 +28,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/product")
-	public @ResponseBody List<Product> getAllProducts() {
+	public  List<Product> getAllProducts() {
 		return productList;
 	}
 
@@ -45,15 +44,14 @@ public class ProductController {
 	}
 
 	@PostMapping(value="/product", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Product createNewProduct(@RequestBody Product product) {
+	public  Product createNewProduct(@RequestBody Product product) {
 		product.setId(++productIdCounter);
 		productList.add(product);
-		System.out.println("createNewProduct(): " + product);
 		return product;
 	}
 
 	@PutMapping(value="/product/{id}", produces=MediaType.APPLICATION_JSON_VALUE, consumes=MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Product updateProduct(@RequestBody Product newProduct, @PathVariable(value="id") String productId) {
+	public  Product updateProduct(@RequestBody Product newProduct, @PathVariable(value="id") String productId) {
 		Product productToBeUpdated = null;
 		List<Product> filteredProductList = productList.stream().filter((product)->product.getId()==Integer.parseInt(productId)).collect(Collectors.toList());
 		if(filteredProductList == null || filteredProductList.isEmpty()) {

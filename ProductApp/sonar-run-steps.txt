@@ -1,0 +1,5 @@
+
+1) D:\software\sonarqube-25.7.0.110598\bin\windows-x86-64\StartSonar.bat
+2) mvn clean verify sonar:sonar -Dsonar.projectKey=product_app -Dsonar.host.url=http://localhost:9090 -Dsonar.token=sqa_bf10148690b2820228eb241cfe4939c88d3ba1e9
+
+Note: sqa_bf10148690b2820228eb241cfe4939c88d3ba1e9  is generated when SonarQube is started and Go to logged in profile and create Tocken
