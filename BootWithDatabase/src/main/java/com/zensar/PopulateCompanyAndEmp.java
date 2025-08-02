@@ -38,7 +38,7 @@ public class PopulateCompanyAndEmp {
     	model.setViewName("welcome");
         model.addObject("empdetails", "aaaa");
         System.out.println(model);
-    	return "welcome";
+    	return "welcome docker";
     }
     
     

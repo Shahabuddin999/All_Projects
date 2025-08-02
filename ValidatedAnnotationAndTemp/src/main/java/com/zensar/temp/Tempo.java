@@ -74,6 +74,18 @@ class Employee_3{
 	public String toString() {
 		return "Employee_3 [id=" + id + ", name=" + name + ", salary=" + salary + "]";
 	}
+}
+
+@AllArgsConstructor
+@NoArgsConstructor
+class Employee_4{
+	Integer id;
+	String name;
+	double salary;
+	@Override
+	public String toString() {
+		return "Employee_3 [id=" + id + ", name=" + name + ", salary=" + salary + "]";
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, name, salary);
@@ -86,12 +98,12 @@ class Employee_3{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Employee_3 other = (Employee_3) obj;
+		Employee_4 other = (Employee_4) obj;
 		return Objects.equals(id, other.id) && Objects.equals(name, other.name)
 				&& Double.doubleToLongBits(salary) == Double.doubleToLongBits(other.salary);
 	}
-	
 }
+
 public class Tempo {
 
 	public static void main(String[] args) {
@@ -112,13 +124,13 @@ public class Tempo {
 		map.entrySet().stream().forEach(System.out::println);
 		
 		System.out.println("----------------------------------------------");
-//		Set<Employee_3> set = Set.of(new Employee_3(1, "Alice", 30000),
-//				new Employee_3(1, "Alice", 30000), 
-//				new Employee_3(2, "Bob", 250000), 
-//				new Employee_3(3, "Alice", 350000));
-//		System.out.println(set);
+		Set<Employee_3> set = Set.of(new Employee_3(1, "Alice", 30000),
+				new Employee_3(1, "Alice", 30000), // if override hashCode() and equals() of Employee_3 class then this will throw IllegalArgumentException
+				new Employee_3(2, "Bob", 250000), 
+				new Employee_3(3, "Alice", 350000));
+		System.out.println(set);
 		
-		//Set<Integer> set2 = Set.of(1,1,2,3); This will not work throw exception : java.lang.IllegalArgumentException because its immutable
+		//Set<Integer> set2 = Set.of(1,1,2,3); This will not work throw exception : java.lang.IllegalArgumentException because its immutable and does not allow duplicate in Set.of() method
 		//System.out.println(set2);
 		Set<Integer> set3 = new HashSet<Integer>(); // This will work because its mutable read below description for more deeply info
 		set3.add(1);set3.add(1);
@@ -131,17 +143,50 @@ public class Tempo {
 		Conclusion:
 		✔️ Set.of() does call equals() and hashCode().
 		❌ But it throws error on duplicate, instead of silently ignoring like HashSet.
-		✅ To safely remove duplicates based on .equals(), prefer new HashSet<>(...).	
+		✅ To safely remove duplicates based on .equals(), prefer and use new HashSet<>(...).	
 		
 		Lombok's @Data includes: @Getter, @Setter, @ToString, @EqualsAndHashCode, @RequiredArgsConstructor
 		 */
 		System.out.println("----------------------------------------------");
-		Set<Employee_3> set1 = new HashSet<>();
-		set1.add(new Employee_3(1, "Alice", 30000));
-		set1.add(new Employee_3(1, "Alice", 30000));
-		set1.add(new Employee_3(2, "Bob", 250000));
-		set1.add(new Employee_3(3, "Alice", 350000));
+		Set<Employee_4> set1 = new HashSet<>();
+		set1.add(new Employee_4(1, "Alice", 30000));
+		set1.add(new Employee_4(1, "Alice", 30000));
+		set1.add(new Employee_4(2, "Bob", 250000));
+		set1.add(new Employee_4(3, "Alice", 350000));
 		set1.stream().forEach(System.out::println);
 		
+		/*
+		| Operation                | Calls `equals()`? | Calls `hashCode()`? | Notes                   |
+		| ------------------------ | -------------------| --------------------| -----------------------|
+		| `List.contains(obj)`     | ✅ Yes             | ❌ No                | Only equals()          |
+		| `Set.add(obj)`           | ✅ Yes             | ✅ Yes               | Prevents duplicates    |
+		| `Map.get(key)`           | ✅ Yes (key)       | ✅ Yes (key)         | For key lookup         |
+		| `Map.containsKey(key)`   | ✅ Yes (key)       | ✅ Yes (key)         | Uses equals + hashCode |
+		| `Map.containsValue(val)` | ✅ Yes (value)     | ❌ No                | Only equals()          |
+		
+		
+		What happens under the hood?
+		When you put() a key-value pair in a HashMap, Java internally:
+		
+		🔢 Step-by-step:
+		Calls hashCode() on the key
+		→ To find the bucket/index where this entry might go.
+		
+		Checks if a key already exists in that bucket
+		→ It compares keys using equals() to check for duplicates.
+		
+		Based on that:
+		
+		If no matching key → new key-value pair is added.
+		
+		If key already exists (equals returns true) → the old value is replaced.
+		
+		✅ So, map.put(k, v):
+		Method	Called?	Why?
+		hashCode()	✅ Yes	To find bucket location
+		equals()	✅ Yes	To check if key already exists
+
+		 */
+
 	}
 }
