@@ -28,6 +28,9 @@ if %errorlevel% neq 0 (
     echo ✅ Minikube is already running.
 )
 
+:: ==== Start Minikube Dashboard (Optional) ====
+start "" minikube dashboard
+
 :: ==== Maven Build ====
 echo ==== Maven Build ====
 call mvn clean package -DskipTests
