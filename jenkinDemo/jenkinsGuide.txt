@@ -1,8 +1,18 @@
+NgRok
+-------
 Open ngrok for jenkins to keep jenkins live on 8080 port suppose jenkin live URL is : https://0c60b3595e37.ngrok-free.app 
 
-then Open 
+GitHub
+---------
+then Open Github -> click settings -> Webhook -> Add webhook
+ Payload URL *: https://0c60b3595e37.ngrok-free.app/github-webhook/
+ Content type * : application/json
+ SSL verification:  Enable SSL verification 
+ Which events would you like to trigger this webhook?: Just the push event.
+ Click on "Add webhook" button
 
-
+Jenkins
+----------
 1) Login jenkins -> Dashboard-> New Item -> enter an Item (jenkinDemo-pipeline)-> Pipeline -> click OK 
 2) jenkinDemo-pipeline -> click configure -> click "Triggers" -> check "GitHub hook trigger for GITScm polling
 ?"
@@ -16,4 +26,7 @@ then Open
 	Branch Specifier (blank for 'any')? : */main
 7) Script Path ? : jenkinDemo/Jenkinsfile
 
-Click Save and Apply
+Click Save and Apply button
+
+Jenkinsfile is available in the jenkinDemo project in root location, this script will be running to build and test the run, but jar file will not be runing after script finishes its execution.
+because server will be runing on AWS/Docker/Kubernetes not inside jenkins server will run out of jenkins. you can give the command to run on AWS/Docker/Kubernetes to keep running the application after building the jar
