@@ -15,21 +15,21 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying application..."
-                // Example: Copy JAR to server
-                // sh 'scp -i ~/.ssh/id_rsa target/jenkinDemo-0.0.1-SNAPSHOT.jar user@server:/opt/apps/'
+                echo "Deploying locally..."
+                bat 'if not exist C:\\deployments mkdir C:\\deployments'
+                bat 'copy target\\jenkinDemo-0.0.1-SNAPSHOT.jar C:\\deployments\\'
             }
         }
     }
