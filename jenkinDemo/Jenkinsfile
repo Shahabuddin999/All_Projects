@@ -1,26 +1,55 @@
 pipeline {
-	agent any
-	stages {
-		stage('Clean stage') {
-			steps {
-				dir("jenkinDemo") {
-					bat 'D:\\Software\\apache-maven-3.8.2\\bin\\mvn clean'
-				}
-			}
-		}
-		stage('Compile stage') {
-			steps {
-				dir("jenkinDemo") {
-					bat 'D:\\Software\\apache-maven-3.8.2\\bin\\mvn compile'
-				}
-			}
-		}
-		stage('Install stage') {
-			steps {
-				dir("jenkinDemo") {
-					bat 'D:\\Software\\apache-maven-3.8.2\\bin\\mvn install'
-				}
-			}
-		}
-	}
+    agent any
+
+    tools {
+        maven 'Maven3'
+        jdk 'Java17'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', 
+                    credentialsId: 'github-creds', 
+                    url: 'https://github.com/Shahabuddin999/All_Projects.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('jenkinDemo') { // Move into the correct folder
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('jenkinDemo') {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir('jenkinDemo') {
+                    echo "Deploying application..."
+                    // Example: run the JAR locally
+                    sh 'java -jar target/jenkinDemo-0.0.1-SNAPSHOT.jar &'
+                    // Or copy to a server:
+                    // sh 'scp -i ~/.ssh/id_rsa target/jenkinDemo-0.0.1-SNAPSHOT.jar user@server:/opt/apps/'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Build and deployment successful!"
+        }
+        failure {
+            echo "❌ Build failed!"
+        }
+    }
 }
