@@ -3,52 +3,40 @@ pipeline {
 
     tools {
         maven 'M3'
-    	jdk 'JDK-17'
-    }
-
-    triggers {
-        // Optional: This ensures manual trigger from webhook
-        githubPush()
+        jdk 'JDK-17'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', 
-                    credentialsId: 'github-creds', 
-                    url: 'https://github.com/Shahabuddin999/All_Projects.git'
+                git branch: 'main', credentialsId: 'github-creds', url: 'https://github.com/Shahabuddin999/All_Projects.git'
             }
         }
 
         stage('Build') {
             steps {
-                dir('jenkinDemo') {
-                    sh 'mvn clean package'
-                }
+                sh 'mvn clean package'
             }
         }
 
         stage('Test') {
             steps {
-                dir('jenkinDemo') {
-                    sh 'mvn test'
-                }
+                sh 'mvn test'
             }
         }
 
         stage('Deploy') {
             steps {
-                dir('jenkinDemo') {
-                    echo "Deploying application..."
-                    sh 'java -jar target/jenkinDemo-0.0.1-SNAPSHOT.jar &'
-                }
+                echo "Deploying application..."
+                // Example: Copy JAR to server
+                // sh 'scp -i ~/.ssh/id_rsa target/jenkinDemo-0.0.1-SNAPSHOT.jar user@server:/opt/apps/'
             }
         }
     }
 
     post {
         success {
-            echo "✅ Build and deployment successful !"
+            echo "✅ Build and deployment successful!"
         }
         failure {
             echo "❌ Build failed!"
