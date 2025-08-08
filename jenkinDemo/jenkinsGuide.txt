@@ -5,7 +5,7 @@ Open ngrok for jenkins to keep jenkins live on 8080 port suppose jenkin live URL
 GitHub
 ---------
 then Open Github -> click settings -> Webhook -> Add webhook
- Payload URL *: https://0c60b3595e37.ngrok-free.app/github-webhook/
+ Payload URL *: https://0c60b3595e37.ngrok-free.app/github-webhook/    must add "/github-webhook/" in last of ngrok url when you are going to add in webhook URL
  Content type * : application/json
  SSL verification:  Enable SSL verification 
  Which events would you like to trigger this webhook?: Just the push event.
@@ -17,7 +17,7 @@ Jenkins
 2) jenkinDemo-pipeline -> click configure -> click "Triggers" -> check "GitHub hook trigger for GITScm polling
 ?"
 
-3) Click on Pipeline -> Definition in dropdown -> select Pipeline script from SCM
+3) Click on Pipeline -> Definition in dropdown -> select "Pipeline script from SCM"
 4) SCM -> select Git 
 5) Repositories ?
 	Repository URL : https://github.com/Shahabuddin999/All_Projects.git
