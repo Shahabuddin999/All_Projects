@@ -21,10 +21,20 @@ pipeline {
             }
         }
 
-        stage('Test') {
+        stage('Run App & Test API') {
             steps {
                 dir('jenkinDemo') {
-                    bat 'mvn test'
+                    // Start the app in background
+                    bat 'start /B java -jar target\\jenkinDemo-0.0.1-SNAPSHOT.jar'
+                    
+                    // Wait a few seconds for app to start
+                    bat 'ping -n 10 127.0.0.1 > nul'
+
+                    // Hit API endpoint
+                    bat 'curl http://localhost:8080/show'
+
+                    // Stop Java process after test
+                    bat 'taskkill /F /IM java.exe'
                 }
             }
         }
@@ -38,10 +48,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build and deployment successful!"
+            echo "✅ Build and API test successful!"
         }
         failure {
-            echo "❌ Build failed!"
+            echo "❌ Build or test failed!"
         }
     }
 }
