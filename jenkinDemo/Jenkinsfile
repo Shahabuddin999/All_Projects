@@ -15,21 +15,23 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean package'
+                dir('jenkinDemo') {
+                    bat 'mvn clean package'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvn test'
+                dir('jenkinDemo') {
+                    bat 'mvn test'
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying locally..."
-                bat 'if not exist C:\\deployments mkdir C:\\deployments'
-                bat 'copy target\\jenkinDemo-0.0.1-SNAPSHOT.jar C:\\deployments\\'
+                echo "Deploying application..."
             }
         }
     }
