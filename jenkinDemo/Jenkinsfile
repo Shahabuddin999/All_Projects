@@ -32,18 +32,21 @@ pipeline {
         stage('Deploy & Test API') {
             steps {
                 dir('jenkinDemo') {
-                    echo "Starting application on port 8081..."
-                    
-                    // Start the app in background and redirect logs
-                    bat 'start /B java -jar target\\jenkinDemo-0.0.1-SNAPSHOT.jar --server.port=8081 > app.log 2>&1'
+                    echo "🚀 Starting application on port 8081..."
 
-                    // Wait longer so the app fully boots (Spring Boot takes time)
+                    // Kill any old process running on 8081 (optional cleanup)
+                    bat 'for /f "tokens=5" %a in (\'netstat -ano ^| findstr :8081\') do taskkill /F /PID %a'
+
+                    // Start Spring Boot in background with logs redirected
+                    bat 'start /MIN cmd /c "java -jar target\\jenkinDemo-0.0.1-SNAPSHOT.jar --server.port=8081 > app.log 2>&1"'
+
+                    // Wait for Spring Boot to fully start
                     bat 'ping -n 20 127.0.0.1 >nul'
 
-                    // Check logs to confirm it started
+                    // Show logs for debugging
                     bat 'type app.log'
 
-                    // Call the API endpoint
+                    // Test API endpoint
                     bat 'curl http://localhost:8081/show'
                 }
             }
@@ -52,10 +55,10 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build and deployment successful!"
+            echo "✅ Build, deployment & API test successful!"
         }
         failure {
-            echo "❌ Build failed!"
+            echo "❌ Build or API test failed!"
         }
     }
 }
