@@ -27,6 +27,7 @@ Jenkins
 7) Script Path ? : jenkinDemo/Jenkinsfile
 
 Click Save and Apply button
+Now jenkins will take pull as someone commits the code on git and it will automatically will build the jar and test the unit case run the app on AWS/Docker/Kubernetes as you wrote the script.
 
 Jenkinsfile is available in the jenkinDemo project in root location, this script will be running to build and test the run, but jar file will not be runing after script finishes its execution.
 because server will be runing on AWS/Docker/Kubernetes not inside jenkins server will run out of jenkins. you can give the command to run on AWS/Docker/Kubernetes to keep running the application after building the jar
