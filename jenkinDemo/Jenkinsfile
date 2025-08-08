@@ -29,17 +29,21 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy & Test API') {
             steps {
-                echo "Starting application on port 8081..."
                 dir('jenkinDemo') {
-                    // Run Spring Boot on port 8081 to avoid Jenkins's 8080
-                    bat 'start /B java -jar target\\jenkinDemo-0.0.1-SNAPSHOT.jar --server.port=8081'
+                    echo "Starting application on port 8081..."
                     
-                    // Wait for the server to boot up
-                    bat 'ping -n 10 127.0.0.1 >nul'
-                    
-                    // Call your API
+                    // Start the app in background and redirect logs
+                    bat 'start /B java -jar target\\jenkinDemo-0.0.1-SNAPSHOT.jar --server.port=8081 > app.log 2>&1'
+
+                    // Wait longer so the app fully boots (Spring Boot takes time)
+                    bat 'ping -n 20 127.0.0.1 >nul'
+
+                    // Check logs to confirm it started
+                    bat 'type app.log'
+
+                    // Call the API endpoint
                     bat 'curl http://localhost:8081/show'
                 }
             }
