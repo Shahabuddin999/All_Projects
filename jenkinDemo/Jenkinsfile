@@ -6,6 +6,11 @@ pipeline {
         jdk 'Java17'
     }
 
+    triggers {
+        // Optional: This ensures manual trigger from webhook
+        githubPush()
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -17,7 +22,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('jenkinDemo') { // Move into the correct folder
+                dir('jenkinDemo') {
                     sh 'mvn clean package'
                 }
             }
@@ -35,10 +40,7 @@ pipeline {
             steps {
                 dir('jenkinDemo') {
                     echo "Deploying application..."
-                    // Example: run the JAR locally
                     sh 'java -jar target/jenkinDemo-0.0.1-SNAPSHOT.jar &'
-                    // Or copy to a server:
-                    // sh 'scp -i ~/.ssh/id_rsa target/jenkinDemo-0.0.1-SNAPSHOT.jar user@server:/opt/apps/'
                 }
             }
         }
@@ -49,7 +51,7 @@ pipeline {
             echo "✅ Build and deployment successful!"
         }
         failure {
-            echo "❌ Build failed !"
+            echo "❌ Build failed!"
         }
     }
 }
