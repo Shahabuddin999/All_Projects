@@ -21,37 +21,37 @@ pipeline {
             }
         }
 
-        stage('Run App & Test API') {
+        stage('Test') {
             steps {
                 dir('jenkinDemo') {
-                    // Start the app in background
-                    bat 'start /B java -jar target\\jenkinDemo-0.0.1-SNAPSHOT.jar'
-                    
-                    // Wait a few seconds for app to start
-                    bat 'ping -n 10 127.0.0.1 > nul'
-
-                    // Hit API endpoint
-                    bat 'curl http://localhost:8080/show'
-
-                    // Stop Java process after test
-                    bat 'taskkill /F /IM java.exe'
+                    bat 'mvn test'
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                echo "Deploying application..."
+                echo "Starting application on port 8081..."
+                dir('jenkinDemo') {
+                    // Run Spring Boot on port 8081 to avoid Jenkins's 8080
+                    bat 'start /B java -jar target\\jenkinDemo-0.0.1-SNAPSHOT.jar --server.port=8081'
+                    
+                    // Wait for the server to boot up
+                    bat 'ping -n 10 127.0.0.1 >nul'
+                    
+                    // Call your API
+                    bat 'curl http://localhost:8081/show'
+                }
             }
         }
     }
 
     post {
         success {
-            echo "✅ Build and API test successful!"
+            echo "✅ Build and deployment successful!"
         }
         failure {
-            echo "❌ Build or test failed!"
+            echo "❌ Build failed!"
         }
     }
 }
