@@ -1,5 +1,6 @@
 package com.zensar.temp;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 public class ParallelStream {
 
@@ -38,5 +39,17 @@ public class ParallelStream {
 		        
 		        //result.parallelStream().forEach(car -> System.out.println(Thread.currentThread().getName() + " - " + car));
 		        //result1.stream().forEach(car -> System.out.println(Thread.currentThread().getName() + " - " + car));
-		    }
+		        
+		        
+		        String name = "Shahabuddin";
+		        Map<String, Long> collect = Arrays.stream(name.split("")).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+		        System.out.println(collect);
+		        Map<Character, Long> collect2 = name.chars().mapToObj(ascii->(char)ascii).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+		        System.out.println(collect2);
+		        
+		        String str = "qwerty";
+		        System.out.println(str.length());
+		        System.out.println(str.substring(2, 4)); // 2 included 4 excluded, index starts from 0
+		        System.out.println(str.substring(2, str.length()));
+	}
 }

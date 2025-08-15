@@ -42,7 +42,8 @@ public class Demo_class {
 		
 		String s1="hello word";
 		String s2="hello ".concat("word");
-		System.out.println(s1==s2);
+		System.out.println(s1==s2); // false // Since s1 (pooled literal) and s2 (new object) are different objects,
+		System.out.println(s1==s2.intern()); // true // Using .intern() forces Java to use the String Pool version.
 		
 		System.out.println(nameList);
 		Comparator<String> cmp = (a,b)->a.compareTo(b);

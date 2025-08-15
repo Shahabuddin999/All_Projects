@@ -29,7 +29,7 @@ class Person {
 	| `final` class               | The class itself is marked as `final` (cannot be extended) |
 
 	
-	@Value annotation making Person class as a Singleton class internally its converting like below code 
+	@Value annotation making Person class as a immutable class internally its converting like below code 
 	
 	public final class Person {
     private final int id;

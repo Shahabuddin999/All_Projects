@@ -58,7 +58,7 @@ public class GenericsMisc {
         System.out.println(collect);
         
      // Getting prime number
- 		IntStream.rangeClosed(1,100).forEach(value->{
+ 		IntStream.rangeClosed(1,10).forEach(value->{
  			boolean noneMatch = IntStream.rangeClosed(2,(int)Math.sqrt(value)).noneMatch(val->value%val==0);
  			if(noneMatch)
  				System.out.println("Prime : "+value);

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.webflux.example.dto.Customer;
 import com.webflux.example.entity.Order;
@@ -29,9 +30,12 @@ public class UserService {
 
 	private OrderRepository orderRepository;
 
-	public UserService(UserRepository userRepository, OrderRepository orderRepository) {
+	private final WebClient webClient;
+    
+	public UserService(UserRepository userRepository, OrderRepository orderRepository, WebClient webClient) {
 		this.userRepository = userRepository;
 		this.orderRepository = orderRepository;
+		this.webClient = webClient;
 	}
 
 	public Flux<User> getAllUsers() {
@@ -127,4 +131,13 @@ public class UserService {
 
 		return users;
 	}
+	
+	public Flux<String> fetchUserDetailsSequentially(Flux<String> userIds) {
+        return userIds.concatMap(id ->
+                webClient.get()
+                        .uri("/user/{id}", id)
+                        .retrieve()
+                        .bodyToMono(String.class)
+        );
+    }
 }

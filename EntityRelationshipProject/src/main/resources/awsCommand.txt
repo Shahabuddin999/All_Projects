@@ -25,6 +25,7 @@ Installing Postgresql
 sudo dnf install -y postgresql15 postgresql15-server
 
 
+Open Git Bash and type below commands
 EC2 Public IPv4 addresses : 13.53.40.25
 scp -i "/d/ec2KeyPair.pem" demo-0.0.1-SNAPSHOT.jar ec2-user@13.53.40.25:/home/ec2-user/   ===> File will be transafer on ec2 instace
 ssh -i "/d/ec2KeyPair.pem" ec2-user@13.53.40.25     ===> This will take you to ec2 instace
@@ -79,7 +80,7 @@ while creating  keystore.p12 file it will ask password pls remeber it because yo
   
 now come back from ec2 and run below command on git bash to move file from ec2 to local machine and configure application.yml file
 
-scp -i "/d/ec2KeyPair.pem" ec2-user@13.53.40.25:/home/ec2-user/keystore.p12 /D:/OLX-Apps/OLX-Updated.zip/webfluxexample/src/main/resources/
+scp -i "/d/ec2KeyPair.pem" ec2-user@13.53.40.25:/home/ec2-user/keystore.p12 /D:/OLX-Apps/OLX-Updated/webfluxexample/src/main/resources/
 -----------------
 To verify if SSL is working on the correct port:
 openssl s_client -connect 13.53.40.25:8443

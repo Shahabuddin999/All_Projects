@@ -96,7 +96,7 @@ class UserControllerTest {
     void updateUserTest() {
         User updated = new User(1, "Updated", "updated@email.com");
 
-        Mockito.when(userService.updateUser(eq(1), any(User.class))).thenReturn(Mono.just(updated));
+        Mockito.when(userService.updateUser(1,updated)).thenReturn(Mono.just(updated));
 
         webTestClient.put().uri("/users/1")
                 .contentType(MediaType.APPLICATION_JSON)

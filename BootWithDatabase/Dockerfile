@@ -1,3 +1,4 @@
+# Start from a lightweight Java runtime
 FROM openjdk:17-jdk-slim
 
 # Set working directory

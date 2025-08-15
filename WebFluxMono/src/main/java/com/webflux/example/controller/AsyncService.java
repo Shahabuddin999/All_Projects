@@ -70,10 +70,21 @@ public class AsyncService {
 		}).subscribeOn(Schedulers.boundedElastic());
 	}
 	
+	public Mono<String> getMono1(String lastName) {
+			return Mono.just(lastName);
+	}
+	
+	public Flux<String> getFlux1(String lastName) {
+		return Flux.just(lastName,"Shahab","Ansari","Koraon");
+	}
+	
 	//combine
 	public Mono<String> combinedAsyncCallsAsFlux() {
 		Mono<String> mono1 = asyncCallOne("Shahabuddin");
 		Mono<String> mono2 = asyncCallTwo("Ansari");
+		
+		getFlux1("Nizam").subscribe(System.out::println);
+		getMono1("Kalam").subscribe(System.out::println);
 		return Mono.zip(mono1, mono2).map(tuple -> "Combined: " + tuple.getT1() + " + " + tuple.getT2());
 	}
 }

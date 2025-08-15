@@ -45,5 +45,13 @@ public class Temp3 {
 			    .skip(1)
 			    .findFirst();
 		System.out.println(secondMax.get());
+		
+		List.of(10,10,15,14,20)
+		.stream()
+	    .distinct()
+	    .sorted(Comparator.reverseOrder())
+	    .skip(1)
+	    .limit(2)
+	    .forEach(System.out::println);
 	}
 }

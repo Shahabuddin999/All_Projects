@@ -16,7 +16,7 @@ public class FutureTaskExample {
 
         //new Thread(futureTask2).start(); futureTask2.get();
         
-        ExecutorService executor = Executors.newFixedThreadPool(2);
+        ExecutorService executor = Executors.newFixedThreadPool(3);
         
         executor.submit(futureTask1);
         executor.submit(futureTask2);
@@ -29,6 +29,15 @@ public class FutureTaskExample {
         // Now fetch results — could be in any order
         System.out.println("Future 1: " + futureTask1.get());
         System.out.println("Future 2: " + futureTask2.get());
+        
+        
+
+        Future<Integer> future = executor.submit(() -> {
+            Thread.sleep(1000);
+            return 42;
+        });
+        System.out.println(future.get()); // blocks
+   
 
         executor.shutdown();
     }

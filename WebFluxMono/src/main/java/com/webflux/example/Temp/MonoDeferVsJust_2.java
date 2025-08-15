@@ -54,7 +54,7 @@ public class MonoDeferVsJust_2 {
 			 * Recommended: run this on Schedulers.boundedElastic() to avoid blocking
 			 * reactive threads.
 			 */
-			// return Mono.just("Shahabuddin"); This line will not work
+			// return Mono.just("Shahabuddin"); //This line will not work
 			return "Shahabuddin";
 		});
 	}
@@ -67,7 +67,7 @@ public class MonoDeferVsJust_2 {
 		});
 		map.subscribe(System.out::println);
 		
-		int count_1 = flux1.count().map(Long::intValue).block();
+		int count_1 = flux1.count().map(longVal->longVal.intValue()).block(); // longVal->longVal.intValue() and below line Long::intValue are same
 		int count_2 = flux2.count().map(Long::intValue).block();
 		int max = Math.max(count_1, count_2);
 		Flux<String> combinedZip = Flux.range(0, max).flatMap(index->{ 

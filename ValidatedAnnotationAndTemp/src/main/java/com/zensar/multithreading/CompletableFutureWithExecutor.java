@@ -44,7 +44,7 @@ public class CompletableFutureWithExecutor {
             Thread.sleep(500);
         }
 
-        // Cleanup
+        // Cleanup // stop taking new tasks
         executor.shutdown();
     }
 }

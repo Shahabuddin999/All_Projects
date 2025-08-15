@@ -22,13 +22,16 @@ public class ErrorHandlingExample {
             .subscribe(System.out::println);
 
         System.out.println("\n== retry() ==");
-        Flux<Integer> errorFlux = Flux.<Integer>create(sink -> {
+        Flux<Integer> errorFlux = Flux.create(sink -> {
             System.out.println("Trying...");
-            sink.next(1);
-            sink.next(2);
+            int counter = 1;
+            sink.next(counter++);
+            sink.next(counter++);
             
-            sink.error(new RuntimeException("Something failed!"));
-            sink.next(100);
+            if(counter<5)
+            	sink.error(new RuntimeException("Something failed!"));
+            
+            sink.next(counter++);
             //sink.complete(); if you have used sink.complete(); then no any next line will be read all other line will be ignored within current curly braces.
             
         });
@@ -37,7 +40,8 @@ public class ErrorHandlingExample {
             .retry(2) // Retry 2 times
             //.onErrorReturn(-1)
             .onErrorResume(e-> {  
-            	System.out.println(e.getMessage()); return Mono.just(-1);
+            	System.out.println("Error Caught: "+e.getMessage()); 
+            	return Mono.just(-1);
             })
             .subscribe(System.out::println);
 
@@ -47,5 +51,11 @@ public class ErrorHandlingExample {
             .doOnError(e -> System.out.println("Logged error: " + e.getMessage()))
             .onErrorReturn(-5)
             .subscribe(System.out::println);
+        
+        Flux<String> flux = Flux.just("A", "B", "C");
+
+        Flux<String> concatMap = flux.concatMap(s -> Flux.just(s.toLowerCase(), s + "1"));
+        concatMap.subscribe(System.out::println);
+           
     }
 }

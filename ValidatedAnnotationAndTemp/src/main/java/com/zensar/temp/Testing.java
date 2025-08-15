@@ -29,8 +29,6 @@ public class Testing {
 		System.out.println(str.length);
 		System.out.println(Arrays.asList(str));
 		
-		
-		
 		String paragraph = "Java is great. Java is object-oriented. Java is fast and Java is powerful!";
         int topN = 3;
         //System.out.println(paragraph);

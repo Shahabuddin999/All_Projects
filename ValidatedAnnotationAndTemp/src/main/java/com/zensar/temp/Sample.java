@@ -32,11 +32,11 @@ public class Sample {
 				System.out.println(reduce);
 		});
 		
-		List<Integer> collect = IntStream.rangeClosed(2, 300).boxed().filter(num->{
+		List<Integer> collect = IntStream.rangeClosed(2, 300).filter(num->{
 			Integer reduce = Arrays.stream(String.valueOf(num).split("")).map(val->Integer.valueOf(val))
 					.map(val-> val*val*val).reduce(0,(a,b)->a+b);	
 					return reduce.equals(num);
-		}).collect(Collectors.toList());
+		}).boxed().collect(Collectors.toList());
 		System.out.println(collect);
 		
 		List<String> strList = List.of("AABCS","WERT","QWRTO");

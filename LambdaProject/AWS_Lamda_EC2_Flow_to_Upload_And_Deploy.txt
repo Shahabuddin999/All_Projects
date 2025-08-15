@@ -7,7 +7,7 @@ Working On Lamda
 Go to "Lambda"
 Create Function : "ShahabFunction"
 Click on "created function"->click on "Code"-> Click on "upload from" and upload jar file-> on same page
-Go to "Runtime settings" click on edit and update Handler : com.example.lambda.LambdaHandler::handleRequest then click on "Save" button-> click on "Test" on same page
+Go to "Runtime settings" click on edit and update Handler : com.example.lambda.handler.LambdaHandler::handleRequest then click on "Save" button-> click on "Test" on same page
 and go to "Test event action" select "Create new event" give any name : in Event name like "ShahabEvent"->
 "Template - optional" dropdown and select "API Gateway AWS Proxy"-> go to Event JSON on same page : in "Path":"/save/employee" this api endpoint of controller
 then go to "httpMethod" here give the endpoint method name "httpMethod":"POST" is its post then "POST" if get then give "GET"
@@ -33,10 +33,10 @@ Create method : ShahabMethod
 Method details : Method type : Any, Integration type : Lambda Proxy,  Lambda function : select created functin (ShahabFunction)
 Deploy API : Stage : Select New stage in drop down : New Stage, Stage name : Give any name like(dev, prod, stag) I have given "Dev" and click on "Continue" button-> then you will be back and click on "Dev" which you have created then below you will see a "Invoke URL" like https://84tb902ue3.execute-api.ap-south-1.amazonaws.com/Dev  This is the base url and in this url you apend your endpoint like
 https://84tb902ue3.execute-api.ap-south-1.amazonaws.com/Dev/save/employee and now you can hit from postman or else where ever you want to test and hit
+https://84tb902ue3.execute-api.ap-south-1.amazonaws.com/stage/employee/get to get the data
 
-
-Now to create database got to Aurora and RDS->Databases->Choose a database creation method "Standard create"->Create Database->Engine Type and select "PostgreSql"->Templates select "Fre Tier"->DB instance identifier give any name like "database-1"->give password->public key select "Yes"
-Now dont change any thing else and click on "create Database". Now Database has been created.
+Now to create database got to Aurora and RDS->Databases->Choose a database creation method "Standard create"->Create Database->Engine Type and select "PostgreSql"->Templates select "Free Tier"->DB instance identifier give any name like "database-1"->give password->public key select "Yes"
+Now don't change any thing else and click on "create Database". Now Database has been created.
 Now click on the database to allow port for database : and go to "Connectivity and Security" ->click on "VPC security groups" it will redirect you to Security Group of EC2 then click on "Security group ID"->click on "edit inbound rule"-> click on "add rule"->select postgresql with port "5432" which will be used to connect database-> click on "Save rules" button
 -------------------------------------------------------------------------
 

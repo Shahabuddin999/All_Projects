@@ -1,5 +1,9 @@
 package com.webflux.example.controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -112,4 +116,25 @@ public class UserController {
 	public Flux<UserWithOrders> getAllUsersWithOrders() {
 		return userService.getAllUsersWithOrders();
 	}
+	
+	@PostMapping(value="/details", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> getUserDetails(@RequestBody Map<String,List<String>> ids) {
+		
+		return Flux.fromIterable(ids.entrySet()) // Iterate map reactively
+	               .flatMap(entry -> {
+	                   return userService.fetchUserDetailsSequentially(Flux.fromIterable(entry.getValue()));
+	               });
+		
+//		return Flux.fromIterable(ids.entrySet()) // Iterate map reactively
+//	               .flatMap(entry -> {
+//	                   String key = entry.getKey();
+//	                   return Flux.fromIterable(entry.getValue())
+//	                              .map(userId -> key + " -> " + userId);
+//	               });
+    }
+	
+	@PostMapping(value="/detailsone", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> getUserDetailsOne(@RequestBody List<String> ids) {
+        return userService.fetchUserDetailsSequentially(Flux.fromIterable(ids));
+    }
 }

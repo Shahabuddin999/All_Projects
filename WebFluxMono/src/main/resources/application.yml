@@ -11,6 +11,13 @@ spring:
     init:
       mode: always
       schema-locations: classpath:schema.sql
+      
+logging:
+  file:
+    name: logs/app.log
+  level:
+    root: INFO
+
 
 # to open on web console put open on browser : http://localhost:8080/h2-console
 # and put  JDBC URL: :jdbc:h2:file:./testdatabase 

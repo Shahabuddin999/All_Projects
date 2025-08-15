@@ -104,7 +104,7 @@ public class PrimeChecker {
 		//frequency of each number using java 8
 		int[] intVal = {1,2,3,3,4,4,4,5,5,2}; 
 		Map<Integer,Integer> map = Arrays.stream(intVal)
-				.boxed()  // .boxed() converts primitive int to Integer objects, .collect() can't collect primitive value so used .boxed()
+				.mapToObj(num->Integer.valueOf(num)) //.boxed()  // .boxed() converts primitive int to Integer objects, .collect() can't collect primitive value so used .boxed()
 				.collect(Collectors.groupingBy(val->val, Collectors.summingInt(value->1)));
 		System.out.println("count: "+map);
 		

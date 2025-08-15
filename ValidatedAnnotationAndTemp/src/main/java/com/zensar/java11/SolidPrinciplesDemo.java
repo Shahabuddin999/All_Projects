@@ -143,8 +143,9 @@ public class SolidPrinciplesDemo {
         mfp.scan();
 
         // DIP
-        Database db = new MySQLDatabase();
-        UserService userService = new UserService(db);
+        // Database db = new MySQLDatabase();
+        // UserService userService = new UserService(db);
+        UserService userService = new UserService(new MySQLDatabase());
         userService.registerUser("Shahabuddin");
     }
 }
