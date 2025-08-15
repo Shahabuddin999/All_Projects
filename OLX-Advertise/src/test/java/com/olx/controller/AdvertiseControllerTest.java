@@ -209,10 +209,11 @@ public class AdvertiseControllerTest {
 		String searchText = "abc";
 		when(this.advertiseService.getAdvertiseByText(searchText)).thenReturn(new ResponseEntity<List<AdvertiseDto>>(list,HttpStatus.FOUND));
 		MvcResult mvcResult  = mockMvc.perform(get("/advertiseMasterApp/advertise/search/text")
-				.contentType("application/json")
-				.accept("application/json")
-				.param("searchText", searchText))
-				.andExpect(status().isFound()).andReturn();
+													.contentType("application/json")
+													.accept("application/json")
+													.param("searchText", searchText)
+											   ).andExpect(status().isFound()).andReturn();
+		
 		String result = mvcResult.getResponse().getContentAsString();
 		assertEquals(true, result.contains("Ahmad"));
 	}
