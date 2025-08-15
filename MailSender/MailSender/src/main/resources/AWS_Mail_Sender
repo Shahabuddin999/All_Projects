@@ -1,0 +1,76 @@
+-----------------
+1) First Add Dependency
+
+<dependencies>
+    <!-- Spring Boot -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <!-- Kafka -->
+    <dependency>
+        <groupId>org.springframework.kafka</groupId>
+        <artifactId>spring-kafka</artifactId>
+    </dependency>
+
+    <!-- AWS SDK for SES -->
+    <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>ses</artifactId>
+        <version>2.22.24</version>
+    </dependency>
+
+    <!-- JSON serialization -->
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+    </dependency>
+</dependencies>
+
+-----------------------
+2) 
+In service : private final SesClient sesClient;  sesClient is used to send the mail using AWS SES mail
+
+package kafka.example.service;
+
+import kafka.example.dto.Email;
+import org.springframework.stereotype.Service;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.ses.SesClient;
+import software.amazon.awssdk.services.ses.model.*;
+
+@Service
+public class EmailSenderService {
+
+    private final SesClient sesClient;
+
+    public EmailSenderService() {
+        sesClient = SesClient.builder()
+                .region(Region.US_EAST_1) // SES region
+                .credentialsProvider(StaticCredentialsProvider.create(
+                        AwsBasicCredentials.create("AWS_ACCESS_KEY", "AWS_SECRET_KEY")
+                ))
+                .build();
+    }
+
+    public void sendEmail(Email email) {
+
+        Destination destination = Destination.builder().toAddresses(email.getTo()).build();
+        Content subject = Content.builder().data(email.getSubject()).build();
+        Content textBody = Content.builder().data(email.getBody()).build();
+        Body body = Body.builder().text(textBody).build();
+        Message message = Message.builder().subject(subject).body(body).build();
+
+        SendEmailRequest request = SendEmailRequest.builder()
+                .destination(destination)
+                .message(message)
+                .source("verified-sender@example.com") // Must be verified in SES
+                .build();
+
+        sesClient.sendEmail(request);
+        System.out.println("Email sent: " + email);
+    }
+}
