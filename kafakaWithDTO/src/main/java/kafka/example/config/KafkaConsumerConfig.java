@@ -39,7 +39,7 @@ public class KafkaConsumerConfig {
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, OrderEvent> orderKafkaListenerFactory(
+	public ConcurrentKafkaListenerContainerFactory<String, OrderEvent> orderkafkaListenerContainerFactory(
 	        KafkaTemplate<String, OrderEvent> kafkaTemplate) {
 
 	    ConcurrentKafkaListenerContainerFactory<String, OrderEvent> factory =
