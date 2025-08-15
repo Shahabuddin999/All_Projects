@@ -14,7 +14,7 @@ public class MailService {
     
     private static final String FROM_EMAIL = "ansari.shahabuddin999@gmail.com"; // ✅ Verified SES email
 
-    // Here I m using spring.mail.host=smtp.gmail.com its slower, to make more scaleable and faster use "SendGrid" or "Amazon SES" which are more faster and scaleabl and can handle million billion mail in a second but SMTP can't. See Application.properties file
+    // Here I m using spring.mail.host=smtp.gmail.com its slower, to make more scalable and faster use "SendGrid" or "Amazon SES" which are more faster and scalable and can handle million billion mail in a second but SMTP can't. See Application.properties file
     @Async
     public void send(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();

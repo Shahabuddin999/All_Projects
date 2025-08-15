@@ -3,6 +3,7 @@ package kafka.example.controller;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import kafka.example.constant.ConstantProperties;
 import kafka.example.dto.OrderEvent;
 
 @RestController
@@ -10,7 +11,6 @@ import kafka.example.dto.OrderEvent;
 public class OrderController {
 
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
-    private static final String TOPIC = "order-topic";
 
     public OrderController(KafkaTemplate<String, OrderEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
@@ -18,7 +18,7 @@ public class OrderController {
 
     @PostMapping
     public String publishOrder(@RequestBody OrderEvent orderEvent) {
-        kafkaTemplate.send(TOPIC, orderEvent);
+        kafkaTemplate.send(ConstantProperties.ORDER_TOPIC, orderEvent);
         return "Order sent to Kafka successfully";
     }
 }

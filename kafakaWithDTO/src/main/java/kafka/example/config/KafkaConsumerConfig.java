@@ -17,6 +17,7 @@ import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
 
+import kafka.example.constant.ConstantProperties;
 import kafka.example.dto.OrderEvent;
 
 @Configuration
@@ -29,7 +30,7 @@ public class KafkaConsumerConfig {
 
 		Map<String, Object> props = new HashMap<>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, "order-group");
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, ConstantProperties.ORDER_GROUP);
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
 		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
@@ -53,11 +54,11 @@ public class KafkaConsumerConfig {
 	                        : ex;
 
 	                StackTraceElement location = rootCause.getStackTrace()[0]; // first element
-	                System.err.println("Sending failed message to Topic: " + record.topic() + "-failed");
+	                System.err.println("Sending failed message to Topic: " + ConstantProperties.ORDER_TOPIC_FAILED);
 	                System.err.println("Exception: " + rootCause);
 	                System.err.println("Location: " + location.getClassName() + "." + location.getMethodName() +
 	                        " (line: " + location.getLineNumber() + ")");
-	                return new TopicPartition(record.topic() + "-failed", record.partition());
+	                return new TopicPartition(ConstantProperties.ORDER_TOPIC_FAILED, record.partition());
 	            });
 
 	    // Retry: 3 attempts with 2 seconds interval
