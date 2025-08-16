@@ -1,21 +1,25 @@
 package com.kafka.controller;
 
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kafka.service.KafkaProducerService;
 
 @RestController
-@RequestMapping("/api/kafka")
+@RequestMapping("/kafka")
 public class KafkaProducerController {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaProducerService producerService;
 
-    public KafkaProducerController(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    public KafkaProducerController(KafkaProducerService producerService) {
+        this.producerService = producerService;
     }
 
     @PostMapping("/send")
-    public String sendMessage(@RequestParam String message) {
-        kafkaTemplate.send("test-topic", message);
-        return "Message sent: " + message;
+    public String send(@RequestParam String message) {
+        producerService.sendMessage("manual-topic", message);
+        return "Sent: " + message;
     }
 }

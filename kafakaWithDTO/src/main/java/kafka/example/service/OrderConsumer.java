@@ -11,7 +11,7 @@ public class OrderConsumer {
 
 	@KafkaListener(topics = ConstantProperties.ORDER_TOPIC, groupId = ConstantProperties.ORDER_GROUP, containerFactory = "orderkafkaListenerContainerFactory")
 	public void consume(OrderEvent event) {
-		int i = 10/0;  // when you enable it retry mechanism will be called defined in KafkaConsumerConfig and this below listener will be called ""order-topic-failed"
+		int i = 10/event.getQuantity();  // when you send 0 in quality parameter from postman then it will throw the error and it will go to the ORDER_FAILED_TOPIC
 		System.out.println("Received Order: " + event);
 	}
 	

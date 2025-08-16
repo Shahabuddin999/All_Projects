@@ -62,7 +62,7 @@ public class KafkaConsumerConfig {
 	            });
 
 	    // Retry: 3 attempts with 2 seconds interval
-	    FixedBackOff backOff = new FixedBackOff(2000L, 3);
+	    FixedBackOff backOff = new FixedBackOff(2000L, 1);
 
 	    DefaultErrorHandler errorHandler = new DefaultErrorHandler(recoverer, backOff);
 
