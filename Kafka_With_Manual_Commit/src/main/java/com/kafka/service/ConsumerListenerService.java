@@ -4,12 +4,14 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Service;
 
+import com.kafka.constant.ConstantProperties;
+
 @Service
 public class ConsumerListenerService {
 
     @KafkaListener(
-            topics = "manual-topic",
-            groupId = "manual-group",
+            topics = ConstantProperties.ORDER_TOPIC,
+            groupId = ConstantProperties.ORDER_TOPIC,
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void listen(String message, Acknowledgment ack) {

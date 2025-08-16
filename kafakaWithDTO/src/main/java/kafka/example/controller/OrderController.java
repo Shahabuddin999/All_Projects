@@ -12,7 +12,7 @@ import kafka.example.service.CommittedMessagePoller;
 public class OrderController {
 
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
-    CommittedMessagePoller committedMessagePoller;
+    private final CommittedMessagePoller committedMessagePoller;
     public OrderController(KafkaTemplate<String, OrderEvent> kafkaTemplate,CommittedMessagePoller committedMessagePoller) {
         this.kafkaTemplate = kafkaTemplate;
         this.committedMessagePoller = committedMessagePoller;
