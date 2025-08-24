@@ -1,4 +1,4 @@
-package com.zensar.temp;
+package com.zensar.interview;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;

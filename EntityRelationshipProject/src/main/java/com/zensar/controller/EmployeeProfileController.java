@@ -1,7 +1,8 @@
 package com.zensar.controller;
 
 import java.util.List;
-
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -23,14 +24,19 @@ public class EmployeeProfileController {
 	@Autowired
 	private EmployeeService employeeService;
 	
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeProfileController.class);
+
 	@GetMapping(value="/test", produces=MediaType.APPLICATION_JSON_VALUE)
 	public String test() {
+		logger.info("You have learned EC2 Congrats !!!");
 		return "You have learned EC2 Congrats !!!";
 	}
 	
 	@GetMapping(value="/employee", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Employee> getAllEmployees() {
-		return employeeService.getAllEmployees();
+		List<Employee> list = employeeService.getAllEmployees();
+		list.stream().forEach(lst->logger.info(lst.toString()));
+		return list;
 	}
 	
 	@PostMapping(value="/employee", consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)

@@ -1,4 +1,4 @@
-package com.zensar.temp;
+package com.zensar.interview;
 @FunctionalInterface
 interface aa{
 	void disp();
@@ -37,7 +37,7 @@ class B extends A{
 	}
 }
 
-public class Test {
+public class Test11 {
     @SuppressWarnings("finally")
 	public static int testReturn() {
         try {

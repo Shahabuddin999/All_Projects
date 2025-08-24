@@ -24,3 +24,8 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
+logging:
+  file:
+    name: logs/app.log
+  level:
+    root: info

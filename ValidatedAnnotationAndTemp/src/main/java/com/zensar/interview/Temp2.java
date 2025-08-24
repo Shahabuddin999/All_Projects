@@ -1,4 +1,4 @@
-package com.zensar.temp;
+package com.zensar.interview;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.zensar.temp.Customer;
 
 public class Temp2 {
 
