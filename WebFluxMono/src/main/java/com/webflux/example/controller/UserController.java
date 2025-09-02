@@ -97,6 +97,7 @@ public class UserController {
 
 	// "produces = MediaType.TEXT_EVENT_STREAM_VALUE" is important to work with Flux
 	// as it get record and will return else will not work
+	//@GetMapping(value = "/stream", produces = MediaType.APPLICATION_NDJSON_VALUE)
 	@GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Customer> getAllCustomerUsingFlux() {
 		return userService.getAllCustomerUsingFlux();
