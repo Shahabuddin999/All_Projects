@@ -19,7 +19,7 @@ public interface StockRepository extends JpaRepository<StockEntity, Integer>{
 	@Query("SELECT se FROM StockEntity se where se.name LIKE %:name%")
 	List<StockEntity> findByNameByJpql(@Param("name") String name);
 
-	@Query(value="select * from stock_entity u where u.name like %:name%", nativeQuery=true)
+	@Query(value = "SELECT * FROM stock_entity u WHERE u.name LIKE '%' || :name || '%'", nativeQuery = true)
 	List<StockEntity> findByNameBySql(@Param("name") String name);
 	
 	List<StockEntity> findByOrderByNameDesc();

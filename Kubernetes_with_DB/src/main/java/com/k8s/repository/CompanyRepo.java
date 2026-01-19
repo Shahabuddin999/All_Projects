@@ -4,5 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import com.k8s.entity.CompanyData;
 
 
-public interface CompanyRepo extends CrudRepository<CompanyData, Long> {
+public interface CompanyRepo extends CrudRepository<CompanyData, Integer> {
 }
