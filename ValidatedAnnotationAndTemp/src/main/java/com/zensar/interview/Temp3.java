@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -25,6 +26,15 @@ public class Temp3 {
 		 List<Integer> collect2 = list.stream().sorted(Collections.reverseOrder()).collect(Collectors.toList());
 		 System.out.println(collect2);
 		 System.out.println(list);
+		 
+		 str="Welcome to java class";
+		 Arrays.stream(str.split(" ")).forEach(sr->{
+			 String s = Arrays.stream(sr.split("")).reduce("",(a,b)->b+a);
+			 System.out.print(s +" ");
+		 });
+		 System.out.println("\n-------------------------");
+		 String collect3 = Arrays.stream(str.split(" ")).map(data->Arrays.stream(data.split("")).reduce("",(a,b)->b+a)).collect(Collectors.joining(" "));
+		 System.out.println(collect3);
 	}
 
 }

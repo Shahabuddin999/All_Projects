@@ -14,8 +14,7 @@ public class Temp14 {
 				   .filter(str-> str!=null && !str.isBlank())
 				   .map(str->{
 					   str = str.trim();
-					   str = (String.valueOf(str.charAt(0)).toUpperCase())+str.substring(1, str.length());
-					   str = str.charAt(0)+str.substring(1, str.length()).toLowerCase();
+					   str = str.substring(0,1).toUpperCase() + str.substring(1).toLowerCase();
 					   return str;
 				   }).distinct()
 				   .collect(Collectors.toList());

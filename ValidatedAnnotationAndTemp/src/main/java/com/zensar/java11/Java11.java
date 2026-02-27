@@ -33,6 +33,22 @@ public class Java11 {
 		System.out.println("  left ".stripLeading());      // "left "
 		System.out.println(" right ".stripTrailing());     // " right"
 		
+		
+		//trim() sirf characters ≤ \u0020 (space, tab, newline etc.) remove karta hai.
+		//👉 Agar string me Unicode spaces ho (jaise non-breaking space), to trim() fail ho sakta hai.
+		
+		String s = "\u2003Hello\u2003"; // EM SPACE (Unicode)
+
+		System.out.println(s.trim());  // ❌ will not remove
+		System.out.println(s.strip()); // ✅ removes properly
+		String normal = " Hello ";
+		String unicode = "\u2003Hello\u2003";
+
+		System.out.println(normal.trim().length());  // works
+		System.out.println(unicode.trim().length()); // will fail
+		System.out.println(unicode.strip().length()); // correct
+		
+		
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 		    .uri(URI.create("https://api.github.com"))
@@ -72,6 +88,6 @@ public class Java11 {
 		// Java 11 removed some older features: like (Applets, Java EE modules (like javax.xml.bind), JavaFX (now separate from JDK))
 	
 		// HttpClient, Files.readString()/writeString(), optional.isEmpty(), List.of(), list.copyOf()
-		// String "".isBlank(), "".lines().count(), "".repeat(3), "".stripLeading(),"".stripTrailing()
+		// String "".isBlank(), strip() "".lines().count(), "".repeat(3), "".stripLeading(),"".stripTrailing()
 	}
 }

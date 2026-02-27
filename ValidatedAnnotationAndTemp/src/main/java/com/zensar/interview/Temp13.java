@@ -13,17 +13,17 @@ import java.util.stream.Collectors;
 interface AutoComplete{
 	List<String> findWordsWithPrefix(String prefix);
 	void addWordToDictionary(String word);
+	List<String> list = new ArrayList<>();
 }
 
 public class Temp13 implements AutoComplete{
 
-	List<String> list = new ArrayList<>();
 	public static void main(String[] args) {
 		Temp13 obj = new Temp13();
 		obj.addWordToDictionary("pizza");
 		obj.addWordToDictionary("piz");
 		obj.addWordToDictionary("polar");
-		List<String> findWordsWithPrefix = obj.findWordsWithPrefix("po");
+		List<String> findWordsWithPrefix = obj.findWordsWithPrefix("piz");
 		findWordsWithPrefix.stream().forEach(System.out::println);
 	}
 

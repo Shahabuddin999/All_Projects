@@ -3,6 +3,8 @@ package com.zensar.interview;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Temp24 {
 
@@ -12,5 +14,8 @@ public class Temp24 {
 		System.out.println(max.get());
 		List<String> word = Arrays.asList(null, "Stream", "API", "Development");
 		word.stream().forEach(System.out::println);
+		
+		List<Integer> collect = Stream.of(90,20).sorted().collect(Collectors.toList());
+		System.out.println(collect);
 	}
 }

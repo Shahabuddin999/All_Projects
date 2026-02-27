@@ -1,0 +1,19 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  ApiLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: api-handler-lambda
+      Runtime: java21
+      Handler: com.loadbalancer.controller.ApiHandler::handleRequest
+      CodeUri: .
+      MemorySize: 512
+      Timeout: 30
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /api
+            Method: GET

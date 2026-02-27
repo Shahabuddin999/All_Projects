@@ -4,15 +4,18 @@ sealed class Vehicle permits Car,Bike {}
 
 final class Car extends Vehicle {} // Subclasses must declare final, sealed, or non-sealed
 
-final class Bike extends Vehicle {}
+non-sealed class Bike extends Vehicle {}
 
+class xyz extends Bike {
+	
+}
 record User(String name, int age) {
 	public User(String name) {
 		this(name, 0); // must calls canonical constructor...
 	}
 
 	public User(int age) {
-		this("", 0); // must calls canonical constructor
+		this("", age); // must calls canonical constructor
 	}
 
 	public User() {

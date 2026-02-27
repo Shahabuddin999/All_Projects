@@ -17,6 +17,8 @@ public class Temp1 {
 	public static void main(String[] args) {
 		List<String> list = Arrays.asList("today today is is monday".split(" "));
 		Map<String,Integer> map = list.stream().collect(Collectors.toMap(Function.identity(),initialValue->1,Math::addExact));
+		Map<String, Long> collect = list.stream().collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+		logger.info(collect);	
 		logger.debug(map);
 		
 		

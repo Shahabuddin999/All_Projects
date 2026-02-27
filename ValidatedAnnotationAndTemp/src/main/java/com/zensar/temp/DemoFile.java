@@ -62,6 +62,7 @@ public class DemoFile {
 		int max = Arrays.asList(10,30,50,20,40).stream().max((e1,e2)->e1-e2).get();
 		System.out.println("Max : "+max);
 		Integer[]arr = (Integer[]) Arrays.asList(10,30,50,20,40).toArray();
+		Integer[]arr1 = Arrays.asList(10,30,50,20,40).toArray(Integer[]::new);
 		System.out.println(arr[0]);
 	}	
 }

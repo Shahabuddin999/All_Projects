@@ -18,5 +18,11 @@ public class Temp16 {
 		
 		Map<String, Integer> collect = list.stream().collect(Collectors.toMap(Function.identity(), String::length));
 		System.out.println(collect);
+		
+		Map<String, String> collect3 = list.stream().map(str->{
+			return Arrays.stream(str.split("")).sorted((s1,s2)->s1.compareTo(s2)).collect(Collectors.joining());
+			
+		}).collect(Collectors.toList()).stream().collect(Collectors.groupingBy(Function.identity(), Collectors.joining(" ")));
+		System.out.println(collect3);
 	}
 }

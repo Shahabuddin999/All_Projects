@@ -20,7 +20,7 @@ public class Test2 {
 		list.stream().sorted(Collections.reverseOrder()).skip(2).limit(1).forEach(System.out::println);
 		
 		IntStream.rangeClosed(2, 10).forEach(num->{
-			boolean noneMatch = IntStream.rangeClosed(2, (int)Math.sqrt(num)).noneMatch(devide->num%devide==0);
+			boolean noneMatch = IntStream.range(2, num).noneMatch(devide->num%devide==0);
 			if(noneMatch)
 				System.out.println("Prime:"+num);
 		});
@@ -63,6 +63,16 @@ public class Test2 {
 		LocalDateTime start = LocalDateTime.parse("2023-06-21 14:35:00",fmt);
 		LocalDateTime end = LocalDateTime.parse("2023-06-21 14:45:00",fmt);
 		
+		System.out.println("------------------");
+		logRecords.stream()
+		.filter(dt->{
+			LocalDateTime dtLog = LocalDateTime.parse(dt.substring(0, 19),fmt);
+			boolean b = (dtLog.isEqual(start) || dtLog.isAfter(start)) && (dtLog.isEqual(end) || dtLog.isBefore(end));
+			return b;
+		})
+		.forEach(System.out::println);
+		System.out.println("-------------------");
+		
 		logRecords.stream()
 		.filter(dt->!LocalDateTime.parse(dt.substring(0, 19),fmt).isAfter(end) && !LocalDateTime.parse(dt.substring(0, 19),fmt).isBefore(start))
 		.forEach(System.out::println);
@@ -80,6 +90,27 @@ public class Test2 {
 //		    listCon.remove("A"); // java.util.ConcurrentModificationException
 //		}
 		
+		// check for prime
+		List<Integer> prime = IntStream.rangeClosed(2, 10).filter(d->{
+			return IntStream.range(2, d).noneMatch(dg->d%dg==0);
+		}).boxed().collect(Collectors.toList());
+		
+		System.out.println(prime);
+		
+		List<Integer> pailindrom = IntStream.rangeClosed(2, 50).filter(d->{
+			String ori = String.valueOf(d);
+			return Arrays.stream(ori.split("")).reduce("",(a,b)->b+a).equals(ori);
+			
+		}).boxed().collect(Collectors.toList());
+		
+		System.out.println(pailindrom);
+		
+		List<Integer> armstrong = IntStream.rangeClosed(2, 500).filter(number->{
+			String ori = String.valueOf(number);
+			return Arrays.stream(ori.split("")).map(c->(int)Math.pow(Integer.parseInt(c), 3)).reduce(0,(a,b)->a+b) == number;			
+		}).boxed().collect(Collectors.toList());
+		
+		System.out.println(armstrong);
 	}
 
 }

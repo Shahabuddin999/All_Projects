@@ -1,6 +1,8 @@
 package com.zensar.interview;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Temp23 {
@@ -23,5 +25,12 @@ public class Temp23 {
 		int max = String.valueOf(number).chars().map(ch -> ch - '0').max().getAsInt();
 		System.out.println("------------------------");
 		IntStream.rangeClosed(min, max).filter(val->!String.valueOf(number).contains(String.valueOf(val))).forEach(System.out::println);
+		
+		System.out.println("-------------");
+		System.out.println(50-'0');
+		
+		int number1 = 152689;
+		List<Integer> collect = IntStream.rangeClosed(min, max).filter(val->!String.valueOf(number1).contains(String.valueOf(val))).boxed().collect(Collectors.toList());
+		System.out.println(collect);
 	}
 }

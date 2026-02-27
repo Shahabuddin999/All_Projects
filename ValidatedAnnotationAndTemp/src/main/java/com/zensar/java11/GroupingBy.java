@@ -31,7 +31,7 @@ public class GroupingBy {
 		
 		sumByDay = transactions.stream().collect(
 		Collectors.groupingBy(val -> val.getDate(), Collectors.summingDouble(value -> value.getAmount())));
-		sumByDay.forEach((date, total) -> System.out.println(date + " : " + total));
+		sumByDay.forEach((date, total) -> System.out.println(date + " :::::: " + total));
 		
 		Map<String, Double> sumByCategory = transactions.stream().collect(
 				Collectors.groupingBy(val -> val.getCategory(), Collectors.summingDouble(value -> value.getAmount())));
@@ -46,6 +46,7 @@ public class GroupingBy {
 			        )
 			    ));
 		result.forEach((date, total) -> System.out.println(date + " ::: " + total));
+		System.out.println(result);
 		
 		Map<String, List<Transaction>> map=  transactions.stream().collect(Collectors.groupingBy(val->val.getCategory()));
 		System.out.println("By Category : "+map);

@@ -38,8 +38,11 @@ public class Temp17 {
         System.out.println(Optional.ofNullable(null));
         Optional<String> op = Optional.of("Shahab");
         // System.out.println(Optional.empty(null)); // Compile time error
-        System.out.println(Optional.of(null));
-       
+        //System.out.println(Optional.of(null));
+        
+        Map<String, Long> collect4 = Arrays.stream(str.split("")).sorted((s1,s2)->s1.compareTo(s2)).collect(Collectors.groupingBy(Function.identity(),LinkedHashMap::new,Collectors.counting()));
+       System.out.println(collect4);
+       System.out.println(collect4.getClass());
 	}
 }
 

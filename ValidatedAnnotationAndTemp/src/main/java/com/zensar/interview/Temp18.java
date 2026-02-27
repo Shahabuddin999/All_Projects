@@ -26,9 +26,7 @@ public class Temp18 implements Runnable{
 	@Override
 	public void run() {
 		for(int i = 0; i<10; i++) {
-			System.out.print(i+" "+Thread.currentThread().getName()+", ");
-			System.out.println(this.name);
+			System.out.println(i+" "+Thread.currentThread().getName()+", "+this.name);
 		}
-		System.out.println();
 	}
 }

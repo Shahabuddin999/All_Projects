@@ -100,8 +100,8 @@ public class ConcurrentHashMapExample2{
 			  System.out.println(sort);
 			  
 			  
-			  Map<String, Integer> duplicateKey = Arrays.asList("shahab","ansari","shahab","nizam","nizam").stream()
-					    .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(s -> 1)));
+			  Map<String, Long> duplicateKey = Arrays.asList("shahab","ansari","shahab","nizam","nizam").stream()
+					    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 			  System.out.println("dupl : "+duplicateKey);
     
     }    

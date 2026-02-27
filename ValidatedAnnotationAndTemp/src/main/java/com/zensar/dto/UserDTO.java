@@ -22,6 +22,7 @@ public class UserDTO {
     @NotBlank(groups = {OnCreate.class, OnUpdate.class}, message = "Name is required")
     private String name;
 
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Email must not be blank")
     @Email(groups = {OnCreate.class, OnUpdate.class}, message = "Email must be valid")
     private String email;
 }

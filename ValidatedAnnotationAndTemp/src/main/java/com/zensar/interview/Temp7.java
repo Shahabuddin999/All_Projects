@@ -31,7 +31,7 @@ public class Temp7 {
                         .toString())                               // convert StringBuilder to String
                 .collect(Collectors.joining(" "));                 // join all words
 
-        System.out.println(result);
+        System.out.println("Result: "+result);
         
         String collect = Arrays.stream(name.split(" ")).collect(Collectors.joining(", "));
         System.out.println(collect);
