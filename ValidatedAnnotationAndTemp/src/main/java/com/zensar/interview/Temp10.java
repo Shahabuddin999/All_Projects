@@ -22,6 +22,7 @@ public class Temp10 {
 		                        Collectors.joining(" ")
 		                ));
 
+		System.out.println(map3);
 		map3.entrySet().stream().forEach(entry->System.out.println(entry.getValue()));
 		System.out.println("-----------------");
 		

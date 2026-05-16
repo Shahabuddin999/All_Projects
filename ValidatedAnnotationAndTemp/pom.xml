@@ -16,6 +16,8 @@
 	<description>Temporary</description>
 	<properties>
 		<java.version>17</java.version>
+		<!-- Override Lombok version to a newer release compatible with newer JDKs -->
+		<lombok.version>1.18.30</lombok.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,12 +42,13 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
 			<optional>true</optional>
 		</dependency>
 	    <dependency>
 	        <groupId>com.fasterxml.jackson.core</groupId>
 	        <artifactId>jackson-databind</artifactId>
-	    </dependency>																							
+	    </dependency>
 	</dependencies>
 
 	<build>

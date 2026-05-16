@@ -15,5 +15,6 @@ class ExceptionPropagation {
     public static void main(String[] args) {
         ExceptionPropagation t = new ExceptionPropagation();
         t.m3();   // main call
+        System.out.println("Program continues...");
     }
 }

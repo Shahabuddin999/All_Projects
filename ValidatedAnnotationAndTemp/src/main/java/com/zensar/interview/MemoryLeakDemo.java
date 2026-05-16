@@ -5,13 +5,21 @@ public class MemoryLeakDemo {
     static List<String> list = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
-    	Thread t = new Thread(() -> {
+    	Thread t1 = new Thread(() -> {
             for (int i = 1; i <= 5; i++) {
-                System.out.println("User Thread: " + i);
+                System.out.println("User-1 Thread: " + i);
                 try { Thread.sleep(1000); } catch (InterruptedException e) {}
             }
         });
-        t.start();
+        t1.start();
+        
+        Thread t2 = new Thread(() -> {
+            for (int i = 1; i <= 5; i++) {
+                System.out.println("User-2 Thread: " + i);
+                try { Thread.sleep(1500); } catch (InterruptedException e) {}
+            }
+        });
+        t2.start();
 
         System.out.println("Main thread finished");
         

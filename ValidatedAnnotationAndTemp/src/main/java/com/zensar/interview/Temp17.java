@@ -19,9 +19,9 @@ public class Temp17 {
 		LinkedHashMap<String, Long> collect2 = collect.entrySet().stream().sorted(Map.Entry.<String,Long>comparingByValue().reversed())
 		.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(a1,a2)->a1,LinkedHashMap::new));
 		collect2.entrySet().stream().forEach(string->{
-			System.out.print(string.getKey().repeat(Integer.parseInt(string.getValue()+"")));
+			System.out.println(string.getKey().repeat(Integer.parseInt(string.getValue()+"")));
 		});
-		// single list, acending without duplicate
+		// single list, ascending without duplicate
 		List<Integer> list1 = Arrays.asList(3,5,8,3,2);
 		List<Integer> list2 = Arrays.asList(11,12,9,3,2);
 		List<List<Integer>> list3 = List.of(list1,list2);
